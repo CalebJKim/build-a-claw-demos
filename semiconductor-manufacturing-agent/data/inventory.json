@@ -1,0 +1,26 @@
+[
+  {
+    "sku": "PR-193I-248",
+    "description": "193 nm immersion photoresist for RF-PMIC-M1 metal layer",
+    "description_zh": "用於 RF-PMIC-M1 金屬層的 193 nm 浸潤式光阻",
+    "uom": "liters",
+    "uom_zh": "公升",
+    "on_hand": 42,
+    "allocated": 38,
+    "daily_usage": 12,
+    "primary_supplier": "Formosa Electronic Materials",
+    "approved_alternates": ["Shin-Etsu Taiwan"]
+  },
+  {
+    "sku": "NF3-ULTRA",
+    "description": "ultra-high-purity NF3 chamber clean gas",
+    "description_zh": "超高純度 NF3 腔體清潔氣體",
+    "uom": "cylinders",
+    "uom_zh": "鋼瓶",
+    "on_hand": 18,
+    "allocated": 12,
+    "daily_usage": 4,
+    "primary_supplier": "Taiwan Specialty Gases",
+    "approved_alternates": ["Linde Electronics"]
+  }
+]

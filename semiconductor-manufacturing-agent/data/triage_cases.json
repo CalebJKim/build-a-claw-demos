@@ -1,0 +1,54 @@
+[
+  {
+    "case_id": "TRIAGE-5107",
+    "source": "FDC and SPC correlation",
+    "source_zh": "FDC 與 SPC 關聯分析",
+    "tool_id": "ETCH-07B",
+    "lot": "WAFERLOT-7782",
+    "severity": "critical",
+    "suspected_root_cause": "RF match drift with chamber polymer buildup and possible ESC helium leak",
+    "suspected_root_cause_zh": "RF 匹配漂移伴隨腔體聚合物堆積，且可能存在 ESC 氦氣洩漏",
+    "containment": "Hold WAFERLOT-7782 for CD-SEM review and block release to implant until disposition.",
+    "containment_zh": "暫停 WAFERLOT-7782 以進行 CD-SEM 審查，並在處置前禁止放行到離子植入站點。",
+    "automated_actions": [
+      "Create a draft equipment diagnostic report for ETCH-07B.",
+      "Open a draft eDHR annotation linking WAFERLOT-7782, SPC drift, and FDC trace IDs.",
+      "Notify shift lead, equipment engineering, process engineering, and production control."
+    ],
+    "automated_actions_zh": [
+      "建立 ETCH-07B 的設備診斷報告草稿。",
+      "建立 eDHR 註記草稿，連結 WAFERLOT-7782、SPC 漂移與 FDC trace ID。",
+      "通知班別主管、設備工程、製程工程與生產管制。"
+    ],
+    "resolution_candidates": [
+      "Run monitor wafer after chamber clean and RF match verification.",
+      "Qualify ETCH-09B with golden recipe before rerouting expedite lots.",
+      "Escalate to hold-disposition meeting if CD-SEM confirms out-of-control drift."
+    ],
+    "resolution_candidates_zh": [
+      "在腔體清潔與 RF match 驗證後執行 monitor wafer。",
+      "在轉派急件批次前，以 golden recipe 驗證 ETCH-09B。",
+      "若 CD-SEM 確認失控漂移，升級到 hold-disposition 會議。"
+    ],
+    "blocked_actions": [
+      "Do not change recipe parameters automatically.",
+      "Do not release wafer lots from quality hold automatically.",
+      "Do not put ETCH-07B into maintenance downtime without human approval."
+    ],
+    "blocked_actions_zh": [
+      "不得自動變更 recipe 參數。",
+      "不得自動將晶圓批次從品質暫停中放行。",
+      "不得在沒有人工作業核准的情況下將 ETCH-07B 轉入維護停機。"
+    ],
+    "approval_required": [
+      "Equipment engineer approval required before chamber intervention.",
+      "Process engineer approval required before recipe or route changes.",
+      "Quality owner approval required before lot release."
+    ],
+    "approval_required_zh": [
+      "腔體介入前需要設備工程師核准。",
+      "變更 recipe 或路線前需要製程工程師核准。",
+      "晶圓批次放行前需要品質負責人核准。"
+    ]
+  }
+]

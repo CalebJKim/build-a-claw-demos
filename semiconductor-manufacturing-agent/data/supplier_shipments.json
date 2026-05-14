@@ -1,0 +1,24 @@
+[
+  {
+    "supplier": "Formosa Electronic Materials",
+    "sku": "PR-193I-248",
+    "po": "PO-8821",
+    "confirmed_quantity": 40,
+    "uom": "liters",
+    "original_eta": "2026-05-11",
+    "latest_eta": "2026-05-13",
+    "risk": "cold-chain hold at Taoyuan customs",
+    "otif_30d": 0.82
+  },
+  {
+    "supplier": "Taiwan Specialty Gases",
+    "sku": "NF3-ULTRA",
+    "po": "PO-8814",
+    "confirmed_quantity": 12,
+    "uom": "cylinders",
+    "original_eta": "2026-05-12",
+    "latest_eta": "2026-05-12",
+    "risk": "none reported",
+    "otif_30d": 0.96
+  }
+]

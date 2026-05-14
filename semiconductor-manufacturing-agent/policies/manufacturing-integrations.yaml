@@ -1,0 +1,89 @@
+# SPDX-License-Identifier: Apache-2.0
+#
+# Example NemoClaw/OpenShell policy preset for semiconductor manufacturing demos.
+# Replace hostnames with real internal endpoints before use.
+
+preset:
+  name: manufacturing
+  description: "Read-mostly fab MES, SPC/QMS, FDC historian, supplier visibility, and LINE reply access"
+
+network_policies:
+  manufacturing_mes:
+    name: manufacturing_mes
+    endpoints:
+      - host: mes.internal.example.com
+        port: 443
+        protocol: rest
+        enforcement: enforce
+        tls: terminate
+        rules:
+          - allow: { method: GET, path: "/api/work-orders/**" }
+          - allow: { method: GET, path: "/api/routes/**" }
+          - allow: { method: GET, path: "/api/lots/**" }
+          - allow: { method: GET, path: "/api/wip/**" }
+    binaries:
+      - { path: /usr/local/bin/openclaw }
+      - { path: /usr/local/bin/node }
+
+  manufacturing_qms:
+    name: manufacturing_qms
+    endpoints:
+      - host: qms.internal.example.com
+        port: 443
+        protocol: rest
+        enforcement: enforce
+        tls: terminate
+        rules:
+          - allow: { method: GET, path: "/api/inspection/**" }
+          - allow: { method: GET, path: "/api/nonconformance/**" }
+          - allow: { method: GET, path: "/api/spc/**" }
+          - allow: { method: GET, path: "/api/disposition/**" }
+          - allow: { method: POST, path: "/api/drafts/holds" }
+    binaries:
+      - { path: /usr/local/bin/openclaw }
+      - { path: /usr/local/bin/node }
+
+  manufacturing_historian:
+    name: manufacturing_historian
+    endpoints:
+      - host: historian.internal.example.com
+        port: 443
+        protocol: rest
+        enforcement: enforce
+        tls: terminate
+        rules:
+          - allow: { method: GET, path: "/api/v1/assets/**" }
+          - allow: { method: GET, path: "/api/v1/tags/**" }
+          - allow: { method: GET, path: "/api/v1/fdc/**" }
+          - allow: { method: GET, path: "/api/v1/tools/**" }
+    binaries:
+      - { path: /usr/local/bin/openclaw }
+      - { path: /usr/local/bin/node }
+
+  supplier_visibility:
+    name: supplier_visibility
+    endpoints:
+      - host: supplier-visibility.example.com
+        port: 443
+        protocol: rest
+        enforcement: enforce
+        tls: terminate
+        rules:
+          - allow: { method: GET, path: "/api/shipments/**" }
+          - allow: { method: POST, path: "/api/drafts/messages" }
+    binaries:
+      - { path: /usr/local/bin/openclaw }
+      - { path: /usr/local/bin/node }
+
+  line_messaging_api:
+    name: line_messaging_api
+    endpoints:
+      - host: api.line.me
+        port: 443
+        protocol: rest
+        enforcement: enforce
+        tls: terminate
+        rules:
+          - allow: { method: POST, path: "/v2/bot/message/reply" }
+    binaries:
+      - { path: /usr/local/bin/node }

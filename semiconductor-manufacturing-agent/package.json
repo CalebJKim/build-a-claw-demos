@@ -1,0 +1,18 @@
+{
+  "name": "manufacturing-ops-nemoclaw-demo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "demo": "node scripts/demo-runner.mjs all",
+    "demo:en": "node scripts/demo-runner.mjs all --lang en",
+    "demo:zh": "node scripts/demo-runner.mjs all --lang zh-TW",
+    "demo:maintenance": "node scripts/demo-runner.mjs maintenance",
+    "demo:quality": "node scripts/demo-runner.mjs quality",
+    "demo:schedule": "node scripts/demo-runner.mjs schedule",
+    "demo:supplier": "node scripts/demo-runner.mjs supplier",
+    "demo:diagnostics": "node scripts/demo-runner.mjs diagnostics",
+    "demo:triage": "node scripts/demo-runner.mjs triage",
+    "line:webhook": "node scripts/line-webhook.mjs"
+  }
+}
