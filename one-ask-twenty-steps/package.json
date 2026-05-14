@@ -1,0 +1,15 @@
+{
+  "name": "one-ask-twenty-steps-nemoclaw-demo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "demo": "node scripts/demo-runner.mjs",
+    "demo:json": "node scripts/demo-runner.mjs --json",
+    "demo:personal-finance": "node scripts/demo-runner.mjs \"Put together a reading list on personal finance for a beginner.\"",
+    "check": "node scripts/demo-runner.mjs --no-write --json"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
