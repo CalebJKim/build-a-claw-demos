@@ -1,0 +1,76 @@
+# Custom policy preset for the PTO travel demo.
+# Install it into the NemoClaw blueprint preset directory before onboarding,
+# or apply the equivalent OpenShell policy dynamically in environments that
+# support custom policy files.
+
+preset:
+  name: travel-demo
+  description: "Weather, travel pricing, and calendar endpoints for the PTO team demo"
+
+network_policies:
+  travel_weather:
+    name: travel_weather
+    endpoints:
+      - host: api.open-meteo.com
+        port: 443
+        protocol: rest
+        enforcement: enforce
+        tls: terminate
+        rules:
+          - allow: { method: GET, path: "/**" }
+      - host: geocoding-api.open-meteo.com
+        port: 443
+        protocol: rest
+        enforcement: enforce
+        tls: terminate
+        rules:
+          - allow: { method: GET, path: "/**" }
+    binaries:
+      - { path: /usr/local/bin/node }
+      - { path: /usr/bin/node }
+      - { path: /usr/local/bin/openclaw }
+  travel_pricing:
+    name: travel_pricing
+    endpoints:
+      - host: test.api.amadeus.com
+        port: 443
+        protocol: rest
+        enforcement: enforce
+        tls: terminate
+        rules:
+          - allow: { method: GET, path: "/**" }
+          - allow: { method: POST, path: "/**" }
+      - host: api.amadeus.com
+        port: 443
+        protocol: rest
+        enforcement: enforce
+        tls: terminate
+        rules:
+          - allow: { method: GET, path: "/**" }
+          - allow: { method: POST, path: "/**" }
+    binaries:
+      - { path: /usr/local/bin/node }
+      - { path: /usr/bin/node }
+      - { path: /usr/local/bin/openclaw }
+  calendar_google:
+    name: calendar_google
+    endpoints:
+      - host: www.googleapis.com
+        port: 443
+        protocol: rest
+        enforcement: enforce
+        tls: terminate
+        rules:
+          - allow: { method: GET, path: "/calendar/**" }
+          - allow: { method: POST, path: "/calendar/**" }
+      - host: oauth2.googleapis.com
+        port: 443
+        protocol: rest
+        enforcement: enforce
+        tls: terminate
+        rules:
+          - allow: { method: POST, path: "/**" }
+    binaries:
+      - { path: /usr/local/bin/node }
+      - { path: /usr/bin/node }
+      - { path: /usr/local/bin/openclaw }

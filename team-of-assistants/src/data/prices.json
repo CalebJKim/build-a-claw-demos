@@ -1,0 +1,26 @@
+{
+  "currency": "USD",
+  "windows": {
+    "2026-05-29_2026-06-01": {
+      "santa-fe": { "flight": 338, "hotelNightly": 198, "localTransit": 135, "fees": 82 },
+      "mexico-city": { "flight": 432, "hotelNightly": 168, "localTransit": 95, "fees": 111 },
+      "san-diego": { "flight": 426, "hotelNightly": 255, "localTransit": 125, "fees": 104 },
+      "portland-me": { "flight": 389, "hotelNightly": 236, "localTransit": 92, "fees": 93 },
+      "denver": { "flight": 282, "hotelNightly": 218, "localTransit": 98, "fees": 88 }
+    },
+    "2026-06-04_2026-06-07": {
+      "santa-fe": { "flight": 298, "hotelNightly": 188, "localTransit": 135, "fees": 79 },
+      "mexico-city": { "flight": 451, "hotelNightly": 172, "localTransit": 95, "fees": 116 },
+      "san-diego": { "flight": 376, "hotelNightly": 241, "localTransit": 125, "fees": 101 },
+      "portland-me": { "flight": 411, "hotelNightly": 229, "localTransit": 92, "fees": 92 },
+      "denver": { "flight": 248, "hotelNightly": 221, "localTransit": 98, "fees": 86 }
+    },
+    "2026-06-11_2026-06-14": {
+      "santa-fe": { "flight": 326, "hotelNightly": 205, "localTransit": 135, "fees": 84 },
+      "mexico-city": { "flight": 417, "hotelNightly": 181, "localTransit": 95, "fees": 113 },
+      "san-diego": { "flight": 358, "hotelNightly": 233, "localTransit": 125, "fees": 98 },
+      "portland-me": { "flight": 447, "hotelNightly": 244, "localTransit": 92, "fees": 96 },
+      "denver": { "flight": 296, "hotelNightly": 209, "localTransit": 98, "fees": 84 }
+    }
+  }
+}

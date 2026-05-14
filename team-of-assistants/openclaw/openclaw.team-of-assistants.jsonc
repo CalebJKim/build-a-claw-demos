@@ -1,0 +1,110 @@
+{
+  // Template overlay for /sandbox/.openclaw/openclaw.json inside a NemoClaw sandbox.
+  // Keep secrets in OpenShell/NemoClaw provider storage where possible.
+  identity: {
+    name: "PTO Team",
+    theme: "a practical team of travel-planning specialist claws"
+  },
+  session: {
+    dmScope: "per-channel-peer",
+    threadBindings: {
+      enabled: true,
+      idleHours: 8,
+      maxAgeHours: 72
+    }
+  },
+  channels: {
+    discord: {
+      enabled: true,
+      token: {
+        source: "env",
+        provider: "default",
+        id: "DISCORD_BOT_TOKEN"
+      },
+      groupPolicy: "allowlist",
+      guilds: {
+        "${DISCORD_SERVER_ID}": {
+          slug: "pto-demo",
+          requireMention: true,
+          users: ["${DISCORD_USER_ID}"],
+          channels: {
+            "${DISCORD_CHANNEL_ID}": {
+              allow: true,
+              requireMention: true
+            }
+          }
+        }
+      },
+      threadBindings: {
+        enabled: true,
+        idleHours: 8,
+        maxAgeHours: 72,
+        spawnSubagentSessions: true
+      }
+    }
+  },
+  agents: {
+    defaults: {
+      workspace: "/sandbox/.openclaw/workspace/team-of-assistants",
+      userTimezone: "America/Chicago",
+      model: {
+        primary: "inference/nvidia/nemotron-3-super-120b-a12b"
+      },
+      subagents: {
+        maxSpawnDepth: 2,
+        maxChildrenPerAgent: 5,
+        maxConcurrent: 4,
+        runTimeoutSeconds: 240,
+        archiveAfterMinutes: 60,
+        requireAgentId: true,
+        allowAgents: ["research-claw", "finance-claw", "scheduling-claw"]
+      }
+    },
+    list: [
+      {
+        id: "main",
+        label: "coordinator-claw",
+        default: true,
+        tools: {
+          profile: "coding",
+          alsoAllow: ["sessions_spawn", "sessions_yield", "subagents"]
+        },
+        subagents: {
+          requireAgentId: true,
+          allowAgents: ["research-claw", "finance-claw", "scheduling-claw"]
+        }
+      },
+      {
+        id: "research-claw",
+        label: "research-claw",
+        tools: {
+          profile: "coding",
+          deny: ["exec", "write", "edit", "apply_patch"]
+        }
+      },
+      {
+        id: "finance-claw",
+        label: "finance-claw",
+        tools: {
+          profile: "coding",
+          deny: ["write", "edit", "apply_patch"]
+        }
+      },
+      {
+        id: "scheduling-claw",
+        label: "scheduling-claw",
+        tools: {
+          profile: "coding",
+          deny: ["write", "edit", "apply_patch"]
+        }
+      }
+    ]
+  },
+  tools: {
+    subagents: {
+      tools: {
+        deny: ["cron"]
+      }
+    }
+  }
+}
