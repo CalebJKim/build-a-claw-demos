@@ -1,0 +1,80 @@
+[
+  {
+    "timestamp": "2026-05-11T06:10:00-05:00",
+    "lot": "WAFERLOT-7781",
+    "work_order": "LOT-10481",
+    "machine_id": "ETCH-07B",
+    "feature": "post_etch_cd_nm",
+    "unit": "nm",
+    "nominal": 38.0,
+    "lsl": 36.5,
+    "usl": 39.5,
+    "actual": 38.2,
+    "scrap_count": 0
+  },
+  {
+    "timestamp": "2026-05-11T08:40:00-05:00",
+    "lot": "WAFERLOT-7781",
+    "work_order": "LOT-10481",
+    "machine_id": "ETCH-07B",
+    "feature": "post_etch_cd_nm",
+    "unit": "nm",
+    "nominal": 38.0,
+    "lsl": 36.5,
+    "usl": 39.5,
+    "actual": 38.9,
+    "scrap_count": 0
+  },
+  {
+    "timestamp": "2026-05-11T10:30:00-05:00",
+    "lot": "WAFERLOT-7782",
+    "work_order": "LOT-10481",
+    "machine_id": "ETCH-07B",
+    "feature": "post_etch_cd_nm",
+    "unit": "nm",
+    "nominal": 38.0,
+    "lsl": 36.5,
+    "usl": 39.5,
+    "actual": 39.4,
+    "scrap_count": 0
+  },
+  {
+    "timestamp": "2026-05-11T11:20:00-05:00",
+    "lot": "WAFERLOT-7782",
+    "work_order": "LOT-10481",
+    "machine_id": "ETCH-07B",
+    "feature": "post_etch_cd_nm",
+    "unit": "nm",
+    "nominal": 38.0,
+    "lsl": 36.5,
+    "usl": 39.5,
+    "actual": 39.8,
+    "scrap_count": 1
+  },
+  {
+    "timestamp": "2026-05-11T09:05:00-05:00",
+    "lot": "WAFERLOT-5104",
+    "work_order": "LOT-10483",
+    "machine_id": "LITHO-04",
+    "feature": "overlay_error_nm",
+    "unit": "nm",
+    "nominal": 0,
+    "lsl": -4.0,
+    "usl": 4.0,
+    "actual": 2.7,
+    "scrap_count": 0
+  },
+  {
+    "timestamp": "2026-05-11T11:35:00-05:00",
+    "lot": "WAFERLOT-5105",
+    "work_order": "LOT-10483",
+    "machine_id": "LITHO-04",
+    "feature": "overlay_error_nm",
+    "unit": "nm",
+    "nominal": 0,
+    "lsl": -4.0,
+    "usl": 4.0,
+    "actual": 3.6,
+    "scrap_count": 0
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "id": "LOT-10481",
+    "part": "RF-PMIC-M1",
+    "customer": "Taipei RF Devices",
+    "due": "2026-05-12",
+    "quantity": 25,
+    "completed": 10,
+    "priority": "expedite",
+    "route": ["LITHO-04", "ETCH-07B", "METRO-01", "ASH-02"],
+    "required_material": "PR-193I-248"
+  },
+  {
+    "id": "LOT-10482",
+    "part": "RF-PMIC-M1",
+    "customer": "Taipei RF Devices",
+    "due": "2026-05-13",
+    "quantity": 25,
+    "completed": 0,
+    "priority": "standard",
+    "route": ["LITHO-04", "ETCH-07B", "METRO-01", "ASH-02"],
+    "required_material": "PR-193I-248"
+  },
+  {
+    "id": "LOT-10483",
+    "part": "MCU-CTRL-28",
+    "customer": "Hsinchu Controls",
+    "due": "2026-05-14",
+    "quantity": 25,
+    "completed": 16,
+    "priority": "standard",
+    "route": ["LITHO-04", "ETCH-09B", "METRO-01", "CMP-03"],
+    "required_material": "NF3-ULTRA"
+  }
+]

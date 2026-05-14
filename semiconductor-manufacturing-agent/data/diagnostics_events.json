@@ -1,0 +1,68 @@
+[
+  {
+    "id": "DIA-9001",
+    "timestamp": "2026-05-11T11:45:00-05:00",
+    "tool_id": "ETCH-07B",
+    "lot": "WAFERLOT-7782",
+    "subsystem": "RF match network",
+    "subsystem_zh": "RF 匹配網路",
+    "severity": "critical",
+    "metric": "rf_reflected_power_w",
+    "observed": 1380,
+    "baseline": 420,
+    "limit": 900,
+    "evidence": [
+      "RF reflected power is 3.3x baseline.",
+      "Endpoint time increased by 7.5%.",
+      "Particle adders increased to 28 per wafer."
+    ],
+    "evidence_zh": [
+      "RF 反射功率為基準值的 3.3 倍。",
+      "Endpoint 時間增加 7.5%。",
+      "每片晶圓新增粒子數增加到 28。"
+    ],
+    "likely_causes": [
+      "RF match drift",
+      "polymer buildup on chamber kit",
+      "ESC helium leak"
+    ],
+    "likely_causes_zh": [
+      "RF 匹配漂移",
+      "腔體套件聚合物堆積",
+      "ESC 氦氣洩漏"
+    ],
+    "report_owner": "equipment engineering",
+    "report_owner_zh": "設備工程"
+  },
+  {
+    "id": "DIA-9002",
+    "timestamp": "2026-05-11T11:50:00-05:00",
+    "tool_id": "LITHO-04",
+    "lot": "WAFERLOT-5105",
+    "subsystem": "alignment",
+    "subsystem_zh": "對準系統",
+    "severity": "watch",
+    "metric": "overlay_error_nm",
+    "observed": 3.6,
+    "baseline": 1.8,
+    "limit": 4.0,
+    "evidence": [
+      "Overlay X/Y trend is moving toward the control limit.",
+      "No excursion is detected on post-etch CD for this lot."
+    ],
+    "evidence_zh": [
+      "Overlay X/Y 趨勢正朝控制界限移動。",
+      "此批次的蝕刻後 CD 未偵測到異常。"
+    ],
+    "likely_causes": [
+      "stage thermal drift",
+      "reticle alignment offset"
+    ],
+    "likely_causes_zh": [
+      "載台熱漂移",
+      "光罩對準偏移"
+    ],
+    "report_owner": "process engineering",
+    "report_owner_zh": "製程工程"
+  }
+]
