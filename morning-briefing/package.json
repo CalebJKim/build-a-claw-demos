@@ -1,0 +1,17 @@
+{
+  "name": "morning-briefing-claw",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A NemoClaw/OpenShell demo that sends a 7am morning briefing to your phone.",
+  "scripts": {
+    "demo": "node src/morning-briefing.mjs --demo --dry-run",
+    "brief": "node src/morning-briefing.mjs --dry-run",
+    "send": "node src/morning-briefing.mjs --send",
+    "schedule": "node src/scheduler.mjs",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

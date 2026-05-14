@@ -1,0 +1,36 @@
+{
+  "briefing": {
+    "title": "Morning Briefing",
+    "schedule": {
+      "time": "07:00",
+      "timezone": "America/Chicago"
+    },
+    "location": {
+      "label": "Chicago, IL",
+      "latitude": 41.8781,
+      "longitude": -87.6298
+    },
+    "topics": [
+      {
+        "name": "AI infrastructure",
+        "query": "AI infrastructure OR NVIDIA OR GPU",
+        "limit": 3
+      },
+      {
+        "name": "Markets and macro",
+        "query": "markets economy inflation earnings",
+        "limit": 3
+      },
+      {
+        "name": "Productivity tools",
+        "query": "calendar email automation productivity",
+        "limit": 3
+      }
+    ],
+    "updatesFile": "data/updates.json",
+    "delivery": {
+      "channel": "telegram",
+      "maxItemsPerTopic": 2
+    }
+  }
+}

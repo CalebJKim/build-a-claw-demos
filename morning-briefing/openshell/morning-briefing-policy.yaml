@@ -1,0 +1,55 @@
+version: 1
+
+network_policies:
+  google_news:
+    name: google_news
+    endpoints:
+      - host: news.google.com
+        port: 443
+        protocol: rest
+        enforcement: enforce
+        tls: terminate
+        rules:
+          - allow: { method: GET, path: "/**" }
+    binaries:
+      - { path: /usr/local/bin/node }
+
+  open_meteo_weather:
+    name: open_meteo_weather
+    endpoints:
+      - host: api.open-meteo.com
+        port: 443
+        protocol: rest
+        enforcement: enforce
+        tls: terminate
+        rules:
+          - allow: { method: GET, path: "/**" }
+    binaries:
+      - { path: /usr/local/bin/node }
+
+  gdelt_news:
+    name: gdelt_news
+    endpoints:
+      - host: api.gdeltproject.org
+        port: 443
+        protocol: rest
+        enforcement: enforce
+        tls: terminate
+        rules:
+          - allow: { method: GET, path: "/**" }
+    binaries:
+      - { path: /usr/local/bin/node }
+
+  telegram_delivery:
+    name: telegram_delivery
+    endpoints:
+      - host: api.telegram.org
+        port: 443
+        protocol: rest
+        enforcement: enforce
+        tls: terminate
+        rules:
+          - allow: { method: GET, path: "/bot*/**" }
+          - allow: { method: POST, path: "/bot*/**" }
+    binaries:
+      - { path: /usr/local/bin/node }
