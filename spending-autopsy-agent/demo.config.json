@@ -1,0 +1,96 @@
+{
+  "name": "spending-autopsy-agent",
+  "profile": "spending-demo",
+  "openclawMinVersion": "2026.5.12",
+  "nodeMinVersion": "22.16.0",
+  "model": {
+    "provider": "ollama",
+    "id": "qwen3.6:35b-a3b",
+    "openclawId": "ollama/qwen3.6:35b-a3b",
+    "baseUrl": "http://127.0.0.1:11434",
+    "contextTokens": 32768,
+    "maxOutputTokens": 2048,
+    "temperature": 0.35
+  },
+  "ports": {
+    "gateway": 18890,
+    "report": 18992,
+    "localTunnel": 18993
+  },
+  "agents": [
+    {
+      "id": "main",
+      "workspace": "workspaces/main",
+      "agentDir": "openclaw/agents/main/agent",
+      "template": "agents/main/AGENTS.md",
+      "soul": "agents/main/SOUL.md",
+      "chatFacing": true
+    },
+    {
+      "id": "cleaner",
+      "workspace": "workspaces/cleaner",
+      "agentDir": "openclaw/agents/cleaner/agent",
+      "template": "agents/cleaner/AGENTS.md",
+      "soul": "agents/cleaner/SOUL.md"
+    },
+    {
+      "id": "categorizer",
+      "workspace": "workspaces/categorizer",
+      "agentDir": "openclaw/agents/categorizer/agent",
+      "template": "agents/categorizer/AGENTS.md",
+      "soul": "agents/categorizer/SOUL.md"
+    },
+    {
+      "id": "anomaly",
+      "workspace": "workspaces/anomaly",
+      "agentDir": "openclaw/agents/anomaly/agent",
+      "template": "agents/anomaly/AGENTS.md",
+      "soul": "agents/anomaly/SOUL.md"
+    },
+    {
+      "id": "narrator",
+      "workspace": "workspaces/narrator",
+      "agentDir": "openclaw/agents/narrator/agent",
+      "template": "agents/narrator/AGENTS.md",
+      "soul": "agents/narrator/SOUL.md"
+    }
+  ],
+  "claws": {
+    "cleaner": "agents/cleaner/SOUL.md",
+    "categorizer": "agents/categorizer/SOUL.md",
+    "anomaly": "agents/anomaly/SOUL.md",
+    "narrator": "agents/narrator/SOUL.md"
+  },
+  "requiredCommands": [
+    "openclaw",
+    "node",
+    "ollama",
+    "curl",
+    "python3"
+  ],
+  "optionalCommands": [
+    "chromium",
+    "google-chrome"
+  ],
+  "generatedPaths": [
+    "runs",
+    "input",
+    "workspaces",
+    ".generated",
+    ".archive",
+    "openclaw/agents"
+  ],
+  "sample": {
+    "csv": "samples/seeded-bank-export.csv",
+    "household": "Avery",
+    "location": "San Francisco, CA"
+  },
+  "commands": {
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
+    "reset": "./scripts/reset",
+    "uninstall": "./scripts/uninstall"
+  }
+}

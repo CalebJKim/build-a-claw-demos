@@ -74,8 +74,8 @@ mkdir -p "$ROOT/input"
 openclaw --profile "$PROFILE" gateway install --port "$PORT" --runtime node --force --json >/dev/null
 openclaw --profile "$PROFILE" gateway restart --json >/dev/null
 
-echo "OpenClaw resume demo is ready."
+echo "OpenClaw spending autopsy demo is ready."
 echo "Profile: $PROFILE"
 echo "Gateway: ws://127.0.0.1:$PORT"
 echo "Model: $OPENCLAW_MODEL"
-echo "Run: $ROOT/bin/resume-claw run --resume /path/to/resume.pdf --target-role \"Product Manager\" --location \"San Francisco, CA\""
+echo "Run: $ROOT/bin/spending-autopsy run --csv $ROOT/samples/seeded-bank-export.csv --household Avery --location \"San Francisco, CA\""

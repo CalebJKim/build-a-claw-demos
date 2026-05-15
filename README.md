@@ -9,6 +9,7 @@ The goal is repeatable demo shipping: a builder should be able to add a new demo
 - `intro-basics/` - introductory OpenClaw/Spark notes.
 - `semiconductor-manufacturing-agent/` - semiconductor manufacturing operations demo with synthetic fab data and OpenClaw workspace files.
 - `resume-callback-agent/` - resume callback demo with PDF upload, parallel specialist claws, local Ollama execution, report generation, and upgraded resume output.
+- `spending-autopsy-agent/` - spending autopsy demo with messy CSV cleanup, behavioral categorization, anomaly flags, visual report, and blunt cut list.
 
 ## Packaging Model
 

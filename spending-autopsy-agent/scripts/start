@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG_VALUE="$ROOT/src/config-value.js"
+
+cd "$ROOT"
+export PATH="$HOME/.npm-global/bin:$PATH"
+
+profile="$(node "$CONFIG_VALUE" profile)"
+gateway_port="$(node "$CONFIG_VALUE" gatewayPort)"
+report_port="$(node "$CONFIG_VALUE" remoteReportPort)"
+local_report_port="$(node "$CONFIG_VALUE" localReportPort)"
+
+if ! command -v openclaw >/dev/null 2>&1; then
+  echo "openclaw is required on PATH. Run ./scripts/bootstrap after installing OpenClaw." >&2
+  exit 1
+fi
+
+mkdir -p "$ROOT/.generated"
+if [[ -f "$ROOT/.generated/report-server.pid" ]] && kill -0 "$(cat "$ROOT/.generated/report-server.pid")" 2>/dev/null; then
+  :
+else
+  nohup python3 -m http.server "$report_port" --bind 127.0.0.1 > "$ROOT/.generated/report-server.log" 2>&1 &
+  echo $! > "$ROOT/.generated/report-server.pid"
+fi
+
+openclaw --profile "$profile" gateway restart --json >/dev/null
+
+cat <<MSG
+Spending autopsy demo services are running.
+
+Profile: $profile
+Gateway: http://127.0.0.1:$gateway_port
+Report server on host: http://127.0.0.1:$report_port
+Expected local report tunnel: http://127.0.0.1:$local_report_port
+
+Dashboard token:
+  openclaw --profile $profile dashboard --no-open
+
+Remote tunnel example:
+  ssh -L $gateway_port:127.0.0.1:$gateway_port -L $local_report_port:127.0.0.1:$report_port <user>@<host>
+MSG

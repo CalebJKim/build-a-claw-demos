@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG_VALUE="$ROOT/src/config-value.js"
+
+cd "$ROOT"
+
+csv="$(node "$CONFIG_VALUE" sample.csv)"
+household="$(node "$CONFIG_VALUE" sample.household)"
+location="$(node "$CONFIG_VALUE" sample.location)"
+
+exec "$ROOT/bin/spending-autopsy" run \
+  --csv "$csv" \
+  --household "$household" \
+  --location "$location" \
+  "$@"
