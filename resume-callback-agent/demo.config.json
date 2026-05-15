@@ -1,0 +1,105 @@
+{
+  "name": "resume-callback-agent",
+  "profile": "resume-demo",
+  "openclawMinVersion": "2026.5.12",
+  "nodeMinVersion": "22.16.0",
+  "model": {
+    "provider": "ollama",
+    "id": "qwen3.6:35b-a3b",
+    "openclawId": "ollama/qwen3.6:35b-a3b",
+    "baseUrl": "http://127.0.0.1:11434",
+    "contextTokens": 32768,
+    "maxOutputTokens": 4096,
+    "temperature": 0.2
+  },
+  "ports": {
+    "gateway": 18889,
+    "report": 18990,
+    "localTunnel": 18991
+  },
+  "agents": [
+    {
+      "id": "main",
+      "workspace": "workspaces/main",
+      "agentDir": "openclaw/agents/main/agent",
+      "template": "agents/main/AGENTS.md",
+      "soul": "agents/main/SOUL.md",
+      "chatFacing": true
+    },
+    {
+      "id": "job-market",
+      "workspace": "workspaces/job-market",
+      "agentDir": "openclaw/agents/job-market/agent",
+      "template": "agents/job-market/AGENTS.md",
+      "soul": "agents/job-market/SOUL.md"
+    },
+    {
+      "id": "resume-gap",
+      "workspace": "workspaces/resume-gap",
+      "agentDir": "openclaw/agents/resume-gap/agent",
+      "template": "agents/resume-gap/AGENTS.md",
+      "soul": "agents/resume-gap/SOUL.md"
+    },
+    {
+      "id": "salary",
+      "workspace": "workspaces/salary",
+      "agentDir": "openclaw/agents/salary/agent",
+      "template": "agents/salary/AGENTS.md",
+      "soul": "agents/salary/SOUL.md"
+    },
+    {
+      "id": "lead",
+      "workspace": "workspaces/lead",
+      "agentDir": "openclaw/agents/lead/agent",
+      "template": "agents/lead/AGENTS.md",
+      "soul": "agents/lead/SOUL.md"
+    }
+  ],
+  "claws": {
+    "jobMarket": "agents/job-market/SOUL.md",
+    "resumeGap": "agents/resume-gap/SOUL.md",
+    "salary": "agents/salary/SOUL.md",
+    "lead": "agents/lead/SOUL.md",
+    "evidenceGuard": "claws/evidence-guard.md",
+    "target": "claws/target-infer.md"
+  },
+  "requiredCommands": [
+    "openclaw",
+    "node",
+    "ollama",
+    "curl",
+    "pdftotext",
+    "python3"
+  ],
+  "optionalCommands": [
+    "chromium",
+    "google-chrome"
+  ],
+  "generatedPaths": [
+    "runs",
+    "input",
+    "workspaces",
+    ".generated",
+    ".archive",
+    "openclaw/agents"
+  ],
+  "sample": {
+    "resume": "samples/anonymized-resume.md",
+    "targetRole": "Customer Success Manager",
+    "location": "San Francisco, CA"
+  },
+  "search": {
+    "maxJobResults": 8,
+    "maxSalaryResults": 6,
+    "fetchPages": true,
+    "pageChars": 3500
+  },
+  "commands": {
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
+    "reset": "./scripts/reset",
+    "uninstall": "./scripts/uninstall"
+  }
+}

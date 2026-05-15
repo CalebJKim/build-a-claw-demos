@@ -8,10 +8,14 @@
     "resume-claw": "./bin/resume-claw"
   },
   "scripts": {
-    "doctor": "node ./src/run.js doctor",
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
+    "reset": "./scripts/reset",
     "run": "node ./src/run.js run"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22.16.0"
   }
 }

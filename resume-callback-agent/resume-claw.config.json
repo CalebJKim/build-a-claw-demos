@@ -17,10 +17,10 @@
     "pageChars": 3500
   },
   "claws": {
-    "jobMarket": "claws/job-market.md",
-    "resumeGap": "claws/resume-gap.md",
-    "salary": "claws/salary.md",
-    "lead": "claws/lead.md",
+    "jobMarket": "agents/job-market/SOUL.md",
+    "resumeGap": "agents/resume-gap/SOUL.md",
+    "salary": "agents/salary/SOUL.md",
+    "lead": "agents/lead/SOUL.md",
     "evidenceGuard": "claws/evidence-guard.md",
     "target": "claws/target-infer.md"
   }

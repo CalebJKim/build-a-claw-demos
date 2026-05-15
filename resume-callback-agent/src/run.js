@@ -6,6 +6,7 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { loadRuntimeConfig } from './demo-config.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const ROOT = path.resolve(path.dirname(__filename), '..');
@@ -25,10 +26,10 @@ const DEFAULT_CONFIG = {
     pageChars: 3500,
   },
   claws: {
-    jobMarket: 'claws/job-market.md',
-    resumeGap: 'claws/resume-gap.md',
-    salary: 'claws/salary.md',
-    lead: 'claws/lead.md',
+    jobMarket: 'agents/job-market/SOUL.md',
+    resumeGap: 'agents/resume-gap/SOUL.md',
+    salary: 'agents/salary/SOUL.md',
+    lead: 'agents/lead/SOUL.md',
     evidenceGuard: 'claws/evidence-guard.md',
     target: 'claws/target-infer.md',
   },
@@ -54,24 +55,7 @@ function parseArgs(argv) {
 }
 
 async function readConfig() {
-  const configPath = path.join(ROOT, 'resume-claw.config.json');
-  if (!existsSync(configPath)) return DEFAULT_CONFIG;
-  const raw = await fs.readFile(configPath, 'utf8');
-  return deepMerge(DEFAULT_CONFIG, JSON.parse(raw));
-}
-
-function deepMerge(base, next) {
-  if (Array.isArray(base) || Array.isArray(next)) return next ?? base;
-  if (!isPlainObject(base) || !isPlainObject(next)) return next ?? base;
-  const out = { ...base };
-  for (const [key, value] of Object.entries(next)) {
-    out[key] = deepMerge(base[key], value);
-  }
-  return out;
-}
-
-function isPlainObject(value) {
-  return value && typeof value === 'object' && Object.getPrototypeOf(value) === Object.prototype;
+  return loadRuntimeConfig(ROOT, DEFAULT_CONFIG);
 }
 
 function usage() {
@@ -80,7 +64,7 @@ function usage() {
   resume-claw run --resume /path/to/resume.pdf [--target-role "Product Manager"] [--location "San Francisco, CA"] [--out runs/demo]
 
 Options:
-  --model <name>        Ollama model override. Default from resume-claw.config.json.
+  --model <name>        Ollama model override. Default from demo.config.json.
   --skip-web            Use model analysis with no live web corpus.
   --serial              Run claws sequentially instead of parallel.
 `;

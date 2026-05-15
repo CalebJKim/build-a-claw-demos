@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-CONFIG="$ROOT/resume-claw.config.json"
+CONFIG_VALUE="$ROOT/src/config-value.js"
 cd "$ROOT"
 
 usage() {
@@ -58,7 +58,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ "$latest_upload" == true && -z "$resume" ]]; then
-  profile="$(node -e "console.log(require('$CONFIG').profile || 'resume-demo')")"
+  profile="$(node "$CONFIG_VALUE" profile)"
   mapfile -t candidates < <(
     find \
       "$HOME/.openclaw-${profile}/media/inbound" \
@@ -111,8 +111,8 @@ ${body}
 EOF
 }
 
-remote_report_port="$(node -e "console.log(require('$CONFIG').remoteReportPort || 18990)")"
-local_report_port="$(node -e "console.log(require('$CONFIG').localReportPort || 18991)")"
+remote_report_port="$(node "$CONFIG_VALUE" remoteReportPort)"
+local_report_port="$(node "$CONFIG_VALUE" localReportPort)"
 
 mkdir -p "$ROOT/.generated"
 if [[ -f "$ROOT/.generated/report-server.pid" ]] && kill -0 "$(cat "$ROOT/.generated/report-server.pid")" 2>/dev/null; then

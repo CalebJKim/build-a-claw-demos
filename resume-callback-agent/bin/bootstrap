@@ -2,18 +2,18 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-CONFIG="$ROOT/resume-claw.config.json"
+CONFIG_VALUE="$ROOT/src/config-value.js"
 
 if ! command -v node >/dev/null 2>&1; then
   echo "node is required." >&2
   exit 1
 fi
 
-PROFILE="${OPENCLAW_PROFILE:-$(node -e "console.log(require('$CONFIG').profile)")}"
-PORT="${OPENCLAW_GATEWAY_PORT:-$(node -e "console.log(require('$CONFIG').gatewayPort)")}"
-OPENCLAW_MODEL="${OPENCLAW_MODEL:-$(node -e "console.log(require('$CONFIG').openclawModel)")}"
-OLLAMA_MODEL="${OLLAMA_MODEL:-$(node -e "console.log(require('$CONFIG').model)")}"
-OLLAMA_HOST="${OLLAMA_HOST:-$(node -e "console.log(require('$CONFIG').ollamaHost)")}"
+PROFILE="${OPENCLAW_PROFILE:-$(node "$CONFIG_VALUE" profile)}"
+PORT="${OPENCLAW_GATEWAY_PORT:-$(node "$CONFIG_VALUE" gatewayPort)}"
+OPENCLAW_MODEL="${OPENCLAW_MODEL:-$(node "$CONFIG_VALUE" openclawModel)}"
+OLLAMA_MODEL="${OLLAMA_MODEL:-$(node "$CONFIG_VALUE" model)}"
+OLLAMA_HOST="${OLLAMA_HOST:-$(node "$CONFIG_VALUE" ollamaHost)}"
 
 export PATH="$HOME/.npm-global/bin:$PATH"
 export OLLAMA_API_KEY="${OLLAMA_API_KEY:-ollama}"
@@ -30,8 +30,10 @@ if ! ollama list | awk 'NR > 1 {print $1}' | grep -Fx "$OLLAMA_MODEL" >/dev/null
   exit 1
 fi
 
-mkdir -p "$ROOT/.generated" "$ROOT/workspaces/main" "$ROOT/workspaces/job-market" "$ROOT/workspaces/resume-gap" "$ROOT/workspaces/salary" "$ROOT/workspaces/lead"
-mkdir -p "$ROOT/openclaw/agents/main/agent" "$ROOT/openclaw/agents/job-market/agent" "$ROOT/openclaw/agents/resume-gap/agent" "$ROOT/openclaw/agents/salary/agent" "$ROOT/openclaw/agents/lead/agent"
+mkdir -p "$ROOT/.generated"
+while IFS=$'\t' read -r name workspace agent_dir template soul chat_facing; do
+  mkdir -p "$ROOT/$workspace" "$ROOT/$agent_dir"
+done < <(node "$ROOT/src/list-agents.js")
 
 PATCH="$ROOT/.generated/openclaw.patch.json"
 node "$ROOT/src/write-openclaw-patch.js" "$ROOT" "$PORT" "$OPENCLAW_MODEL" "$OLLAMA_MODEL" "$OLLAMA_HOST" > "$PATCH"
@@ -55,27 +57,13 @@ ensure_agent() {
     --json >/dev/null
 }
 
-ensure_agent "main" "$ROOT/workspaces/main" "$ROOT/openclaw/agents/main/agent"
-ensure_agent "job-market" "$ROOT/workspaces/job-market" "$ROOT/openclaw/agents/job-market/agent"
-ensure_agent "resume-gap" "$ROOT/workspaces/resume-gap" "$ROOT/openclaw/agents/resume-gap/agent"
-ensure_agent "salary" "$ROOT/workspaces/salary" "$ROOT/openclaw/agents/salary/agent"
-ensure_agent "lead" "$ROOT/workspaces/lead" "$ROOT/openclaw/agents/lead/agent"
+while IFS=$'\t' read -r name workspace agent_dir template soul chat_facing; do
+  ensure_agent "$name" "$ROOT/$workspace" "$ROOT/$agent_dir"
 
-for pair in \
-  "main:main" \
-  "job-market:job-market" \
-  "resume-gap:resume-gap" \
-  "salary:salary" \
-  "lead:lead"
-do
-  agent="${pair%%:*}"
-  prompt="${pair##*:}"
-  cp "$ROOT/openclaw/templates/$prompt.AGENTS.md" "$ROOT/workspaces/$agent/AGENTS.md"
-  cp "$ROOT/claws/$prompt.md" "$ROOT/workspaces/$agent/SOUL.md"
-  if [ "$prompt" = "main" ]; then
-    node -e 'const fs = require("fs"); const [path, root] = process.argv.slice(1); fs.writeFileSync(path, fs.readFileSync(path, "utf8").replaceAll("__DEMO_ROOT__", root));' "$ROOT/workspaces/$agent/AGENTS.md" "$ROOT"
-    node -e 'const fs = require("fs"); const [path, root] = process.argv.slice(1); fs.writeFileSync(path, fs.readFileSync(path, "utf8").replaceAll("__DEMO_ROOT__", root));' "$ROOT/workspaces/$agent/SOUL.md" "$ROOT"
-  fi
+  cp "$ROOT/$template" "$ROOT/$workspace/AGENTS.md"
+  cp "$ROOT/$soul" "$ROOT/$workspace/SOUL.md"
+  node -e 'const fs = require("fs"); const [file, root] = process.argv.slice(1); fs.writeFileSync(file, fs.readFileSync(file, "utf8").replaceAll("__DEMO_ROOT__", root));' "$ROOT/$workspace/AGENTS.md" "$ROOT"
+  node -e 'const fs = require("fs"); const [file, root] = process.argv.slice(1); fs.writeFileSync(file, fs.readFileSync(file, "utf8").replaceAll("__DEMO_ROOT__", root));' "$ROOT/$workspace/SOUL.md" "$ROOT"
 done
 
 mkdir -p "$ROOT/input"

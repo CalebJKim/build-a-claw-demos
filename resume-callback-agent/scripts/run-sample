@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG_VALUE="$ROOT/src/config-value.js"
+
+cd "$ROOT"
+
+resume="$(node "$CONFIG_VALUE" sample.resume)"
+target_role="$(node "$CONFIG_VALUE" sample.targetRole)"
+location="$(node "$CONFIG_VALUE" sample.location)"
+
+exec "$ROOT/bin/resume-claw" run \
+  --resume "$resume" \
+  --target-role "$target_role" \
+  --location "$location"

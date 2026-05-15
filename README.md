@@ -49,6 +49,31 @@ The main things that can still interfere across demos are shared host resources:
 
 Every demo should include checks for those risks.
 
+## Swapping Demos
+
+Use the demo's own scripts instead of manually editing OpenClaw state.
+
+Typical swap flow:
+
+```bash
+cd <old-demo>
+./scripts/reset
+
+cd ../<new-demo>
+./scripts/doctor
+./scripts/bootstrap
+./scripts/start
+```
+
+If the old demo should be removed entirely:
+
+```bash
+cd <old-demo>
+./scripts/uninstall
+```
+
+For live events, prefer keeping demos installed but reset. That preserves model/profile setup while clearing uploaded files, reports, logs, and stale chat state.
+
 ## Required Demo Shape
 
 New demos should use this structure unless there is a clear reason not to:
