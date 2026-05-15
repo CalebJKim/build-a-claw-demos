@@ -1,0 +1,44 @@
+id: product-sync
+title: Mobile Checkout Launch Sync
+source: mock-teams-api
+recorded_at: 2026-05-12T17:00:00Z
+participants:
+  - name: Maya Chen
+    role: Product Manager
+    email: maya.chen@example.com
+  - name: Sarah Kim
+    role: Engineering Lead
+    email: sarah.kim@example.com
+  - name: Jordan Lee
+    role: Design Lead
+    email: jordan.lee@example.com
+  - name: Priya Nair
+    role: Data Analyst
+    email: priya.nair@example.com
+  - name: Leo Martinez
+    role: Marketing Manager
+    email: leo.martinez@example.com
+transcript: |
+  00:00 Maya Chen: Okay, rough agenda. Mobile checkout launch, beta blockers, analytics, and who owns the follow-ups.
+  00:18 Sarah Kim: Engineering is still blocked by the payment provider sandbox. Their webhook is returning duplicate success events.
+  00:35 Maya Chen: Decision: we are not moving launch to June 1. We are keeping May 29 for beta, but public launch is now June 12.
+  00:53 Jordan Lee: I can have the final empty-state screens ready by Thursday. The loading state is done, but error copy still needs legal review.
+  01:15 Maya Chen: Great. Sarah, can you confirm whether the duplicate webhook is provider-side or our retry logic?
+  01:27 Sarah Kim: Yes, I will confirm the webhook root cause by Friday and post the result in the launch channel.
+  01:45 Priya Nair: For analytics, I need the final event names before I can finish the dashboard.
+  02:01 Maya Chen: Decision: we will use checkout_started, payment_failed, payment_retried, and checkout_completed as the final event names.
+  02:20 Priya Nair: Perfect. I will update the dashboard using those event names by next Tuesday.
+  02:43 Leo Martinez: Marketing can draft the beta announcement, but I need the approved screenshots first.
+  03:02 Jordan Lee: I will send Leo the approved screenshots by Thursday afternoon after legal signs off on copy.
+  03:24 Maya Chen: Open question: do we need a separate email for failed payment recovery or just an in-app message?
+  03:40 Leo Martinez: I will look into that.
+  03:55 Sarah Kim: One more blocker. QA found a flaky Apple Pay test on iOS 17.4. It is not launch blocking yet, but it could become one.
+  04:18 Maya Chen: Sarah, please create the Apple Pay bug and tag QA today.
+  04:28 Sarah Kim: I can do that today.
+  04:41 Priya Nair: Also, if public launch is June 12, I need traffic estimates from Leo by Monday to size the dashboard alerts.
+  04:58 Leo Martinez: I can send Priya the traffic estimate by Monday morning.
+  05:12 Maya Chen: Decision: beta goes to the existing 250-person waitlist only. No paid acquisition until checkout completion is above 68 percent.
+  05:35 Jordan Lee: I still need clarity on who approves the legal copy. Maya, is that you or Legal?
+  05:48 Maya Chen: Legal approves final copy. I will ask Nina in Legal for a same-day review slot.
+  06:08 Maya Chen: Action recap: Sarah owns webhook root cause and Apple Pay bug, Jordan owns screenshots and empty states, Priya owns dashboard updates, Leo owns beta announcement and traffic estimate, and I own legal review slot.
+  06:34 Maya Chen: If anything slips, post in the launch channel before standup tomorrow.

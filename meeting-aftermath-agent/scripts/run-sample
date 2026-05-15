@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG_VALUE="$ROOT/src/config-value.js"
+
+cd "$ROOT"
+
+mock_transcript="$(node "$CONFIG_VALUE" sample.mockTranscript)"
+pm_format="$(node "$CONFIG_VALUE" sample.pmFormat)"
+organization="$(node "$CONFIG_VALUE" sample.organization)"
+
+exec "$ROOT/bin/meeting-aftermath" run \
+  --mock-transcript "$mock_transcript" \
+  --pm-format "$pm_format" \
+  --organization "$organization" \
+  "$@"

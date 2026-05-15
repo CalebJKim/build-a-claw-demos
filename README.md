@@ -10,6 +10,7 @@ The goal is repeatable demo shipping: a builder should be able to add a new demo
 - `semiconductor-manufacturing-agent/` - semiconductor manufacturing operations demo with synthetic fab data and OpenClaw workspace files.
 - `resume-callback-agent/` - resume callback demo with PDF upload, parallel specialist claws, local Ollama execution, report generation, and upgraded resume output.
 - `spending-autopsy-agent/` - spending autopsy demo with messy CSV cleanup, behavioral categorization, anomaly flags, visual report, and blunt cut list.
+- `meeting-aftermath-agent/` - meeting aftermath demo with mock transcript retrieval, parallel extraction, personalized follow-up emails, and PM-tool timeline output.
 
 ## Packaging Model
 

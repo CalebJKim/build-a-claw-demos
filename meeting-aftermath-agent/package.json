@@ -1,0 +1,22 @@
+{
+  "name": "meeting-aftermath-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenClaw meeting aftermath demo with transcript retrieval, parallel extraction, follow-up emails, and project timeline output.",
+  "bin": {
+    "meeting-aftermath": "./bin/meeting-aftermath"
+  },
+  "scripts": {
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
+    "reset": "./scripts/reset",
+    "uninstall": "./scripts/uninstall",
+    "run": "node ./src/run.js run"
+  },
+  "engines": {
+    "node": ">=22.16.0"
+  }
+}

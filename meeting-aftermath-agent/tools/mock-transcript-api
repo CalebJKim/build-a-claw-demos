@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+usage() {
+  cat <<'USAGE'
+Usage:
+  mock-transcript-api list
+  mock-transcript-api get <transcript-id>
+
+This is a local demo tool that pretends to retrieve a transcript from a
+meeting API. It prints YAML fixtures from data/mock-transcripts/.
+USAGE
+}
+
+cmd="${1:-}"
+case "$cmd" in
+  list)
+    find "$ROOT/data/mock-transcripts" -maxdepth 1 -type f -name '*.yaml' -print \
+      | sed 's#.*/##; s#\.yaml$##' | sort
+    ;;
+  get)
+    id="${2:-}"
+    if [[ -z "$id" ]]; then
+      usage >&2
+      exit 2
+    fi
+    file="$ROOT/data/mock-transcripts/$id.yaml"
+    if [[ ! -f "$file" ]]; then
+      echo "Transcript not found: $id" >&2
+      exit 1
+    fi
+    printf "# mock transcript API response\n"
+    printf "# endpoint: GET /v1/transcripts/%s\n" "$id"
+    cat "$file"
+    ;;
+  -h|--help|help|"")
+    usage
+    ;;
+  *)
+    echo "Unknown command: $cmd" >&2
+    usage >&2
+    exit 2
+    ;;
+esac

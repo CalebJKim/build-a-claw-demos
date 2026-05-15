@@ -1,0 +1,156 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG_VALUE="$ROOT/src/config-value.js"
+cd "$ROOT"
+
+usage() {
+  cat <<'USAGE'
+Usage:
+  meeting-aftermath-chat --mock-transcript product-sync [--pm-format linear]
+  meeting-aftermath-chat --transcript /path/to/transcript.txt [--pm-format linear]
+  meeting-aftermath-chat --latest-upload --async [--pm-format linear]
+
+Finds or retrieves a transcript, runs the aftermath workflow, keeps the report
+server running, and prints browser links for dashboard chat.
+
+Use --skip-model only for smoke tests on machines without Ollama running.
+USAGE
+}
+
+transcript=""
+mock_transcript=""
+pm_format=""
+organization=""
+latest_upload=false
+async=false
+skip_model=false
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --transcript) transcript="${2:-}"; shift 2 ;;
+    --mock-transcript) mock_transcript="${2:-}"; shift 2 ;;
+    --pm-format) pm_format="${2:-}"; shift 2 ;;
+    --organization) organization="${2:-}"; shift 2 ;;
+    --latest-upload) latest_upload=true; shift ;;
+    --async) async=true; shift ;;
+    --skip-model) skip_model=true; shift ;;
+    -h|--help) usage; exit 0 ;;
+    *) echo "Unknown option: $1" >&2; usage >&2; exit 2 ;;
+  esac
+done
+
+if [[ "$latest_upload" == true && -z "$transcript" ]]; then
+  profile="$(node "$CONFIG_VALUE" profile)"
+  mapfile -t candidates < <(
+    find \
+      "$HOME/.openclaw-${profile}/media/inbound" \
+      "$HOME/.openclaw-${profile}/media" \
+      "$HOME/.openclaw/media/inbound" \
+      "$ROOT/workspaces/main/.openclaw/attachments" \
+      "$ROOT/input" \
+      "/tmp/openclaw/uploads" \
+      -type f \( -iname '*.txt' -o -iname '*.md' -o -iname '*.vtt' -o -iname '*.srt' \) \
+      -printf '%T@ %p\n' 2>/dev/null | sort -nr | awk 'NR == 1 {$1=""; sub(/^ /,""); print}'
+  )
+  transcript="${candidates[0]:-}"
+fi
+
+if [[ -z "$transcript" && -z "$mock_transcript" ]]; then
+  mock_transcript="$(node "$CONFIG_VALUE" sample.mockTranscript)"
+fi
+
+if [[ -n "$transcript" && ! -f "$transcript" ]]; then
+  echo "Transcript not found: $transcript" >&2
+  exit 1
+fi
+
+if [[ -z "$pm_format" ]]; then
+  pm_format="$(node "$CONFIG_VALUE" sample.pmFormat)"
+fi
+if [[ -z "$organization" ]]; then
+  organization="$(node "$CONFIG_VALUE" sample.organization)"
+fi
+
+write_status_page() {
+  local file="$1"
+  local title="$2"
+  local body="$3"
+  cat > "$file" <<EOF
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="refresh" content="5">
+<title>${title}</title>
+<style>
+body{font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;background:#f6f7f9;color:#1f2328}
+main{max-width:820px;margin:0 auto;padding:42px 24px;background:#fff;min-height:100vh}
+a{color:#0f766e} code,pre{background:#eef2f6;border-radius:6px} code{padding:2px 5px} pre{padding:14px;overflow:auto}
+</style>
+</head>
+<body><main>
+${body}
+</main></body>
+</html>
+EOF
+}
+
+remote_report_port="$(node "$CONFIG_VALUE" remoteReportPort)"
+local_report_port="$(node "$CONFIG_VALUE" localReportPort)"
+
+mkdir -p "$ROOT/.generated"
+if [[ -f "$ROOT/.generated/report-server.pid" ]] && kill -0 "$(cat "$ROOT/.generated/report-server.pid")" 2>/dev/null; then
+  :
+else
+  nohup python3 -m http.server "$remote_report_port" --bind 127.0.0.1 > "$ROOT/.generated/report-server.log" 2>&1 &
+  echo $! > "$ROOT/.generated/report-server.pid"
+  sleep 1
+fi
+
+cmd=("$ROOT/bin/meeting-aftermath" run --pm-format "$pm_format" --organization "$organization")
+if [[ -n "$transcript" ]]; then cmd+=(--transcript "$transcript"); fi
+if [[ -n "$mock_transcript" ]]; then cmd+=(--mock-transcript "$mock_transcript"); fi
+if [[ "$skip_model" == true ]]; then cmd+=(--skip-model); fi
+
+if [[ "$async" == true ]]; then
+  job_id="chat-$(date -u +%Y%m%dT%H%M%SZ)"
+  job_dir="$ROOT/runs/_jobs/$job_id"
+  out_dir="$ROOT/runs/$job_id"
+  mkdir -p "$job_dir"
+  write_status_page "$job_dir/index.html" "Meeting aftermath running" "<h1>Meeting aftermath running</h1><p>The transcript workflow is running in the background.</p><p>This page refreshes every 5 seconds.</p><p>Output directory: <code>$out_dir</code></p>"
+  job_cmd=("$ROOT/bin/meeting-aftermath-job" --job-id "$job_id" --pm-format "$pm_format" --organization "$organization")
+  if [[ -n "$transcript" ]]; then job_cmd+=(--transcript "$transcript"); fi
+  if [[ -n "$mock_transcript" ]]; then job_cmd+=(--mock-transcript "$mock_transcript"); fi
+  if [[ "$skip_model" == true ]]; then job_cmd+=(--skip-model); fi
+  nohup "${job_cmd[@]}" > "$job_dir/launcher.log" 2>&1 < /dev/null &
+  echo $! > "$job_dir/pid"
+  cat <<EOF
+Meeting aftermath started.
+Status: http://127.0.0.1:${local_report_port}/runs/_jobs/${job_id}/index.html
+Server-local status: http://127.0.0.1:${remote_report_port}/runs/_jobs/${job_id}/index.html
+Output directory: ${out_dir}
+EOF
+  exit 0
+fi
+
+run_log="$ROOT/.generated/chat-run-$(date +%Y%m%d%H%M%S).log"
+"${cmd[@]}" | tee "$run_log"
+
+out_dir="$(awk -F'Report: ' '/^Report: / {print $2}' "$run_log" | sed 's#/index.html$##' | tail -1)"
+if [[ -z "$out_dir" ]]; then
+  out_dir="$(ls -td "$ROOT"/runs/* | head -1)"
+fi
+relative="${out_dir#$ROOT/}"
+
+cat <<EOF
+
+Meeting aftermath complete.
+Report: http://127.0.0.1:${local_report_port}/${relative}/index.html
+Draft emails: http://127.0.0.1:${local_report_port}/${relative}/draft-emails.md
+Timeline: http://127.0.0.1:${local_report_port}/${relative}/project-timeline.md
+Server-local report: http://127.0.0.1:${remote_report_port}/${relative}/index.html
+Output directory: ${out_dir}
+EOF

@@ -1,0 +1,96 @@
+{
+  "name": "meeting-aftermath-agent",
+  "profile": "meeting-demo",
+  "openclawMinVersion": "2026.5.12",
+  "nodeMinVersion": "22.16.0",
+  "model": {
+    "provider": "ollama",
+    "id": "qwen3.6:35b-a3b",
+    "openclawId": "ollama/qwen3.6:35b-a3b",
+    "baseUrl": "http://127.0.0.1:11434",
+    "contextTokens": 32768,
+    "maxOutputTokens": 2048,
+    "temperature": 0.25
+  },
+  "ports": {
+    "gateway": 18891,
+    "report": 18994,
+    "localTunnel": 18995
+  },
+  "agents": [
+    {
+      "id": "main",
+      "workspace": "workspaces/main",
+      "agentDir": "openclaw/agents/main/agent",
+      "template": "agents/main/AGENTS.md",
+      "soul": "agents/main/SOUL.md",
+      "chatFacing": true
+    },
+    {
+      "id": "extractor",
+      "workspace": "workspaces/extractor",
+      "agentDir": "openclaw/agents/extractor/agent",
+      "template": "agents/extractor/AGENTS.md",
+      "soul": "agents/extractor/SOUL.md"
+    },
+    {
+      "id": "owners",
+      "workspace": "workspaces/owners",
+      "agentDir": "openclaw/agents/owners/agent",
+      "template": "agents/owners/AGENTS.md",
+      "soul": "agents/owners/SOUL.md"
+    },
+    {
+      "id": "comms",
+      "workspace": "workspaces/comms",
+      "agentDir": "openclaw/agents/comms/agent",
+      "template": "agents/comms/AGENTS.md",
+      "soul": "agents/comms/SOUL.md"
+    },
+    {
+      "id": "timeline",
+      "workspace": "workspaces/timeline",
+      "agentDir": "openclaw/agents/timeline/agent",
+      "template": "agents/timeline/AGENTS.md",
+      "soul": "agents/timeline/SOUL.md"
+    }
+  ],
+  "claws": {
+    "extractor": "agents/extractor/SOUL.md",
+    "owners": "agents/owners/SOUL.md",
+    "comms": "agents/comms/SOUL.md",
+    "timeline": "agents/timeline/SOUL.md"
+  },
+  "requiredCommands": [
+    "openclaw",
+    "node",
+    "ollama",
+    "curl",
+    "python3"
+  ],
+  "optionalCommands": [
+    "chromium",
+    "google-chrome"
+  ],
+  "generatedPaths": [
+    "runs",
+    "input",
+    "workspaces",
+    ".generated",
+    ".archive",
+    "openclaw/agents"
+  ],
+  "sample": {
+    "mockTranscript": "product-sync",
+    "pmFormat": "linear",
+    "organization": "Acme Product"
+  },
+  "commands": {
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
+    "reset": "./scripts/reset",
+    "uninstall": "./scripts/uninstall"
+  }
+}
