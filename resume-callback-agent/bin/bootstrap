@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG="$ROOT/resume-claw.config.json"
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "node is required." >&2
+  exit 1
+fi
+
+PROFILE="${OPENCLAW_PROFILE:-$(node -e "console.log(require('$CONFIG').profile)")}"
+PORT="${OPENCLAW_GATEWAY_PORT:-$(node -e "console.log(require('$CONFIG').gatewayPort)")}"
+OPENCLAW_MODEL="${OPENCLAW_MODEL:-$(node -e "console.log(require('$CONFIG').openclawModel)")}"
+OLLAMA_MODEL="${OLLAMA_MODEL:-$(node -e "console.log(require('$CONFIG').model)")}"
+OLLAMA_HOST="${OLLAMA_HOST:-$(node -e "console.log(require('$CONFIG').ollamaHost)")}"
+
+export PATH="$HOME/.npm-global/bin:$PATH"
+export OLLAMA_API_KEY="${OLLAMA_API_KEY:-ollama}"
+
+for cmd in openclaw ollama curl; do
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    echo "$cmd is required but was not found on PATH." >&2
+    exit 1
+  fi
+done
+
+if ! ollama list | awk 'NR > 1 {print $1}' | grep -Fx "$OLLAMA_MODEL" >/dev/null; then
+  echo "Ollama model '$OLLAMA_MODEL' is not installed. Run: ollama pull $OLLAMA_MODEL" >&2
+  exit 1
+fi
+
+mkdir -p "$ROOT/.generated" "$ROOT/workspaces/main" "$ROOT/workspaces/job-market" "$ROOT/workspaces/resume-gap" "$ROOT/workspaces/salary" "$ROOT/workspaces/lead"
+mkdir -p "$ROOT/openclaw/agents/main/agent" "$ROOT/openclaw/agents/job-market/agent" "$ROOT/openclaw/agents/resume-gap/agent" "$ROOT/openclaw/agents/salary/agent" "$ROOT/openclaw/agents/lead/agent"
+
+PATCH="$ROOT/.generated/openclaw.patch.json"
+node "$ROOT/src/write-openclaw-patch.js" "$ROOT" "$PORT" "$OPENCLAW_MODEL" "$OLLAMA_MODEL" "$OLLAMA_HOST" > "$PATCH"
+
+openclaw --profile "$PROFILE" config patch --file "$PATCH" >/dev/null
+
+ensure_agent() {
+  local name="$1"
+  local workspace="$2"
+  local agent_dir="$3"
+
+  if openclaw --profile "$PROFILE" agents list --json | node -e "let s='';process.stdin.on('data',d=>s+=d);process.stdin.on('end',()=>{const agents=JSON.parse(s); process.exit(agents.some(a=>a.id===process.argv[1]) ? 0 : 1);})" "$name"; then
+    return 0
+  fi
+
+  openclaw --profile "$PROFILE" agents add "$name" \
+    --workspace "$workspace" \
+    --agent-dir "$agent_dir" \
+    --model "$OPENCLAW_MODEL" \
+    --non-interactive \
+    --json >/dev/null
+}
+
+ensure_agent "main" "$ROOT/workspaces/main" "$ROOT/openclaw/agents/main/agent"
+ensure_agent "job-market" "$ROOT/workspaces/job-market" "$ROOT/openclaw/agents/job-market/agent"
+ensure_agent "resume-gap" "$ROOT/workspaces/resume-gap" "$ROOT/openclaw/agents/resume-gap/agent"
+ensure_agent "salary" "$ROOT/workspaces/salary" "$ROOT/openclaw/agents/salary/agent"
+ensure_agent "lead" "$ROOT/workspaces/lead" "$ROOT/openclaw/agents/lead/agent"
+
+for pair in \
+  "main:main" \
+  "job-market:job-market" \
+  "resume-gap:resume-gap" \
+  "salary:salary" \
+  "lead:lead"
+do
+  agent="${pair%%:*}"
+  prompt="${pair##*:}"
+  cp "$ROOT/openclaw/templates/$prompt.AGENTS.md" "$ROOT/workspaces/$agent/AGENTS.md"
+  cp "$ROOT/claws/$prompt.md" "$ROOT/workspaces/$agent/SOUL.md"
+  if [ "$prompt" = "main" ]; then
+    node -e 'const fs = require("fs"); const [path, root] = process.argv.slice(1); fs.writeFileSync(path, fs.readFileSync(path, "utf8").replaceAll("__DEMO_ROOT__", root));' "$ROOT/workspaces/$agent/AGENTS.md" "$ROOT"
+    node -e 'const fs = require("fs"); const [path, root] = process.argv.slice(1); fs.writeFileSync(path, fs.readFileSync(path, "utf8").replaceAll("__DEMO_ROOT__", root));' "$ROOT/workspaces/$agent/SOUL.md" "$ROOT"
+  fi
+done
+
+mkdir -p "$ROOT/input"
+
+openclaw --profile "$PROFILE" gateway install --port "$PORT" --runtime node --force --json >/dev/null
+openclaw --profile "$PROFILE" gateway restart --json >/dev/null
+
+echo "OpenClaw resume demo is ready."
+echo "Profile: $PROFILE"
+echo "Gateway: ws://127.0.0.1:$PORT"
+echo "Model: $OPENCLAW_MODEL"
+echo "Run: $ROOT/bin/resume-claw run --resume /path/to/resume.pdf --target-role \"Product Manager\" --location \"San Francisco, CA\""

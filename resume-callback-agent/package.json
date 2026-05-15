@@ -1,0 +1,17 @@
+{
+  "name": "resume-callback-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenClaw resume callback demo with modular claws and local Ollama execution.",
+  "bin": {
+    "resume-claw": "./bin/resume-claw"
+  },
+  "scripts": {
+    "doctor": "node ./src/run.js doctor",
+    "run": "node ./src/run.js run"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

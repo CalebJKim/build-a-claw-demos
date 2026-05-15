@@ -1,0 +1,27 @@
+{
+  "profile": "resume-demo",
+  "gatewayPort": 18889,
+  "remoteReportPort": 18990,
+  "localReportPort": 18991,
+  "model": "qwen3.6:35b-a3b",
+  "ollamaHost": "http://127.0.0.1:11434",
+  "openclawModel": "ollama/qwen3.6:35b-a3b",
+  "contextTokens": 32768,
+  "maxOutputTokens": 4096,
+  "temperature": 0.2,
+  "parallelClaws": true,
+  "search": {
+    "maxJobResults": 8,
+    "maxSalaryResults": 6,
+    "fetchPages": true,
+    "pageChars": 3500
+  },
+  "claws": {
+    "jobMarket": "claws/job-market.md",
+    "resumeGap": "claws/resume-gap.md",
+    "salary": "claws/salary.md",
+    "lead": "claws/lead.md",
+    "evidenceGuard": "claws/evidence-guard.md",
+    "target": "claws/target-infer.md"
+  }
+}
