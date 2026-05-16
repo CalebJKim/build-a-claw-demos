@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+usage() {
+  cat <<'USAGE'
+Usage:
+  mock-travel-search search
+
+Prints the seeded travel corpus as JSON. This intentionally acts like a local
+travel-search API for the live demo.
+USAGE
+}
+
+case "${1:-}" in
+  search)
+    cat "$ROOT/data/travel-corpus.json"
+    ;;
+  -h|--help|help|'')
+    usage
+    ;;
+  *)
+    echo "Unknown command: $1" >&2
+    usage >&2
+    exit 2
+    ;;
+esac

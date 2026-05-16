@@ -1,0 +1,129 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG_VALUE="$ROOT/src/config-value.js"
+cd "$ROOT"
+
+usage() {
+  cat <<'USAGE'
+Usage:
+  surprise-trip-chat --brief "Plan a surprise weekend trip..." [--async]
+
+Runs the surprise trip planner workflow, keeps the report server running, and
+prints browser links for dashboard chat.
+
+Use --skip-model only for smoke tests on machines without Ollama running.
+USAGE
+}
+
+brief=""
+origin=""
+budget=""
+partner_name=""
+traveler_name=""
+dates=""
+async=false
+skip_model=false
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --brief) brief="${2:-}"; shift 2 ;;
+    --origin) origin="${2:-}"; shift 2 ;;
+    --budget) budget="${2:-}"; shift 2 ;;
+    --partner-name) partner_name="${2:-}"; shift 2 ;;
+    --traveler-name) traveler_name="${2:-}"; shift 2 ;;
+    --dates) dates="${2:-}"; shift 2 ;;
+    --async) async=true; shift ;;
+    --skip-model) skip_model=true; shift ;;
+    -h|--help) usage; exit 0 ;;
+    *) echo "Unknown option: $1" >&2; usage >&2; exit 2 ;;
+  esac
+done
+
+if [[ -z "$brief" ]]; then
+  brief="$(node "$CONFIG_VALUE" sample.brief)"
+fi
+if [[ -z "$origin" ]]; then origin="$(node "$CONFIG_VALUE" sample.origin)"; fi
+if [[ -z "$budget" ]]; then budget="$(node "$CONFIG_VALUE" sample.budget)"; fi
+if [[ -z "$partner_name" ]]; then partner_name="$(node "$CONFIG_VALUE" sample.partnerName)"; fi
+if [[ -z "$traveler_name" ]]; then traveler_name="$(node "$CONFIG_VALUE" sample.travelerName)"; fi
+if [[ -z "$dates" ]]; then dates="$(node "$CONFIG_VALUE" sample.dates)"; fi
+
+write_status_page() {
+  local file="$1"
+  local title="$2"
+  local body="$3"
+  cat > "$file" <<EOF
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="refresh" content="5">
+<title>${title}</title>
+<style>
+body{font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;background:#f6f7f9;color:#1f2328}
+main{max-width:820px;margin:0 auto;padding:42px 24px;background:#fff;min-height:100vh}
+a{color:#0f766e} code,pre{background:#eef2f6;border-radius:6px} code{padding:2px 5px} pre{padding:14px;overflow:auto}
+</style>
+</head>
+<body><main>
+${body}
+</main></body>
+</html>
+EOF
+}
+
+remote_report_port="$(node "$CONFIG_VALUE" remoteReportPort)"
+local_report_port="$(node "$CONFIG_VALUE" localReportPort)"
+
+mkdir -p "$ROOT/.generated"
+if [[ -f "$ROOT/.generated/report-server.pid" ]] && kill -0 "$(cat "$ROOT/.generated/report-server.pid")" 2>/dev/null; then
+  :
+else
+  nohup python3 -m http.server "$remote_report_port" --bind 127.0.0.1 > "$ROOT/.generated/report-server.log" 2>&1 &
+  echo $! > "$ROOT/.generated/report-server.pid"
+  sleep 1
+fi
+
+cmd=("$ROOT/bin/surprise-trip" run --brief "$brief" --origin "$origin" --budget "$budget" --partner-name "$partner_name" --traveler-name "$traveler_name" --dates "$dates")
+if [[ "$skip_model" == true ]]; then cmd+=(--skip-model); fi
+
+if [[ "$async" == true ]]; then
+  job_id="chat-$(date -u +%Y%m%dT%H%M%SZ)"
+  job_dir="$ROOT/runs/_jobs/$job_id"
+  out_dir="$ROOT/runs/$job_id"
+  mkdir -p "$job_dir"
+  write_status_page "$job_dir/index.html" "Surprise trip running" "<h1>Surprise trip running</h1><p>The trip planner workflow is running in the background.</p><p>This page refreshes every 5 seconds.</p><p>Output directory: <code>$out_dir</code></p>"
+  job_cmd=("$ROOT/bin/surprise-trip-job" --job-id "$job_id" --brief "$brief" --origin "$origin" --budget "$budget" --partner-name "$partner_name" --traveler-name "$traveler_name" --dates "$dates")
+  if [[ "$skip_model" == true ]]; then job_cmd+=(--skip-model); fi
+  nohup "${job_cmd[@]}" > "$job_dir/launcher.log" 2>&1 < /dev/null &
+  echo $! > "$job_dir/pid"
+  cat <<EOF
+Surprise trip planner started.
+Status: http://127.0.0.1:${local_report_port}/runs/_jobs/${job_id}/index.html
+Server-local status: http://127.0.0.1:${remote_report_port}/runs/_jobs/${job_id}/index.html
+Output directory: ${out_dir}
+EOF
+  exit 0
+fi
+
+run_log="$ROOT/.generated/chat-run-$(date +%Y%m%d%H%M%S).log"
+"${cmd[@]}" | tee "$run_log"
+
+out_dir="$(awk -F'Report: ' '/^Report: / {print $2}' "$run_log" | sed 's#/index.html$##' | tail -1)"
+if [[ -z "$out_dir" ]]; then
+  out_dir="$(ls -td "$ROOT"/runs/* | head -1)"
+fi
+relative="${out_dir#$ROOT/}"
+
+cat <<EOF
+
+Surprise trip planner complete.
+Report: http://127.0.0.1:${local_report_port}/${relative}/index.html
+Reveal messages: http://127.0.0.1:${local_report_port}/${relative}/reveal-messages.md
+Booking links: http://127.0.0.1:${local_report_port}/${relative}/booking-links.md
+Server-local report: http://127.0.0.1:${remote_report_port}/${relative}/index.html
+Output directory: ${out_dir}
+EOF

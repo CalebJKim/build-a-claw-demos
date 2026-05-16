@@ -1,0 +1,99 @@
+{
+  "name": "surprise-trip-planner-agent",
+  "profile": "trip-demo",
+  "openclawMinVersion": "2026.5.12",
+  "nodeMinVersion": "22.16.0",
+  "model": {
+    "provider": "ollama",
+    "id": "qwen3.6:35b-a3b",
+    "openclawId": "ollama/qwen3.6:35b-a3b",
+    "baseUrl": "http://127.0.0.1:11434",
+    "contextTokens": 32768,
+    "maxOutputTokens": 2048,
+    "temperature": 0.45
+  },
+  "ports": {
+    "gateway": 18892,
+    "report": 18996,
+    "localTunnel": 18997
+  },
+  "agents": [
+    {
+      "id": "main",
+      "workspace": "workspaces/main",
+      "agentDir": "openclaw/agents/main/agent",
+      "template": "agents/main/AGENTS.md",
+      "soul": "agents/main/SOUL.md",
+      "chatFacing": true
+    },
+    {
+      "id": "destinations",
+      "workspace": "workspaces/destinations",
+      "agentDir": "openclaw/agents/destinations/agent",
+      "template": "agents/destinations/AGENTS.md",
+      "soul": "agents/destinations/SOUL.md"
+    },
+    {
+      "id": "trails",
+      "workspace": "workspaces/trails",
+      "agentDir": "openclaw/agents/trails/agent",
+      "template": "agents/trails/AGENTS.md",
+      "soul": "agents/trails/SOUL.md"
+    },
+    {
+      "id": "logistics",
+      "workspace": "workspaces/logistics",
+      "agentDir": "openclaw/agents/logistics/agent",
+      "template": "agents/logistics/AGENTS.md",
+      "soul": "agents/logistics/SOUL.md"
+    },
+    {
+      "id": "reveal",
+      "workspace": "workspaces/reveal",
+      "agentDir": "openclaw/agents/reveal/agent",
+      "template": "agents/reveal/AGENTS.md",
+      "soul": "agents/reveal/SOUL.md"
+    }
+  ],
+  "claws": {
+    "destinations": "agents/destinations/SOUL.md",
+    "trails": "agents/trails/SOUL.md",
+    "logistics": "agents/logistics/SOUL.md",
+    "reveal": "agents/reveal/SOUL.md"
+  },
+  "requiredCommands": [
+    "openclaw",
+    "node",
+    "ollama",
+    "curl",
+    "python3"
+  ],
+  "optionalCommands": [
+    "chromium",
+    "google-chrome"
+  ],
+  "generatedPaths": [
+    "runs",
+    "input",
+    "workspaces",
+    ".generated",
+    ".archive",
+    "openclaw/agents"
+  ],
+  "sample": {
+    "brief": "Plan a surprise weekend trip for my partner. She loves hiking, hates crowds, and we have $1,200.",
+    "origin": "San Francisco, CA",
+    "budget": 1200,
+    "partnerName": "Maya",
+    "travelerName": "Caleb",
+    "dates": "a spring weekend"
+  },
+  "commands": {
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
+    "reset": "./scripts/reset",
+    "uninstall": "./scripts/uninstall"
+  }
+}

@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG_VALUE="$ROOT/src/config-value.js"
+
+cd "$ROOT"
+
+brief="$(node "$CONFIG_VALUE" sample.brief)"
+origin="$(node "$CONFIG_VALUE" sample.origin)"
+budget="$(node "$CONFIG_VALUE" sample.budget)"
+partner_name="$(node "$CONFIG_VALUE" sample.partnerName)"
+traveler_name="$(node "$CONFIG_VALUE" sample.travelerName)"
+dates="$(node "$CONFIG_VALUE" sample.dates)"
+
+exec "$ROOT/bin/surprise-trip" run \
+  --brief "$brief" \
+  --origin "$origin" \
+  --budget "$budget" \
+  --partner-name "$partner_name" \
+  --traveler-name "$traveler_name" \
+  --dates "$dates" \
+  "$@"

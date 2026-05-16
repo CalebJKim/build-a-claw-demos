@@ -1,0 +1,336 @@
+{
+  "origin": "San Francisco, CA",
+  "generatedFor": "seeded demo corpus",
+  "destinations": [
+    {
+      "id": "mendocino-redwoods",
+      "name": "Mendocino Coast + Russian Gulch",
+      "region": "Mendocino County, California",
+      "travelMode": "drive",
+      "driveHours": 3.4,
+      "flightHours": null,
+      "crowdLevel": 2,
+      "hikingFit": 9,
+      "romanceFit": 9,
+      "seasonFit": ["spring", "fall", "early summer"],
+      "quietWindow": "Friday evening arrival, hike before 9:00 AM, late lunch after the day-tripper wave",
+      "whyFits": "Coastal cliffs, redwoods, tide pools, and quiet inns make it feel planned and intimate without blowing the budget.",
+      "risks": ["Highway 1 can be slow", "fog can hide sunset views"],
+      "costs": {
+        "transport": 95,
+        "lodging": 520,
+        "food": 230,
+        "activities": 45,
+        "contingency": 90
+      },
+      "lodging": {
+        "name": "Quiet Mendocino inn or cabin",
+        "neighborhood": "Mendocino village or Little River",
+        "notes": "Book a small inn away from Main Street for quiet mornings and easy trail access.",
+        "bookingUrl": "https://www.google.com/travel/hotels/Mendocino"
+      },
+      "transportLinks": [
+        {
+          "label": "Route from San Francisco to Mendocino",
+          "url": "https://www.google.com/maps/dir/San+Francisco,+CA/Mendocino,+CA"
+        }
+      ],
+      "bookingLinks": [
+        {
+          "label": "Mendocino hotel search",
+          "url": "https://www.google.com/travel/hotels/Mendocino"
+        },
+        {
+          "label": "Russian Gulch State Park",
+          "url": "https://www.parks.ca.gov/?page_id=432"
+        }
+      ],
+      "trails": [
+        {
+          "name": "Russian Gulch Waterfall Loop",
+          "difficulty": "moderate",
+          "distanceMiles": 6.3,
+          "elevationFeet": 790,
+          "bestTime": "8:00 AM Saturday",
+          "crowdTip": "Start from the state park side before most coastal visitors arrive.",
+          "reviewSignal": "Consistently praised for redwoods, fern canyon, and a real payoff waterfall.",
+          "url": "https://www.parks.ca.gov/?page_id=432"
+        },
+        {
+          "name": "Mendocino Headlands bluff walk",
+          "difficulty": "easy",
+          "distanceMiles": 3.0,
+          "elevationFeet": 120,
+          "bestTime": "sunset or Sunday morning",
+          "crowdTip": "Walk the western bluff sections instead of the closest village overlooks.",
+          "reviewSignal": "Low effort, high reward coastal views.",
+          "url": "https://www.parks.ca.gov/?page_id=442"
+        }
+      ]
+    },
+    {
+      "id": "lassen-mineral",
+      "name": "Lassen Volcanic + Mineral",
+      "region": "Lassen Volcanic National Park, California",
+      "travelMode": "drive",
+      "driveHours": 4.2,
+      "flightHours": null,
+      "crowdLevel": 2,
+      "hikingFit": 10,
+      "romanceFit": 7,
+      "seasonFit": ["late spring", "summer", "fall"],
+      "quietWindow": "Shoulder season weekend, arrive Friday, hike early while day visitors are still driving in",
+      "whyFits": "Big volcanic scenery without Yosemite-level crowds, with quiet cabins and hot-springs energy nearby.",
+      "risks": ["Snow can close high-elevation trails early in season", "Food options are limited near the park"],
+      "costs": {
+        "transport": 155,
+        "lodging": 430,
+        "food": 210,
+        "activities": 60,
+        "contingency": 110
+      },
+      "lodging": {
+        "name": "Mineral or Chester cabin/motel",
+        "neighborhood": "Mineral, Chester, or Mill Creek",
+        "notes": "Choose simple lodging close to the south entrance to maximize trail time.",
+        "bookingUrl": "https://www.google.com/travel/hotels/Lassen+Volcanic+National+Park"
+      },
+      "transportLinks": [
+        {
+          "label": "Route from San Francisco to Lassen Volcanic",
+          "url": "https://www.google.com/maps/dir/San+Francisco,+CA/Lassen+Volcanic+National+Park"
+        }
+      ],
+      "bookingLinks": [
+        {
+          "label": "Lassen lodging search",
+          "url": "https://www.google.com/travel/hotels/Lassen+Volcanic+National+Park"
+        },
+        {
+          "label": "Lassen official trip planning",
+          "url": "https://www.nps.gov/lavo/planyourvisit/index.htm"
+        }
+      ],
+      "trails": [
+        {
+          "name": "Bumpass Hell",
+          "difficulty": "moderate",
+          "distanceMiles": 3.0,
+          "elevationFeet": 440,
+          "bestTime": "first legal trail window after road/trail opening",
+          "crowdTip": "Go early and avoid holiday weekends.",
+          "reviewSignal": "Hydrothermal boardwalks make it feel unlike a normal California hike.",
+          "url": "https://www.nps.gov/lavo/planyourvisit/bumpass-hell.htm"
+        },
+        {
+          "name": "Kings Creek Falls",
+          "difficulty": "moderate",
+          "distanceMiles": 2.8,
+          "elevationFeet": 700,
+          "bestTime": "Saturday morning",
+          "crowdTip": "Start before 8:30 AM and picnic after the return.",
+          "reviewSignal": "Waterfall payoff, meadow approach, and manageable distance.",
+          "url": "https://www.nps.gov/lavo/planyourvisit/hiking.htm"
+        }
+      ]
+    },
+    {
+      "id": "tucson-saguaro",
+      "name": "Tucson + Saguaro National Park",
+      "region": "Tucson, Arizona",
+      "travelMode": "fly",
+      "driveHours": null,
+      "flightHours": 2.1,
+      "crowdLevel": 3,
+      "hikingFit": 9,
+      "romanceFit": 8,
+      "seasonFit": ["winter", "spring", "fall"],
+      "quietWindow": "Fly Friday, dawn hike Saturday, pool/food recovery in the afternoon",
+      "whyFits": "Desert trails, huge sky, and warm evenings feel like a real surprise without needing an international budget.",
+      "risks": ["Heat changes the hiking window", "Flights can push the package near the budget ceiling"],
+      "costs": {
+        "transport": 410,
+        "lodging": 430,
+        "food": 230,
+        "activities": 50,
+        "contingency": 70
+      },
+      "lodging": {
+        "name": "Quiet casita or boutique hotel near Catalina Foothills",
+        "neighborhood": "Catalina Foothills or central Tucson",
+        "notes": "Prioritize a calm patio and short drive to trailheads.",
+        "bookingUrl": "https://www.google.com/travel/hotels/Tucson"
+      },
+      "transportLinks": [
+        {
+          "label": "Flight search SFO to TUS",
+          "url": "https://www.google.com/travel/flights?q=SFO%20to%20TUS"
+        }
+      ],
+      "bookingLinks": [
+        {
+          "label": "Tucson hotel search",
+          "url": "https://www.google.com/travel/hotels/Tucson"
+        },
+        {
+          "label": "Saguaro hiking guide",
+          "url": "https://www.nps.gov/sagu/planyourvisit/hiking.htm"
+        }
+      ],
+      "trails": [
+        {
+          "name": "Wasson Peak via King Canyon",
+          "difficulty": "hard",
+          "distanceMiles": 7.9,
+          "elevationFeet": 1863,
+          "bestTime": "sunrise Saturday",
+          "crowdTip": "Start at sunrise and avoid the hottest window.",
+          "reviewSignal": "Classic Sonoran views and a summit that feels earned.",
+          "url": "https://www.nps.gov/sagu/planyourvisit/hiking-west.htm"
+        },
+        {
+          "name": "Mica View + Cactus Forest Loop",
+          "difficulty": "easy",
+          "distanceMiles": 3.7,
+          "elevationFeet": 180,
+          "bestTime": "golden hour",
+          "crowdTip": "Use it as a quiet Sunday morning walk before flying home.",
+          "reviewSignal": "Dense saguaro scenery without a punishing climb.",
+          "url": "https://www.nps.gov/sagu/planyourvisit/hiking-east.htm"
+        }
+      ]
+    },
+    {
+      "id": "bend-sisters",
+      "name": "Bend + Sisters",
+      "region": "Central Oregon",
+      "travelMode": "fly",
+      "driveHours": null,
+      "flightHours": 1.4,
+      "crowdLevel": 4,
+      "hikingFit": 10,
+      "romanceFit": 8,
+      "seasonFit": ["spring", "fall", "early summer"],
+      "quietWindow": "Stay in Sisters or west Bend, hike early, avoid downtown Saturday night",
+      "whyFits": "A polished outdoors weekend with volcanic trails, rivers, and good food, but it needs crowd-aware timing.",
+      "risks": ["Popular weekends get expensive", "Snow can affect higher trails"],
+      "costs": {
+        "transport": 390,
+        "lodging": 500,
+        "food": 230,
+        "activities": 35,
+        "contingency": 80
+      },
+      "lodging": {
+        "name": "Sisters lodge or quiet west Bend stay",
+        "neighborhood": "Sisters or west Bend",
+        "notes": "Sisters is calmer than downtown Bend and closer to several quiet trailheads.",
+        "bookingUrl": "https://www.google.com/travel/hotels/Sisters,+Oregon"
+      },
+      "transportLinks": [
+        {
+          "label": "Flight search SFO to RDM",
+          "url": "https://www.google.com/travel/flights?q=SFO%20to%20RDM"
+        }
+      ],
+      "bookingLinks": [
+        {
+          "label": "Sisters hotel search",
+          "url": "https://www.google.com/travel/hotels/Sisters,+Oregon"
+        },
+        {
+          "label": "Visit Bend hiking",
+          "url": "https://www.visitbend.com/things-to-do/activities/hiking/"
+        }
+      ],
+      "trails": [
+        {
+          "name": "Tam McArthur Rim",
+          "difficulty": "moderate",
+          "distanceMiles": 5.0,
+          "elevationFeet": 1200,
+          "bestTime": "early Saturday if snow-free",
+          "crowdTip": "Pick shoulder season and start at first light.",
+          "reviewSignal": "Big Cascade views without needing an all-day sufferfest.",
+          "url": "https://www.fs.usda.gov/recarea/deschutes/recarea/?recid=38804"
+        },
+        {
+          "name": "Shevlin Park Loop",
+          "difficulty": "easy",
+          "distanceMiles": 4.6,
+          "elevationFeet": 340,
+          "bestTime": "Sunday morning",
+          "crowdTip": "Use it as a low-stress second hike before brunch.",
+          "reviewSignal": "Ponderosa forest and creek scenery close to town.",
+          "url": "https://www.visitbend.com/listing/shevlin-park/"
+        }
+      ]
+    },
+    {
+      "id": "ojai-sespe",
+      "name": "Ojai + Los Padres",
+      "region": "Ventura County, California",
+      "travelMode": "drive",
+      "driveHours": 5.2,
+      "flightHours": null,
+      "crowdLevel": 5,
+      "hikingFit": 8,
+      "romanceFit": 9,
+      "seasonFit": ["winter", "spring", "fall"],
+      "quietWindow": "Stay outside the main village, hike early, do dinner after the day crowd clears",
+      "whyFits": "Warm, romantic, and hikeable, but the drive is longer and Ojai can get crowded on pretty weekends.",
+      "risks": ["Longer drive from San Francisco", "Boutique lodging can crush the budget"],
+      "costs": {
+        "transport": 170,
+        "lodging": 590,
+        "food": 260,
+        "activities": 30,
+        "contingency": 100
+      },
+      "lodging": {
+        "name": "Small inn near Ojai or Ventura foothills",
+        "neighborhood": "Ojai edge or Ventura",
+        "notes": "Avoid premium spa resorts if the budget matters.",
+        "bookingUrl": "https://www.google.com/travel/hotels/Ojai"
+      },
+      "transportLinks": [
+        {
+          "label": "Route from San Francisco to Ojai",
+          "url": "https://www.google.com/maps/dir/San+Francisco,+CA/Ojai,+CA"
+        }
+      ],
+      "bookingLinks": [
+        {
+          "label": "Ojai hotel search",
+          "url": "https://www.google.com/travel/hotels/Ojai"
+        },
+        {
+          "label": "Los Padres trail information",
+          "url": "https://www.fs.usda.gov/lpnf"
+        }
+      ],
+      "trails": [
+        {
+          "name": "Shelf Road",
+          "difficulty": "easy",
+          "distanceMiles": 3.5,
+          "elevationFeet": 350,
+          "bestTime": "sunset Friday or early Sunday",
+          "crowdTip": "Walk before breakfast or at golden hour, not midday.",
+          "reviewSignal": "Easy views over Ojai with minimal planning.",
+          "url": "https://www.ojaivalleytrailridingcompany.com/local-hikes"
+        },
+        {
+          "name": "Cozy Dell Trail",
+          "difficulty": "moderate",
+          "distanceMiles": 4.0,
+          "elevationFeet": 850,
+          "bestTime": "early Saturday",
+          "crowdTip": "Start early and bring water; exposed sections get warm.",
+          "reviewSignal": "Classic Ojai foothill climb with valley views.",
+          "url": "https://www.fs.usda.gov/lpnf"
+        }
+      ]
+    }
+  ]
+}

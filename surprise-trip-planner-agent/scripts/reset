@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG_VALUE="$ROOT/src/config-value.js"
+
+cd "$ROOT"
+export PATH="$HOME/.npm-global/bin:$PATH"
+
+profile="$(node "$CONFIG_VALUE" profile)"
+stamp="$(date +%Y%m%d-%H%M%S)"
+archive="$ROOT/.archive/$stamp"
+
+mkdir -p "$archive"
+
+if [[ -f "$ROOT/.generated/report-server.pid" ]] && kill -0 "$(cat "$ROOT/.generated/report-server.pid")" 2>/dev/null; then
+  kill "$(cat "$ROOT/.generated/report-server.pid")" 2>/dev/null || true
+fi
+
+for item in runs input .generated; do
+  if [[ -e "$ROOT/$item" ]]; then
+    mv "$ROOT/$item" "$archive/$item"
+  fi
+done
+
+mkdir -p "$ROOT/runs" "$ROOT/input" "$ROOT/.generated"
+
+if command -v openclaw >/dev/null 2>&1; then
+  openclaw --profile "$profile" gateway restart --json >/dev/null 2>&1 || true
+fi
+
+cat <<MSG
+Surprise trip planner demo reset complete.
+
+Archived old state to:
+  $archive
+
+Profile kept:
+  $profile
+
+Start a fresh dashboard chat before the next live run.
+MSG
