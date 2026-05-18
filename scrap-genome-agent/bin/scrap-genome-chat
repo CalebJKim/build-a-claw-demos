@@ -88,12 +88,12 @@ if [[ "$async" == true ]]; then
   echo $! > "$job_dir/pid"
   cat <<EOF
 Scrap Genome started.
-Status: http://127.0.0.1:${local_report_port}/runs/_jobs/${job_id}/index.html
-Report: http://127.0.0.1:${local_report_port}/runs/${job_id}/index.html
-Genome: http://127.0.0.1:${local_report_port}/runs/${job_id}/scrap-genome.md
-Findings: http://127.0.0.1:${local_report_port}/runs/${job_id}/plain-english-findings.md
-Recommendations: http://127.0.0.1:${local_report_port}/runs/${job_id}/recommendations.md
-Current conditions: http://127.0.0.1:${local_report_port}/runs/${job_id}/current-conditions.md
+Status: http://127.0.0.1:${remote_report_port}/runs/_jobs/${job_id}/index.html
+Report: http://127.0.0.1:${remote_report_port}/runs/${job_id}/index.html
+Genome: http://127.0.0.1:${remote_report_port}/runs/${job_id}/scrap-genome.md
+Findings: http://127.0.0.1:${remote_report_port}/runs/${job_id}/plain-english-findings.md
+Recommendations: http://127.0.0.1:${remote_report_port}/runs/${job_id}/recommendations.md
+Current conditions: http://127.0.0.1:${remote_report_port}/runs/${job_id}/current-conditions.md
 Server-local status: http://127.0.0.1:${remote_report_port}/runs/_jobs/${job_id}/index.html
 Output directory: ${out_dir}
 EOF
@@ -112,9 +112,9 @@ relative="${out_dir#$ROOT/}"
 cat <<EOF
 
 Scrap Genome complete.
-Report: http://127.0.0.1:${local_report_port}/${relative}/index.html
-Genome: http://127.0.0.1:${local_report_port}/${relative}/scrap-genome.md
-Findings: http://127.0.0.1:${local_report_port}/${relative}/plain-english-findings.md
-Recommendations: http://127.0.0.1:${local_report_port}/${relative}/recommendations.md
+Report: http://127.0.0.1:${remote_report_port}/${relative}/index.html
+Genome: http://127.0.0.1:${remote_report_port}/${relative}/scrap-genome.md
+Findings: http://127.0.0.1:${remote_report_port}/${relative}/plain-english-findings.md
+Recommendations: http://127.0.0.1:${remote_report_port}/${relative}/recommendations.md
 Output directory: ${out_dir}
 EOF

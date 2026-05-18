@@ -85,13 +85,13 @@ if [[ "$async" == true ]]; then
   echo $! > "$job_dir/pid"
   cat <<EOF
 Pre-Flight started.
-Status: http://127.0.0.1:${local_report_port}/runs/_jobs/${job_id}/index.html
-Report: http://127.0.0.1:${local_report_port}/runs/${job_id}/index.html
-Forecast: http://127.0.0.1:${local_report_port}/runs/${job_id}/forecast.md
-Comparison: http://127.0.0.1:${local_report_port}/runs/${job_id}/comparison.md
-Job analysis: http://127.0.0.1:${local_report_port}/runs/${job_id}/job-analysis.md
-Machine assessment: http://127.0.0.1:${local_report_port}/runs/${job_id}/machine-assessment.md
-Context reading: http://127.0.0.1:${local_report_port}/runs/${job_id}/context-reading.md
+Status: http://127.0.0.1:${remote_report_port}/runs/_jobs/${job_id}/index.html
+Report: http://127.0.0.1:${remote_report_port}/runs/${job_id}/index.html
+Forecast: http://127.0.0.1:${remote_report_port}/runs/${job_id}/forecast.md
+Comparison: http://127.0.0.1:${remote_report_port}/runs/${job_id}/comparison.md
+Job analysis: http://127.0.0.1:${remote_report_port}/runs/${job_id}/job-analysis.md
+Machine assessment: http://127.0.0.1:${remote_report_port}/runs/${job_id}/machine-assessment.md
+Context reading: http://127.0.0.1:${remote_report_port}/runs/${job_id}/context-reading.md
 Server-local status: http://127.0.0.1:${remote_report_port}/runs/_jobs/${job_id}/index.html
 Output directory: ${out_dir}
 EOF
@@ -110,8 +110,8 @@ relative="${out_dir#$ROOT/}"
 cat <<EOF
 
 Pre-Flight complete.
-Report: http://127.0.0.1:${local_report_port}/${relative}/index.html
-Forecast: http://127.0.0.1:${local_report_port}/${relative}/forecast.md
-Comparison: http://127.0.0.1:${local_report_port}/${relative}/comparison.md
+Report: http://127.0.0.1:${remote_report_port}/${relative}/index.html
+Forecast: http://127.0.0.1:${remote_report_port}/${relative}/forecast.md
+Comparison: http://127.0.0.1:${remote_report_port}/${relative}/comparison.md
 Output directory: ${out_dir}
 EOF

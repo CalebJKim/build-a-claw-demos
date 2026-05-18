@@ -102,7 +102,7 @@ if [[ "$async" == true ]]; then
   echo $! > "$job_dir/pid"
   cat <<EOF
 Surprise trip planner started.
-Status: http://127.0.0.1:${local_report_port}/runs/_jobs/${job_id}/index.html
+Status: http://127.0.0.1:${remote_report_port}/runs/_jobs/${job_id}/index.html
 Server-local status: http://127.0.0.1:${remote_report_port}/runs/_jobs/${job_id}/index.html
 Output directory: ${out_dir}
 EOF
@@ -121,9 +121,9 @@ relative="${out_dir#$ROOT/}"
 cat <<EOF
 
 Surprise trip planner complete.
-Report: http://127.0.0.1:${local_report_port}/${relative}/index.html
-Reveal messages: http://127.0.0.1:${local_report_port}/${relative}/reveal-messages.md
-Booking links: http://127.0.0.1:${local_report_port}/${relative}/booking-links.md
+Report: http://127.0.0.1:${remote_report_port}/${relative}/index.html
+Reveal messages: http://127.0.0.1:${remote_report_port}/${relative}/reveal-messages.md
+Booking links: http://127.0.0.1:${remote_report_port}/${relative}/booking-links.md
 Server-local report: http://127.0.0.1:${remote_report_port}/${relative}/index.html
 Output directory: ${out_dir}
 EOF

@@ -94,8 +94,8 @@ if [[ "$async" == true ]]; then
   echo $! > "$job_dir/pid"
   cat <<EOF
 Side project launcher started.
-Status: http://127.0.0.1:${local_report_port}/runs/_jobs/${job_id}/index.html
-Landing page: http://127.0.0.1:${local_report_port}/runs/${job_id}/landing-page/index.html
+Status: http://127.0.0.1:${remote_report_port}/runs/_jobs/${job_id}/index.html
+Landing page: http://127.0.0.1:${remote_report_port}/runs/${job_id}/landing-page/index.html
 Server-local status: http://127.0.0.1:${remote_report_port}/runs/_jobs/${job_id}/index.html
 Output directory: ${out_dir}
 EOF
@@ -114,9 +114,9 @@ relative="${out_dir#$ROOT/}"
 cat <<EOF
 
 Side project launcher complete.
-Landing page: http://127.0.0.1:${local_report_port}/${relative}/landing-page/index.html
-Report: http://127.0.0.1:${local_report_port}/${relative}/index.html
-Week one checklist: http://127.0.0.1:${local_report_port}/${relative}/week-one-checklist.md
+Landing page: http://127.0.0.1:${remote_report_port}/${relative}/landing-page/index.html
+Report: http://127.0.0.1:${remote_report_port}/${relative}/index.html
+Week one checklist: http://127.0.0.1:${remote_report_port}/${relative}/week-one-checklist.md
 Server-local landing page: http://127.0.0.1:${remote_report_port}/${relative}/landing-page/index.html
 Output directory: ${out_dir}
 EOF

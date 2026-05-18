@@ -85,13 +85,13 @@ if [[ "$async" == true ]]; then
   echo $! > "$job_dir/pid"
   cat <<EOF
 Downtime Clock started.
-Status: http://127.0.0.1:${local_report_port}/runs/_jobs/${job_id}/index.html
-Live dashboard: http://127.0.0.1:${local_report_port}/runs/${job_id}/index.html
-Executive summary: http://127.0.0.1:${local_report_port}/runs/${job_id}/executive-summary.md
-Break-even: http://127.0.0.1:${local_report_port}/runs/${job_id}/break-even.md
-Revenue clock: http://127.0.0.1:${local_report_port}/runs/${job_id}/revenue-clock.md
-Cascade tracker: http://127.0.0.1:${local_report_port}/runs/${job_id}/cascade-tracker.md
-History: http://127.0.0.1:${local_report_port}/runs/${job_id}/history.md
+Status: http://127.0.0.1:${remote_report_port}/runs/_jobs/${job_id}/index.html
+Live dashboard: http://127.0.0.1:${remote_report_port}/runs/${job_id}/index.html
+Executive summary: http://127.0.0.1:${remote_report_port}/runs/${job_id}/executive-summary.md
+Break-even: http://127.0.0.1:${remote_report_port}/runs/${job_id}/break-even.md
+Revenue clock: http://127.0.0.1:${remote_report_port}/runs/${job_id}/revenue-clock.md
+Cascade tracker: http://127.0.0.1:${remote_report_port}/runs/${job_id}/cascade-tracker.md
+History: http://127.0.0.1:${remote_report_port}/runs/${job_id}/history.md
 Server-local status: http://127.0.0.1:${remote_report_port}/runs/_jobs/${job_id}/index.html
 Output directory: ${out_dir}
 EOF
@@ -110,8 +110,8 @@ relative="${out_dir#$ROOT/}"
 cat <<EOF
 
 Downtime Clock complete.
-Live dashboard: http://127.0.0.1:${local_report_port}/${relative}/index.html
-Executive summary: http://127.0.0.1:${local_report_port}/${relative}/executive-summary.md
-Break-even: http://127.0.0.1:${local_report_port}/${relative}/break-even.md
+Live dashboard: http://127.0.0.1:${remote_report_port}/${relative}/index.html
+Executive summary: http://127.0.0.1:${remote_report_port}/${relative}/executive-summary.md
+Break-even: http://127.0.0.1:${remote_report_port}/${relative}/break-even.md
 Output directory: ${out_dir}
 EOF
