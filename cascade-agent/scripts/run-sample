@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG_VALUE="$ROOT/src/config-value.js"
+
+cd "$ROOT"
+
+machine="$(node "$CONFIG_VALUE" sample.machineId)"
+repair_hours="$(node "$CONFIG_VALUE" sample.estimatedRepairHours)"
+
+exec "$ROOT/bin/cascade" run \
+  --machine "$machine" \
+  --repair-hours "$repair_hours" \
+  "$@"

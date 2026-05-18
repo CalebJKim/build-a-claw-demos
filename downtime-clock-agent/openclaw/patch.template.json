@@ -1,0 +1,19 @@
+{
+  "gateway": {
+    "mode": "local",
+    "port": "__GATEWAY_PORT__"
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "__OPENCLAW_MODEL__",
+        "fallbacks": []
+      },
+      "workspace": "__DEMO_ROOT__/workspaces/main",
+      "maxConcurrent": 3,
+      "subagents": {
+        "maxConcurrent": 3
+      }
+    }
+  }
+}

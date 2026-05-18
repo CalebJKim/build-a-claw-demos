@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG_VALUE="$ROOT/src/config-value.js"
+
+cd "$ROOT"
+
+part_family="$(node "$CONFIG_VALUE" sample.partFamily)"
+lookback_days="$(node "$CONFIG_VALUE" sample.lookbackDays)"
+
+exec "$ROOT/bin/scrap-genome" run \
+  --part-family "$part_family" \
+  --lookback-days "$lookback_days" \
+  "$@"

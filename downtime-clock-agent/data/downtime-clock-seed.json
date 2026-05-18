@@ -1,0 +1,119 @@
+{
+  "event": {
+    "eventId": "dt-machine-4-live",
+    "machineId": "MACHINE-4",
+    "displayName": "Machine 4",
+    "detectedAt": "2026-05-18T09:12:00-07:00",
+    "fault": "main spindle drive fault, thermal trip during finishing pass",
+    "estimatedRepairMinutes": 118,
+    "demoTimeScale": {
+      "realSecondsPerDowntimeMinute": 1,
+      "label": "Demo clock: 1 second = 1 downtime minute"
+    }
+  },
+  "productionSchedule": [
+    {
+      "jobId": "J-7714",
+      "customer": "Apex Hydraulics",
+      "part": "Hydraulic manifold HMX-17",
+      "status": "running",
+      "startsAtDowntimeMinute": 0,
+      "unitsPerHour": 54,
+      "unitsRemaining": 124,
+      "contributionMarginPerUnit": 1067,
+      "commitRisk": "today 2:00 PM dock slot"
+    },
+    {
+      "jobId": "J-7721",
+      "customer": "Northstar Robotics",
+      "part": "Actuator clevis set",
+      "status": "queued",
+      "startsAtDowntimeMinute": 7,
+      "unitsPerHour": 32,
+      "unitsRemaining": 86,
+      "contributionMarginPerUnit": 742,
+      "commitRisk": "line-down premium if delayed past noon"
+    },
+    {
+      "jobId": "J-7730",
+      "customer": "MedVector",
+      "part": "Pump rotor carrier",
+      "status": "queued",
+      "startsAtDowntimeMinute": 14,
+      "unitsPerHour": 26,
+      "unitsRemaining": 51,
+      "contributionMarginPerUnit": 1558,
+      "commitRisk": "validated lot release window"
+    }
+  ],
+  "downstreamStations": [
+    {
+      "stationId": "DEBURR-2",
+      "name": "Deburr Cell 2",
+      "bufferMinutes": 9,
+      "idleLaborCostPerMinute": 185,
+      "crew": 3
+    },
+    {
+      "stationId": "CMM-1",
+      "name": "CMM Inspection 1",
+      "bufferMinutes": 18,
+      "idleLaborCostPerMinute": 260,
+      "crew": 2
+    },
+    {
+      "stationId": "ASSY-4",
+      "name": "Assembly Line 4",
+      "bufferMinutes": 27,
+      "idleLaborCostPerMinute": 315,
+      "crew": 5
+    }
+  ],
+  "repair": {
+    "parts": [
+      {
+        "sku": "DRV-4AX-SP",
+        "description": "spindle drive module",
+        "cost": 9800
+      },
+      {
+        "sku": "SNS-TMP-19",
+        "description": "thermal sensor harness",
+        "cost": 1200
+      }
+    ],
+    "laborCost": 3400,
+    "expediteCost": 2000,
+    "outsideServiceCost": 2600,
+    "totalCost": 19000,
+    "estimatedRepairMinutes": 118
+  },
+  "history": {
+    "quarter": "Q2 FY2026",
+    "unplannedEventsThisQuarterIncludingCurrent": 4,
+    "priorEvents": [
+      {
+        "date": "2026-04-03",
+        "minutesDown": 112,
+        "loss": 28600,
+        "cause": "spindle drive thermal trip"
+      },
+      {
+        "date": "2026-04-19",
+        "minutesDown": 87,
+        "loss": 21400,
+        "cause": "axis servo fault"
+      },
+      {
+        "date": "2026-05-06",
+        "minutesDown": 153,
+        "loss": 35000,
+        "cause": "spindle drive thermal trip"
+      }
+    ],
+    "averageRepairMinutes": 117,
+    "annualizedDowntimeCost": 340000,
+    "rebuildCost": 80000,
+    "rebuildLeadTimeDays": 9
+  }
+}

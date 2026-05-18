@@ -15,6 +15,10 @@ The goal is repeatable demo shipping: a builder should be able to add a new demo
 - `side-project-launcher-agent/` - side project launcher demo with mock market research, brand/copy generation, live landing page, email capture, and week-one checklist.
 - `self-fixing-game-agent/` - self-fixing multiplayer trivia game demo with spec/build/test/fix/deploy loop, live phone-playable game server, and bug report.
 - `monday-morning-machine-agent/` - Monday morning prep demo with mock calendar/inbox/world-search integrations, parallel claws, weekly brief, and mock-safe action receipts.
+- `cascade-agent/` - manufacturing downtime cascade demo with live cost clock, blast-radius analysis, reroute ranking, and mock-safe customer notifications.
+- `scrap-genome-agent/` - scrap genome demo with 90-day quality/process mock data, interaction correlation, plain-English findings, process recommendations, and current elevated-risk warning.
+- `pre-flight-agent/` - pre-run manufacturing risk demo with job/machine/context analysis, first-pass yield forecast, wait-vs-run cost tradeoff, and go/no-go recommendation.
+- `downtime-clock-agent/` - executive downtime-cost demo with live ticking cost clock, downstream cascade acceleration, repair break-even threshold, and Machine 4 history.
 
 ## Packaging Model
 

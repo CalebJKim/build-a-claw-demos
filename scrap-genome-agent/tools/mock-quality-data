@@ -1,0 +1,119 @@
+#!/usr/bin/env node
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const ROOT = path.resolve(path.dirname(__filename), '..');
+const command = process.argv[2] ?? 'collect';
+const partFamily = process.argv[3] ?? 'impeller-housing-G7';
+const lookbackDays = Number(process.argv[4] ?? 90);
+
+if (['-h', '--help', 'help'].includes(command)) {
+  console.log('Usage: mock-quality-data collect <part-family> [lookback-days]');
+  process.exit(0);
+}
+
+if (command !== 'collect') {
+  console.error(`Unknown command: ${command}`);
+  process.exit(2);
+}
+
+const seed = JSON.parse(readFileSync(path.join(ROOT, 'data/scrap-seed.json'), 'utf8'));
+if (partFamily !== seed.partFamily) {
+  console.error(`Unknown part family: ${partFamily}`);
+  process.exit(1);
+}
+
+const events = generateEvents(seed, lookbackDays);
+console.log(JSON.stringify({
+  source: 'mock historical quality/process join',
+  partFamily,
+  lookbackDays,
+  asOf: seed.asOf,
+  geometry: seed.geometry,
+  currentConditions: seed.currentConditions,
+  rowCount: events.length,
+  fields: [
+    'eventId',
+    'timestamp',
+    'outcome',
+    'machineId',
+    'operator',
+    'shift',
+    'toolAgeHours',
+    'materialLot',
+    'ambientTempF',
+    'humidityPercent',
+    'spindleLoadPercent',
+    'maintenancePrior48h',
+    'failureMode'
+  ],
+  events,
+}, null, 2));
+
+function generateEvents(seedData, days) {
+  const events = [];
+  const start = new Date(seedData.asOf);
+  start.setDate(start.getDate() - days);
+  let id = 1000;
+  for (let day = 0; day < days; day += 1) {
+    for (let run = 0; run < 8; run += 1) {
+      const timestamp = new Date(start.getTime() + (day * 24 + 6 + run * 2.2) * 60 * 60 * 1000);
+      const machineId = pick(seedData.machines, day + run * 3);
+      const operator = pick(seedData.operators, day * 2 + run);
+      const shift = seedData.shifts[(run + Math.floor(day / 3)) % seedData.shifts.length];
+      const toolAgeHours = Number((12 + ((day * 5 + run * 7) % 52) + (run % 3) * 0.7).toFixed(1));
+      const materialLot = pick(seedData.materialLots, day + run * 2).id;
+      const humidityPercent = Number((52 + ((day * 7 + run * 5) % 27) + (shift === 'B' ? 2.2 : 0)).toFixed(1));
+      const ambientTempF = Number((70 + ((day * 3 + run * 4) % 11) + (humidityPercent > 68 ? 1.5 : 0)).toFixed(1));
+      const spindleLoadPercent = Number((66 + ((day * 4 + run * 6) % 23) + (toolAgeHours > 40 ? 4.5 : 0)).toFixed(1));
+      const maintenancePrior48h = seedData.maintenanceEvents.some((event) => event.machineId === machineId && Math.abs(timestamp - new Date(event.at)) <= 48 * 60 * 60 * 1000);
+      const riskScore = scoreRisk({ machineId, shift, toolAgeHours, materialLot, humidityPercent, spindleLoadPercent, maintenancePrior48h });
+      const deterministic = ((day * 37 + run * 19) % 100) / 100;
+      const outcome = deterministic < riskScore ? 'scrap' : 'good';
+      events.push({
+        eventId: `QE-${id++}`,
+        timestamp: timestamp.toISOString(),
+        outcome,
+        machineId,
+        operator,
+        shift,
+        toolAgeHours,
+        materialLot,
+        ambientTempF,
+        humidityPercent,
+        spindleLoadPercent,
+        maintenancePrior48h,
+        failureMode: outcome === 'scrap' ? failureModeFor({ toolAgeHours, humidityPercent, spindleLoadPercent, materialLot }) : '',
+      });
+    }
+  }
+  return events;
+}
+
+function scoreRisk(row) {
+  let risk = 0.055;
+  if (row.toolAgeHours > 40) risk += 0.035;
+  if (row.humidityPercent > 68) risk += 0.03;
+  if (row.spindleLoadPercent > 82) risk += 0.028;
+  if (['AL-8821', 'AL-8827'].includes(row.materialLot)) risk += 0.018;
+  if (row.shift === 'B') risk += 0.012;
+  if (row.maintenancePrior48h) risk += 0.01;
+  if (row.toolAgeHours > 40 && row.humidityPercent > 68) risk += 0.14;
+  if (row.toolAgeHours > 40 && row.humidityPercent > 68 && row.shift === 'B') risk += 0.08;
+  if (row.toolAgeHours > 40 && row.humidityPercent > 68 && ['AL-8821', 'AL-8827'].includes(row.materialLot)) risk += 0.07;
+  if (row.toolAgeHours > 40 && row.humidityPercent > 68 && row.spindleLoadPercent > 82) risk += 0.065;
+  return Math.min(0.76, risk);
+}
+
+function failureModeFor(row) {
+  if (row.toolAgeHours > 40 && row.humidityPercent > 68) return 'chatter on thin wall';
+  if (row.spindleLoadPercent > 82) return 'bore oversize';
+  if (['AL-8821', 'AL-8827'].includes(row.materialLot)) return 'datum face taper';
+  return 'bore oversize';
+}
+
+function pick(items, index) {
+  return items[((index % items.length) + items.length) % items.length];
+}

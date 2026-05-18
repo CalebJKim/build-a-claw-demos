@@ -1,0 +1,92 @@
+{
+  "name": "downtime-clock-agent",
+  "profile": "downtime-clock-demo",
+  "openclawMinVersion": "2026.5.12",
+  "nodeMinVersion": "22.14.0",
+  "model": {
+    "provider": "ollama",
+    "id": "qwen3.6:35b-a3b",
+    "openclawId": "ollama/qwen3.6:35b-a3b",
+    "baseUrl": "http://127.0.0.1:11434",
+    "contextTokens": 32768,
+    "maxOutputTokens": 2048,
+    "temperature": 0.22
+  },
+  "ports": {
+    "gateway": 18900,
+    "report": 19014,
+    "localTunnel": 19015
+  },
+  "agents": [
+    {
+      "id": "main",
+      "workspace": "workspaces/main",
+      "agentDir": "openclaw/agents/main/agent",
+      "template": "agents/main/AGENTS.md",
+      "soul": "agents/main/SOUL.md",
+      "chatFacing": true
+    },
+    {
+      "id": "revenue",
+      "workspace": "workspaces/revenue",
+      "agentDir": "openclaw/agents/revenue/agent",
+      "template": "agents/revenue/AGENTS.md",
+      "soul": "agents/revenue/SOUL.md"
+    },
+    {
+      "id": "cascade",
+      "workspace": "workspaces/cascade",
+      "agentDir": "openclaw/agents/cascade/agent",
+      "template": "agents/cascade/AGENTS.md",
+      "soul": "agents/cascade/SOUL.md"
+    },
+    {
+      "id": "comparator",
+      "workspace": "workspaces/comparator",
+      "agentDir": "openclaw/agents/comparator/agent",
+      "template": "agents/comparator/AGENTS.md",
+      "soul": "agents/comparator/SOUL.md"
+    },
+    {
+      "id": "historian",
+      "workspace": "workspaces/historian",
+      "agentDir": "openclaw/agents/historian/agent",
+      "template": "agents/historian/AGENTS.md",
+      "soul": "agents/historian/SOUL.md"
+    }
+  ],
+  "claws": {
+    "revenue": "agents/revenue/SOUL.md",
+    "cascade": "agents/cascade/SOUL.md",
+    "comparator": "agents/comparator/SOUL.md",
+    "historian": "agents/historian/SOUL.md"
+  },
+  "requiredCommands": [
+    "openclaw",
+    "node",
+    "ollama",
+    "curl",
+    "python3"
+  ],
+  "generatedPaths": [
+    "runs",
+    "input",
+    "workspaces",
+    ".generated",
+    ".archive",
+    "openclaw/agents"
+  ],
+  "sample": {
+    "ask": "Machine 4 just went down. What is this actually costing me.",
+    "machineId": "MACHINE-4",
+    "eventId": "dt-machine-4-live"
+  },
+  "commands": {
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
+    "reset": "./scripts/reset",
+    "uninstall": "./scripts/uninstall"
+  }
+}

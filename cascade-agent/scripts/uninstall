@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG_VALUE="$ROOT/src/config-value.js"
+
+cd "$ROOT"
+export PATH="$HOME/.npm-global/bin:$PATH"
+
+profile="$(node "$CONFIG_VALUE" profile)"
+yes=false
+
+if [[ "${1:-}" == "--yes" ]]; then
+  yes=true
+fi
+
+if [[ "$yes" != true ]]; then
+  printf "This will remove generated demo state and OpenClaw profile '%s'. Continue? [y/N] " "$profile"
+  read -r reply
+  case "$reply" in
+    y|Y|yes|YES) ;;
+    *) echo "Canceled."; exit 0 ;;
+  esac
+fi
+
+if command -v openclaw >/dev/null 2>&1; then
+  openclaw --profile "$profile" gateway stop --json >/dev/null 2>&1 || true
+  openclaw --profile "$profile" gateway uninstall --json >/dev/null 2>&1 || true
+fi
+
+if [[ -f "$ROOT/.generated/report-server.pid" ]] && kill -0 "$(cat "$ROOT/.generated/report-server.pid")" 2>/dev/null; then
+  kill "$(cat "$ROOT/.generated/report-server.pid")" 2>/dev/null || true
+fi
+
+for item in runs input workspaces .generated .archive openclaw/agents; do
+  rm -rf "$ROOT/$item"
+done
+
+case "$profile" in
+  ""|*/*|.*)
+    echo "Refusing to remove suspicious profile name: $profile" >&2
+    ;;
+  *)
+    rm -rf "$HOME/.openclaw-$profile"
+    ;;
+esac
+
+echo "Cascade demo uninstalled."

@@ -1,0 +1,38 @@
+#!/usr/bin/env node
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
+
+const command = process.argv[2] ?? 'help';
+const outDir = process.argv[3];
+const payload = process.argv[4] ? JSON.parse(process.argv[4]) : {};
+
+if (['-h', '--help', 'help'].includes(command) || !outDir) {
+  console.log('Usage: mock-customer-comms <send|draft> <out-dir> <json-payload>');
+  process.exit(command === 'help' ? 0 : 2);
+}
+
+if (!['send', 'draft'].includes(command)) {
+  console.error(`Unknown command: ${command}`);
+  process.exit(2);
+}
+
+mkdirSync(outDir, { recursive: true });
+const ledgerPath = path.join(outDir, 'customer-comms-ledger.json');
+let ledger = [];
+try {
+  ledger = JSON.parse(readFileSync(ledgerPath, 'utf8'));
+} catch {
+  ledger = [];
+}
+
+const entry = {
+  id: `${command}-customer-${String(ledger.length + 1).padStart(3, '0')}`,
+  command,
+  approved: command === 'send',
+  demoMode: true,
+  executedAt: new Date().toISOString(),
+  payload,
+};
+ledger.push(entry);
+writeFileSync(ledgerPath, `${JSON.stringify(ledger, null, 2)}\n`);
+console.log(JSON.stringify(entry, null, 2));

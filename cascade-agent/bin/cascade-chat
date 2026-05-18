@@ -1,0 +1,124 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG_VALUE="$ROOT/src/config-value.js"
+cd "$ROOT"
+
+usage() {
+  cat <<'USAGE'
+Usage:
+  cascade-chat --machine PRESS-17 [--async]
+
+Triggers the downtime cascade workflow, keeps the report server running, and
+prints browser links for dashboard chat.
+
+Use --skip-model for deterministic smoke tests. Use --no-send to draft
+customer notifications without mock send receipts.
+USAGE
+}
+
+machine=""
+repair_hours=""
+async=false
+skip_model=false
+no_send=false
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --machine) machine="${2:-}"; shift 2 ;;
+    --repair-hours) repair_hours="${2:-}"; shift 2 ;;
+    --async) async=true; shift ;;
+    --skip-model) skip_model=true; shift ;;
+    --no-send) no_send=true; shift ;;
+    -h|--help) usage; exit 0 ;;
+    *) echo "Unknown option: $1" >&2; usage >&2; exit 2 ;;
+  esac
+done
+
+if [[ -z "$machine" ]]; then machine="$(node "$CONFIG_VALUE" sample.machineId)"; fi
+if [[ -z "$repair_hours" ]]; then repair_hours="$(node "$CONFIG_VALUE" sample.estimatedRepairHours)"; fi
+
+write_status_page() {
+  local file="$1"
+  local title="$2"
+  local body="$3"
+  cat > "$file" <<EOF
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="refresh" content="5">
+<title>${title}</title>
+<style>
+body{font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;background:#f6f7f9;color:#1f2328}
+main{max-width:860px;margin:0 auto;padding:42px 24px;background:#fff;min-height:100vh}
+a{color:#2457d6} code,pre{background:#eef2f6;border-radius:6px} code{padding:2px 5px} pre{padding:14px;overflow:auto}
+</style>
+</head>
+<body><main>
+${body}
+</main></body>
+</html>
+EOF
+}
+
+remote_report_port="$(node "$CONFIG_VALUE" remoteReportPort)"
+local_report_port="$(node "$CONFIG_VALUE" localReportPort)"
+
+mkdir -p "$ROOT/.generated"
+if [[ -f "$ROOT/.generated/report-server.pid" ]] && kill -0 "$(cat "$ROOT/.generated/report-server.pid")" 2>/dev/null; then
+  :
+else
+  nohup python3 -m http.server "$remote_report_port" --bind 127.0.0.1 > "$ROOT/.generated/report-server.log" 2>&1 &
+  echo $! > "$ROOT/.generated/report-server.pid"
+  sleep 1
+fi
+
+cmd=("$ROOT/bin/cascade" run --machine "$machine" --repair-hours "$repair_hours")
+if [[ "$skip_model" == true ]]; then cmd+=(--skip-model); fi
+if [[ "$no_send" == true ]]; then cmd+=(--no-send); fi
+
+if [[ "$async" == true ]]; then
+  job_id="chat-$(date -u +%Y%m%dT%H%M%SZ)"
+  job_dir="$ROOT/runs/_jobs/$job_id"
+  out_dir="$ROOT/runs/$job_id"
+  mkdir -p "$job_dir"
+  write_status_page "$job_dir/index.html" "Cascade running" "<h1>Cascade running</h1><p>Downtime event triggered. Impact, reroute, and cost clock claws are running in parallel.</p><p>This page refreshes every 5 seconds.</p><p>Output directory: <code>$out_dir</code></p>"
+  job_cmd=("$ROOT/bin/cascade-job" --job-id "$job_id" --machine "$machine" --repair-hours "$repair_hours")
+  if [[ "$skip_model" == true ]]; then job_cmd+=(--skip-model); fi
+  if [[ "$no_send" == true ]]; then job_cmd+=(--no-send); fi
+  nohup "${job_cmd[@]}" > "$job_dir/cascade.log" 2>&1 < /dev/null &
+  echo $! > "$job_dir/pid"
+  cat <<EOF
+Cascade started.
+Status: http://127.0.0.1:${local_report_port}/runs/_jobs/${job_id}/index.html
+Live report: http://127.0.0.1:${local_report_port}/runs/${job_id}/index.html
+Blast radius: http://127.0.0.1:${local_report_port}/runs/${job_id}/blast-radius.md
+Reroute options: http://127.0.0.1:${local_report_port}/runs/${job_id}/reroute-options.md
+Customer notifications: http://127.0.0.1:${local_report_port}/runs/${job_id}/customer-notifications.md
+Server-local status: http://127.0.0.1:${remote_report_port}/runs/_jobs/${job_id}/index.html
+Output directory: ${out_dir}
+EOF
+  exit 0
+fi
+
+run_log="$ROOT/.generated/chat-run-$(date +%Y%m%d%H%M%S).log"
+"${cmd[@]}" | tee "$run_log"
+
+out_dir="$(awk -F'Report: ' '/^Report: / {print $2}' "$run_log" | sed 's#/index.html$##' | tail -1)"
+if [[ -z "$out_dir" ]]; then
+  out_dir="$(ls -td "$ROOT"/runs/* | head -1)"
+fi
+relative="${out_dir#$ROOT/}"
+
+cat <<EOF
+
+Cascade complete.
+Live report: http://127.0.0.1:${local_report_port}/${relative}/index.html
+Blast radius: http://127.0.0.1:${local_report_port}/${relative}/blast-radius.md
+Reroute options: http://127.0.0.1:${local_report_port}/${relative}/reroute-options.md
+Customer notifications: http://127.0.0.1:${local_report_port}/${relative}/customer-notifications.md
+Output directory: ${out_dir}
+EOF

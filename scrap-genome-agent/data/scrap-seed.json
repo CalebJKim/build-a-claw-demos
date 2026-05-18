@@ -1,0 +1,38 @@
+{
+  "partFamily": "impeller-housing-G7",
+  "lookbackDays": 90,
+  "asOf": "2026-05-18T08:20:00-07:00",
+  "geometry": {
+    "name": "Impeller Housing G7",
+    "criticalFeatures": ["thin-wall pocket", "bearing bore", "datum face A"],
+    "failureModes": ["bore oversize", "chatter on thin wall", "datum face taper"]
+  },
+  "machines": ["MILL-14", "MILL-19", "MILL-22", "MILL-31"],
+  "operators": ["Nadia", "Eli", "Marcus", "Sofia", "Jae", "Priya"],
+  "shifts": ["A", "B", "C"],
+  "materialLots": [
+    { "id": "AL-8821", "vendor": "Barton Metals", "received": "2026-03-11", "flagged": true },
+    { "id": "AL-8827", "vendor": "Barton Metals", "received": "2026-03-27", "flagged": true },
+    { "id": "AL-8733", "vendor": "North Alloy", "received": "2026-02-16", "flagged": false },
+    { "id": "AL-8790", "vendor": "North Alloy", "received": "2026-03-02", "flagged": false },
+    { "id": "AL-8844", "vendor": "Hanover Billet", "received": "2026-04-05", "flagged": false }
+  ],
+  "maintenanceEvents": [
+    { "machineId": "MILL-14", "at": "2026-04-22T20:00:00-07:00", "type": "spindle bearing inspection" },
+    { "machineId": "MILL-19", "at": "2026-05-10T07:30:00-07:00", "type": "coolant concentration adjustment" },
+    { "machineId": "MILL-22", "at": "2026-05-15T18:00:00-07:00", "type": "toolholder replacement" }
+  ],
+  "currentConditions": {
+    "timestamp": "2026-05-18T08:20:00-07:00",
+    "machineId": "MILL-19",
+    "operator": "Eli",
+    "shift": "B",
+    "toolAgeHours": 43.6,
+    "materialLot": "AL-8821",
+    "ambientTempF": 77.4,
+    "humidityPercent": 71.2,
+    "spindleLoadPercent": 84.5,
+    "maintenancePrior48h": false,
+    "nextScheduledRun": "2026-05-18T10:00:00-07:00"
+  }
+}

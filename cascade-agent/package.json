@@ -1,0 +1,22 @@
+{
+  "name": "cascade-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenClaw manufacturing cascade demo with downtime trigger, parallel impact/reroute/cost analysis, live clock, and customer notifications.",
+  "bin": {
+    "cascade": "./bin/cascade"
+  },
+  "scripts": {
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
+    "reset": "./scripts/reset",
+    "uninstall": "./scripts/uninstall",
+    "run": "node ./src/run.js run"
+  },
+  "engines": {
+    "node": ">=22.16.0"
+  }
+}

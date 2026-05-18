@@ -1,0 +1,117 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG_VALUE="$ROOT/src/config-value.js"
+cd "$ROOT"
+
+usage() {
+  cat <<'USAGE'
+Usage:
+  downtime-clock-chat --machine MACHINE-4 [--async]
+
+Runs the live downtime clock workflow, keeps the report server running, and
+prints browser links for dashboard chat.
+
+Use --skip-model for deterministic smoke tests.
+USAGE
+}
+
+machine=""
+async=false
+skip_model=false
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --machine) machine="${2:-}"; shift 2 ;;
+    --async) async=true; shift ;;
+    --skip-model) skip_model=true; shift ;;
+    -h|--help) usage; exit 0 ;;
+    *) echo "Unknown option: $1" >&2; usage >&2; exit 2 ;;
+  esac
+done
+
+if [[ -z "$machine" ]]; then machine="$(node "$CONFIG_VALUE" sample.machineId)"; fi
+
+write_status_page() {
+  local file="$1"
+  local title="$2"
+  local body="$3"
+  cat > "$file" <<EOF
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="refresh" content="5">
+<title>${title}</title>
+<style>
+body{font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;background:#f6f7f9;color:#1f2328}
+main{max-width:860px;margin:0 auto;padding:42px 24px;background:#fff;min-height:100vh}
+a{color:#2457d6} code,pre{background:#eef2f6;border-radius:6px} code{padding:2px 5px} pre{padding:14px;overflow:auto}
+</style>
+</head>
+<body><main>
+${body}
+</main></body>
+</html>
+EOF
+}
+
+remote_report_port="$(node "$CONFIG_VALUE" remoteReportPort)"
+local_report_port="$(node "$CONFIG_VALUE" localReportPort)"
+
+mkdir -p "$ROOT/.generated"
+if [[ -f "$ROOT/.generated/report-server.pid" ]] && kill -0 "$(cat "$ROOT/.generated/report-server.pid")" 2>/dev/null; then
+  :
+else
+  nohup python3 -m http.server "$remote_report_port" --bind 127.0.0.1 > "$ROOT/.generated/report-server.log" 2>&1 &
+  echo $! > "$ROOT/.generated/report-server.pid"
+  sleep 1
+fi
+
+cmd=("$ROOT/bin/downtime-clock" run --machine "$machine")
+if [[ "$skip_model" == true ]]; then cmd+=(--skip-model); fi
+
+if [[ "$async" == true ]]; then
+  job_id="chat-$(date -u +%Y%m%dT%H%M%SZ)"
+  job_dir="$ROOT/runs/_jobs/$job_id"
+  out_dir="$ROOT/runs/$job_id"
+  mkdir -p "$job_dir"
+  write_status_page "$job_dir/index.html" "Downtime Clock running" "<h1>Downtime Clock running</h1><p>Revenue calculator, cascade tracker, comparator, and historian are building the live clock.</p><p>This page refreshes every 5 seconds.</p><p>Output directory: <code>$out_dir</code></p>"
+  job_cmd=("$ROOT/bin/downtime-clock-job" --job-id "$job_id" --machine "$machine")
+  if [[ "$skip_model" == true ]]; then job_cmd+=(--skip-model); fi
+  nohup "${job_cmd[@]}" > "$job_dir/downtime-clock.log" 2>&1 < /dev/null &
+  echo $! > "$job_dir/pid"
+  cat <<EOF
+Downtime Clock started.
+Status: http://127.0.0.1:${local_report_port}/runs/_jobs/${job_id}/index.html
+Live dashboard: http://127.0.0.1:${local_report_port}/runs/${job_id}/index.html
+Executive summary: http://127.0.0.1:${local_report_port}/runs/${job_id}/executive-summary.md
+Break-even: http://127.0.0.1:${local_report_port}/runs/${job_id}/break-even.md
+Revenue clock: http://127.0.0.1:${local_report_port}/runs/${job_id}/revenue-clock.md
+Cascade tracker: http://127.0.0.1:${local_report_port}/runs/${job_id}/cascade-tracker.md
+History: http://127.0.0.1:${local_report_port}/runs/${job_id}/history.md
+Server-local status: http://127.0.0.1:${remote_report_port}/runs/_jobs/${job_id}/index.html
+Output directory: ${out_dir}
+EOF
+  exit 0
+fi
+
+run_log="$ROOT/.generated/chat-run-$(date +%Y%m%d%H%M%S).log"
+"${cmd[@]}" | tee "$run_log"
+
+out_dir="$(awk -F'Report: ' '/^Report: / {print $2}' "$run_log" | sed 's#/index.html$##' | tail -1)"
+if [[ -z "$out_dir" ]]; then
+  out_dir="$(ls -td "$ROOT"/runs/* | head -1)"
+fi
+relative="${out_dir#$ROOT/}"
+
+cat <<EOF
+
+Downtime Clock complete.
+Live dashboard: http://127.0.0.1:${local_report_port}/${relative}/index.html
+Executive summary: http://127.0.0.1:${local_report_port}/${relative}/executive-summary.md
+Break-even: http://127.0.0.1:${local_report_port}/${relative}/break-even.md
+Output directory: ${out_dir}
+EOF

@@ -1,0 +1,22 @@
+{
+  "name": "scrap-genome-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenClaw scrap genome demo with historical quality data ingest, interaction correlation, causal fingerprinting, recommendations, and live risk warning.",
+  "bin": {
+    "scrap-genome": "./bin/scrap-genome"
+  },
+  "scripts": {
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
+    "reset": "./scripts/reset",
+    "uninstall": "./scripts/uninstall",
+    "run": "node ./src/run.js run"
+  },
+  "engines": {
+    "node": ">=22.16.0"
+  }
+}

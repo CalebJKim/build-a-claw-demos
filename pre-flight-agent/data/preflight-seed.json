@@ -1,0 +1,168 @@
+{
+  "asOf": "2026-05-18T08:15:00-07:00",
+  "plant": "Spark Precision Cell 4",
+  "scenarios": [
+    {
+      "id": "wait-smart",
+      "title": "Wait four hours is cheaper than running now",
+      "job": {
+        "jobId": "PF-24018",
+        "partFamily": "fuel-metering-valve-body",
+        "geometry": "Fuel Metering Valve Body",
+        "material": "Inconel 718",
+        "quantity": 42,
+        "dueAt": "2026-05-19T14:00:00-07:00",
+        "complexity": "5-axis thin-wall pocketing with intersecting bores",
+        "tightestToleranceInches": 0.0008,
+        "customerRequirement": "zero cosmetic defects, full dimensional report on critical bores",
+        "materialCert": "cert OK, heat lot shows high hardness band at 43 HRC",
+        "reworkCostPerFailedUnit": 1650,
+        "escapeRiskReserve": 4200
+      },
+      "current": {
+        "machineId": "MILL-03",
+        "operator": "Riley",
+        "shift": "A",
+        "yieldProbability": 0.62,
+        "confidence": 0.74,
+        "calibrationDaysAgo": 38,
+        "similarJobFpy60d": 0.68,
+        "openWorkOrders": [
+          "probe repeatability warning",
+          "thermal compensation drift watch"
+        ],
+        "operatorMaterialRuns": 2,
+        "operatorGeometryRuns": 1,
+        "shopLoad": "heavy",
+        "ambientTempF": 78.5,
+        "humidityPercent": 69.4
+      },
+      "bestAvailable": {
+        "availableInHours": 4,
+        "machineId": "MILL-07",
+        "operator": "Chen",
+        "shift": "B",
+        "yieldProbability": 0.84,
+        "confidence": 0.81,
+        "calibrationDaysAgo": 9,
+        "similarJobFpy60d": 0.87,
+        "openWorkOrders": [],
+        "operatorMaterialRuns": 18,
+        "operatorGeometryRuns": 11,
+        "shopLoad": "moderate",
+        "ambientTempF": 74.1,
+        "humidityPercent": 58.7
+      },
+      "costs": {
+        "waitCost": 2800,
+        "scheduleImpact": "4-hour slip, no customer commit miss",
+        "inspectionGateCost": 950
+      },
+      "dragFactors": [
+        {
+          "source": "Machine Assessor",
+          "factor": "MILL-03 has 68% first-pass yield on similar Inconel valve bodies in the last 60 days",
+          "impactPoints": 12
+        },
+        {
+          "source": "Job Analyzer",
+          "factor": "0.0008 inch bore tolerance on 5-axis thin-wall geometry",
+          "impactPoints": 8
+        },
+        {
+          "source": "Context Reader",
+          "factor": "Riley has only 2 Inconel runs and 1 run on this geometry",
+          "impactPoints": 6
+        },
+        {
+          "source": "Machine Assessor",
+          "factor": "probe repeatability warning plus calibration at 38 days",
+          "impactPoints": 5
+        },
+        {
+          "source": "Context Reader",
+          "factor": "humidity is 69.4% during a thin-wall Inconel run",
+          "impactPoints": 4
+        }
+      ]
+    },
+    {
+      "id": "run-now-smart",
+      "title": "Run now despite lower yield because waiting costs too much",
+      "job": {
+        "jobId": "PF-24031",
+        "partFamily": "sensor-cover-6061",
+        "geometry": "Sensor Cover 6061",
+        "material": "6061-T6 aluminum",
+        "quantity": 180,
+        "dueAt": "2026-05-18T17:30:00-07:00",
+        "complexity": "3-axis pocketing with cosmetic face and gasket channel",
+        "tightestToleranceInches": 0.003,
+        "customerRequirement": "ship-today dock slot, cosmetic face check, gasket channel Cpk > 1.33",
+        "materialCert": "cert OK, no hardness or chemistry warnings",
+        "reworkCostPerFailedUnit": 120,
+        "escapeRiskReserve": 900
+      },
+      "current": {
+        "machineId": "MILL-11",
+        "operator": "Avery",
+        "shift": "A",
+        "yieldProbability": 0.78,
+        "confidence": 0.79,
+        "calibrationDaysAgo": 22,
+        "similarJobFpy60d": 0.81,
+        "openWorkOrders": [
+          "chip conveyor intermittent"
+        ],
+        "operatorMaterialRuns": 36,
+        "operatorGeometryRuns": 7,
+        "shopLoad": "rush dock slot",
+        "ambientTempF": 73.2,
+        "humidityPercent": 51.6
+      },
+      "bestAvailable": {
+        "availableInHours": 4,
+        "machineId": "MILL-04",
+        "operator": "Morgan",
+        "shift": "B",
+        "yieldProbability": 0.91,
+        "confidence": 0.83,
+        "calibrationDaysAgo": 6,
+        "similarJobFpy60d": 0.93,
+        "openWorkOrders": [],
+        "operatorMaterialRuns": 44,
+        "operatorGeometryRuns": 15,
+        "shopLoad": "normal",
+        "ambientTempF": 72.8,
+        "humidityPercent": 50.2
+      },
+      "costs": {
+        "waitCost": 29000,
+        "scheduleImpact": "4-hour slip misses today's dock slot and triggers premium freight plus customer line-risk reserve",
+        "inspectionGateCost": 720
+      },
+      "dragFactors": [
+        {
+          "source": "Machine Assessor",
+          "factor": "MILL-11 similar-job FPY is 81% versus MILL-04 at 93%",
+          "impactPoints": 8
+        },
+        {
+          "source": "Context Reader",
+          "factor": "rush dock slot creates no useful buffer",
+          "impactPoints": 7
+        },
+        {
+          "source": "Job Analyzer",
+          "factor": "cosmetic face and gasket Cpk requirement make rework visible but cheap",
+          "impactPoints": 4
+        },
+        {
+          "source": "Machine Assessor",
+          "factor": "chip conveyor intermittent work order can cause short stoppages",
+          "impactPoints": 3
+        }
+      ]
+    }
+  ]
+}

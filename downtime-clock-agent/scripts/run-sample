@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG_VALUE="$ROOT/src/config-value.js"
+
+cd "$ROOT"
+
+machine="$(node "$CONFIG_VALUE" sample.machineId)"
+
+exec "$ROOT/bin/downtime-clock" run \
+  --machine "$machine" \
+  "$@"

@@ -1,0 +1,93 @@
+{
+  "name": "cascade-agent",
+  "profile": "cascade-demo",
+  "openclawMinVersion": "2026.5.12",
+  "nodeMinVersion": "22.16.0",
+  "model": {
+    "provider": "ollama",
+    "id": "qwen3.6:35b-a3b",
+    "openclawId": "ollama/qwen3.6:35b-a3b",
+    "baseUrl": "http://127.0.0.1:11434",
+    "contextTokens": 32768,
+    "maxOutputTokens": 2048,
+    "temperature": 0.3
+  },
+  "ports": {
+    "gateway": 18896,
+    "report": 19006,
+    "localTunnel": 19007
+  },
+  "agents": [
+    {
+      "id": "main",
+      "workspace": "workspaces/main",
+      "agentDir": "openclaw/agents/main/agent",
+      "template": "agents/main/AGENTS.md",
+      "soul": "agents/main/SOUL.md",
+      "chatFacing": true
+    },
+    {
+      "id": "impact",
+      "workspace": "workspaces/impact",
+      "agentDir": "openclaw/agents/impact/agent",
+      "template": "agents/impact/AGENTS.md",
+      "soul": "agents/impact/SOUL.md"
+    },
+    {
+      "id": "rerouter",
+      "workspace": "workspaces/rerouter",
+      "agentDir": "openclaw/agents/rerouter/agent",
+      "template": "agents/rerouter/AGENTS.md",
+      "soul": "agents/rerouter/SOUL.md"
+    },
+    {
+      "id": "clock",
+      "workspace": "workspaces/clock",
+      "agentDir": "openclaw/agents/clock/agent",
+      "template": "agents/clock/AGENTS.md",
+      "soul": "agents/clock/SOUL.md"
+    },
+    {
+      "id": "communicator",
+      "workspace": "workspaces/communicator",
+      "agentDir": "openclaw/agents/communicator/agent",
+      "template": "agents/communicator/AGENTS.md",
+      "soul": "agents/communicator/SOUL.md"
+    }
+  ],
+  "claws": {
+    "impact": "agents/impact/SOUL.md",
+    "rerouter": "agents/rerouter/SOUL.md",
+    "clock": "agents/clock/SOUL.md",
+    "communicator": "agents/communicator/SOUL.md"
+  },
+  "requiredCommands": [
+    "openclaw",
+    "node",
+    "ollama",
+    "curl",
+    "python3"
+  ],
+  "generatedPaths": [
+    "runs",
+    "input",
+    "workspaces",
+    ".generated",
+    ".archive",
+    "openclaw/agents"
+  ],
+  "sample": {
+    "ask": "Press 17 just went down. Figure out what just happened to the rest of my week.",
+    "machineId": "PRESS-17",
+    "eventType": "unplanned downtime",
+    "estimatedRepairHours": 9
+  },
+  "commands": {
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
+    "reset": "./scripts/reset",
+    "uninstall": "./scripts/uninstall"
+  }
+}

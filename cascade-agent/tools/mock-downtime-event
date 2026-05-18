@@ -1,0 +1,40 @@
+#!/usr/bin/env node
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const ROOT = path.resolve(path.dirname(__filename), '..');
+const command = process.argv[2] ?? 'trigger';
+const machineId = process.argv[3] ?? 'PRESS-17';
+const repairHours = Number(process.argv[4] ?? 9);
+
+if (['-h', '--help', 'help'].includes(command)) {
+  console.log('Usage: mock-downtime-event trigger <machine-id> [repair-hours]');
+  process.exit(0);
+}
+
+if (command !== 'trigger') {
+  console.error(`Unknown command: ${command}`);
+  process.exit(2);
+}
+
+const plantState = JSON.parse(readFileSync(path.join(ROOT, 'data/plant-state.json'), 'utf8'));
+const machine = plantState.machines.find((item) => item.id === machineId);
+if (!machine) {
+  console.error(`Unknown machine: ${machineId}`);
+  process.exit(1);
+}
+
+const eventTime = process.env.CASCADE_DETECTED_AT || new Date().toISOString();
+console.log(JSON.stringify({
+  eventId: `DOWNTIME-${machineId}-${eventTime.replace(/[^0-9]/g, '').slice(0, 12)}`,
+  eventType: 'unplanned downtime',
+  machineId,
+  machineName: machine.name,
+  detectedAt: eventTime,
+  estimatedRepairHours: repairHours,
+  symptoms: ['hydraulic pressure drop', 'ram position fault', 'line stopped automatically'],
+  source: 'mock PLC downtime event',
+  plantState,
+}, null, 2));

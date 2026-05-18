@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG_VALUE="$ROOT/src/config-value.js"
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "node is required." >&2
+  exit 1
+fi
+
+PROFILE="${OPENCLAW_PROFILE:-$(node "$CONFIG_VALUE" profile)}"
+PORT="${OPENCLAW_GATEWAY_PORT:-$(node "$CONFIG_VALUE" gatewayPort)}"
+OPENCLAW_MODEL="${OPENCLAW_MODEL:-$(node "$CONFIG_VALUE" openclawModel)}"
+OLLAMA_MODEL="${OLLAMA_MODEL:-$(node "$CONFIG_VALUE" model)}"
+OLLAMA_HOST="${OLLAMA_HOST:-$(node "$CONFIG_VALUE" ollamaHost)}"
+
+export PATH="$HOME/.npm-global/bin:$PATH"
+export OLLAMA_API_KEY="${OLLAMA_API_KEY:-ollama}"
+
+for cmd in openclaw ollama curl; do
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    echo "$cmd is required but was not found on PATH." >&2
+    exit 1
+  fi
+done
+
+if ! ollama list | awk 'NR > 1 {print $1}' | grep -Fx "$OLLAMA_MODEL" >/dev/null; then
+  echo "Ollama model '$OLLAMA_MODEL' is not installed. Run: ollama pull $OLLAMA_MODEL" >&2
+  exit 1
+fi
+
+mkdir -p "$ROOT/.generated"
+mapfile -t AGENT_ROWS < <(node "$ROOT/src/list-agents.js")
+for row in "${AGENT_ROWS[@]}"; do
+  IFS=$'\t' read -r name workspace agent_dir template soul chat_facing <<< "$row"
+  mkdir -p "$ROOT/$workspace" "$ROOT/$agent_dir"
+done
+
+PATCH="$ROOT/.generated/openclaw.patch.json"
+node "$ROOT/src/write-openclaw-patch.js" "$ROOT" "$PORT" "$OPENCLAW_MODEL" "$OLLAMA_MODEL" "$OLLAMA_HOST" > "$PATCH"
+
+openclaw --profile "$PROFILE" config patch --file "$PATCH" >/dev/null
+
+ensure_agent() {
+  local name="$1"
+  local workspace="$2"
+  local agent_dir="$3"
+
+  if openclaw --profile "$PROFILE" agents list --json < /dev/null | node -e "let s='';process.stdin.on('data',d=>s+=d);process.stdin.on('end',()=>{const agents=JSON.parse(s); process.exit(agents.some(a=>a.id===process.argv[1]) ? 0 : 1);})" "$name"; then
+    return 0
+  fi
+
+  openclaw --profile "$PROFILE" agents add "$name" \
+    --workspace "$workspace" \
+    --agent-dir "$agent_dir" \
+    --model "$OPENCLAW_MODEL" \
+    --non-interactive \
+    --json < /dev/null >/dev/null
+}
+
+for row in "${AGENT_ROWS[@]}"; do
+  IFS=$'\t' read -r name workspace agent_dir template soul chat_facing <<< "$row"
+  ensure_agent "$name" "$ROOT/$workspace" "$ROOT/$agent_dir"
+  cp "$ROOT/$template" "$ROOT/$workspace/AGENTS.md"
+  cp "$ROOT/$soul" "$ROOT/$workspace/SOUL.md"
+  node -e 'const fs = require("fs"); const [file, root] = process.argv.slice(1); fs.writeFileSync(file, fs.readFileSync(file, "utf8").replaceAll("__DEMO_ROOT__", root));' "$ROOT/$workspace/AGENTS.md" "$ROOT"
+  node -e 'const fs = require("fs"); const [file, root] = process.argv.slice(1); fs.writeFileSync(file, fs.readFileSync(file, "utf8").replaceAll("__DEMO_ROOT__", root));' "$ROOT/$workspace/SOUL.md" "$ROOT"
+done
+
+mkdir -p "$ROOT/input"
+
+openclaw --profile "$PROFILE" gateway install --port "$PORT" --runtime node --force --json >/dev/null
+openclaw --profile "$PROFILE" gateway restart --json >/dev/null
+
+echo "OpenClaw Pre-Flight demo is ready."
+echo "Profile: $PROFILE"
+echo "Gateway: ws://127.0.0.1:$PORT"
+echo "Model: $OPENCLAW_MODEL"
+echo "Run: $ROOT/bin/pre-flight run --scenario dual"

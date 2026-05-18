@@ -1,0 +1,16 @@
+{
+  "name": "pre-flight-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
+    "reset": "./scripts/reset"
+  },
+  "engines": {
+    "node": ">=22.14.0"
+  }
+}

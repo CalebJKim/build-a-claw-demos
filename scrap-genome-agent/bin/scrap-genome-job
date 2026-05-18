@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
+
+job_id=""
+part_family=""
+lookback_days=""
+skip_model=false
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --job-id) job_id="${2:-}"; shift 2 ;;
+    --part-family) part_family="${2:-}"; shift 2 ;;
+    --lookback-days) lookback_days="${2:-}"; shift 2 ;;
+    --skip-model) skip_model=true; shift ;;
+    *) echo "Unknown option: $1" >&2; exit 2 ;;
+  esac
+done
+
+if [[ -z "$job_id" ]]; then
+  echo "Usage: scrap-genome-job --job-id <id> [--part-family <part-family>]" >&2
+  exit 2
+fi
+
+job_dir="$ROOT/runs/_jobs/$job_id"
+out_dir="$ROOT/runs/$job_id"
+mkdir -p "$job_dir"
+
+write_status_page() {
+  local file="$1"
+  local title="$2"
+  local body="$3"
+  cat > "$file" <<EOF
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${title}</title>
+<style>
+body{font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;background:#f6f7f9;color:#1f2328}
+main{max-width:860px;margin:0 auto;padding:42px 24px;background:#fff;min-height:100vh}
+a{color:#2457d6} code,pre{background:#eef2f6;border-radius:6px} code{padding:2px 5px} pre{padding:14px;overflow:auto;white-space:pre-wrap}
+</style>
+</head>
+<body><main>
+${body}
+</main></body>
+</html>
+EOF
+}
+
+escape_log() {
+  sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g'
+}
+
+cmd=("$ROOT/bin/scrap-genome" run --out "$out_dir")
+if [[ -n "$part_family" ]]; then cmd+=(--part-family "$part_family"); fi
+if [[ -n "$lookback_days" ]]; then cmd+=(--lookback-days "$lookback_days"); fi
+if [[ "$skip_model" == true ]]; then cmd+=(--skip-model); fi
+
+set +e
+"${cmd[@]}" > "$job_dir/run.log" 2>&1
+status=$?
+set -e
+
+if [[ "$status" -eq 0 && -f "$out_dir/index.html" ]]; then
+  write_status_page "$job_dir/index.html" "Scrap genome ready" "<h1>Scrap genome ready</h1><p><a href=\"/runs/$job_id/index.html\">Open report</a></p><p><a href=\"/runs/$job_id/scrap-genome.md\">Open scrap genome</a></p><p><a href=\"/runs/$job_id/plain-english-findings.md\">Open findings</a></p><p><a href=\"/runs/$job_id/recommendations.md\">Open recommendations</a></p><p><a href=\"/runs/$job_id/current-conditions.md\">Open current conditions</a></p><p>Output directory: <code>$out_dir</code></p><h2>Run log</h2><pre>$(tail -100 "$job_dir/run.log" | escape_log)</pre>"
+else
+  write_status_page "$job_dir/index.html" "Scrap genome failed" "<h1>Scrap genome failed</h1><p>Exit code: <code>$status</code></p><p>Output directory: <code>$out_dir</code></p><h2>Run log</h2><pre>$(tail -140 "$job_dir/run.log" | escape_log)</pre>"
+fi
+
+exit "$status"

@@ -1,0 +1,92 @@
+{
+  "name": "scrap-genome-agent",
+  "profile": "scrap-demo",
+  "openclawMinVersion": "2026.5.12",
+  "nodeMinVersion": "22.14.0",
+  "model": {
+    "provider": "ollama",
+    "id": "qwen3.6:35b-a3b",
+    "openclawId": "ollama/qwen3.6:35b-a3b",
+    "baseUrl": "http://127.0.0.1:11434",
+    "contextTokens": 32768,
+    "maxOutputTokens": 2048,
+    "temperature": 0.28
+  },
+  "ports": {
+    "gateway": 18897,
+    "report": 19008,
+    "localTunnel": 19009
+  },
+  "agents": [
+    {
+      "id": "main",
+      "workspace": "workspaces/main",
+      "agentDir": "openclaw/agents/main/agent",
+      "template": "agents/main/AGENTS.md",
+      "soul": "agents/main/SOUL.md",
+      "chatFacing": true
+    },
+    {
+      "id": "collector",
+      "workspace": "workspaces/collector",
+      "agentDir": "openclaw/agents/collector/agent",
+      "template": "agents/collector/AGENTS.md",
+      "soul": "agents/collector/SOUL.md"
+    },
+    {
+      "id": "correlator",
+      "workspace": "workspaces/correlator",
+      "agentDir": "openclaw/agents/correlator/agent",
+      "template": "agents/correlator/AGENTS.md",
+      "soul": "agents/correlator/SOUL.md"
+    },
+    {
+      "id": "narrator",
+      "workspace": "workspaces/narrator",
+      "agentDir": "openclaw/agents/narrator/agent",
+      "template": "agents/narrator/AGENTS.md",
+      "soul": "agents/narrator/SOUL.md"
+    },
+    {
+      "id": "recommender",
+      "workspace": "workspaces/recommender",
+      "agentDir": "openclaw/agents/recommender/agent",
+      "template": "agents/recommender/AGENTS.md",
+      "soul": "agents/recommender/SOUL.md"
+    }
+  ],
+  "claws": {
+    "collector": "agents/collector/SOUL.md",
+    "correlator": "agents/correlator/SOUL.md",
+    "narrator": "agents/narrator/SOUL.md",
+    "recommender": "agents/recommender/SOUL.md"
+  },
+  "requiredCommands": [
+    "openclaw",
+    "node",
+    "ollama",
+    "curl",
+    "python3"
+  ],
+  "generatedPaths": [
+    "runs",
+    "input",
+    "workspaces",
+    ".generated",
+    ".archive",
+    "openclaw/agents"
+  ],
+  "sample": {
+    "ask": "We're scrapping too many parts on this geometry. Why.",
+    "partFamily": "impeller-housing-G7",
+    "lookbackDays": 90
+  },
+  "commands": {
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
+    "reset": "./scripts/reset",
+    "uninstall": "./scripts/uninstall"
+  }
+}

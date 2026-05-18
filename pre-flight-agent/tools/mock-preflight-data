@@ -1,0 +1,52 @@
+#!/usr/bin/env node
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const ROOT = path.resolve(path.dirname(__filename), '..');
+const seedPath = path.join(ROOT, 'data', 'preflight-seed.json');
+const seed = JSON.parse(readFileSync(seedPath, 'utf8'));
+
+const [command, scenarioArg = 'dual'] = process.argv.slice(2);
+
+if (!command || ['-h', '--help', 'help'].includes(command)) {
+  console.log('Usage: mock-preflight-data scenario <dual|wait-smart|run-now-smart>');
+  console.log('       mock-preflight-data list');
+  process.exit(0);
+}
+
+if (command === 'list') {
+  console.log(JSON.stringify({
+    asOf: seed.asOf,
+    plant: seed.plant,
+    scenarios: seed.scenarios.map((scenario) => ({
+      id: scenario.id,
+      title: scenario.title,
+      jobId: scenario.job.jobId,
+      geometry: scenario.job.geometry,
+    })),
+  }, null, 2));
+  process.exit(0);
+}
+
+if (command !== 'scenario') {
+  console.error(`Unknown command: ${command}`);
+  process.exit(2);
+}
+
+const selected = scenarioArg === 'dual'
+  ? seed.scenarios
+  : seed.scenarios.filter((scenario) => scenario.id === scenarioArg || scenario.job.jobId === scenarioArg);
+
+if (!selected.length) {
+  console.error(`Unknown scenario: ${scenarioArg}`);
+  process.exit(2);
+}
+
+console.log(JSON.stringify({
+  asOf: seed.asOf,
+  plant: seed.plant,
+  scenario: scenarioArg,
+  scenarios: selected,
+}, null, 2));

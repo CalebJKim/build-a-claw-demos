@@ -1,0 +1,92 @@
+{
+  "name": "pre-flight-agent",
+  "profile": "preflight-demo",
+  "openclawMinVersion": "2026.5.12",
+  "nodeMinVersion": "22.14.0",
+  "model": {
+    "provider": "ollama",
+    "id": "qwen3.6:35b-a3b",
+    "openclawId": "ollama/qwen3.6:35b-a3b",
+    "baseUrl": "http://127.0.0.1:11434",
+    "contextTokens": 32768,
+    "maxOutputTokens": 2048,
+    "temperature": 0.24
+  },
+  "ports": {
+    "gateway": 18898,
+    "report": 19010,
+    "localTunnel": 19011
+  },
+  "agents": [
+    {
+      "id": "main",
+      "workspace": "workspaces/main",
+      "agentDir": "openclaw/agents/main/agent",
+      "template": "agents/main/AGENTS.md",
+      "soul": "agents/main/SOUL.md",
+      "chatFacing": true
+    },
+    {
+      "id": "job",
+      "workspace": "workspaces/job",
+      "agentDir": "openclaw/agents/job/agent",
+      "template": "agents/job/AGENTS.md",
+      "soul": "agents/job/SOUL.md"
+    },
+    {
+      "id": "machine",
+      "workspace": "workspaces/machine",
+      "agentDir": "openclaw/agents/machine/agent",
+      "template": "agents/machine/AGENTS.md",
+      "soul": "agents/machine/SOUL.md"
+    },
+    {
+      "id": "context",
+      "workspace": "workspaces/context",
+      "agentDir": "openclaw/agents/context/agent",
+      "template": "agents/context/AGENTS.md",
+      "soul": "agents/context/SOUL.md"
+    },
+    {
+      "id": "forecaster",
+      "workspace": "workspaces/forecaster",
+      "agentDir": "openclaw/agents/forecaster/agent",
+      "template": "agents/forecaster/AGENTS.md",
+      "soul": "agents/forecaster/SOUL.md"
+    }
+  ],
+  "claws": {
+    "job": "agents/job/SOUL.md",
+    "machine": "agents/machine/SOUL.md",
+    "context": "agents/context/SOUL.md",
+    "forecaster": "agents/forecaster/SOUL.md"
+  },
+  "requiredCommands": [
+    "openclaw",
+    "node",
+    "ollama",
+    "curl",
+    "python3"
+  ],
+  "generatedPaths": [
+    "runs",
+    "input",
+    "workspaces",
+    ".generated",
+    ".archive",
+    "openclaw/agents"
+  ],
+  "sample": {
+    "ask": "Before this job runs, tell me if it's going to go well.",
+    "scenario": "dual",
+    "jobId": "PF-24018"
+  },
+  "commands": {
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
+    "reset": "./scripts/reset",
+    "uninstall": "./scripts/uninstall"
+  }
+}
