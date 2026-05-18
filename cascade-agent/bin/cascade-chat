@@ -93,12 +93,16 @@ if [[ "$async" == true ]]; then
   echo $! > "$job_dir/pid"
   cat <<EOF
 Cascade started.
-Status: http://127.0.0.1:${local_report_port}/runs/_jobs/${job_id}/index.html
-Live report: http://127.0.0.1:${local_report_port}/runs/${job_id}/index.html
-Blast radius: http://127.0.0.1:${local_report_port}/runs/${job_id}/blast-radius.md
-Reroute options: http://127.0.0.1:${local_report_port}/runs/${job_id}/reroute-options.md
-Customer notifications: http://127.0.0.1:${local_report_port}/runs/${job_id}/customer-notifications.md
-Server-local status: http://127.0.0.1:${remote_report_port}/runs/_jobs/${job_id}/index.html
+Spark-local status: http://127.0.0.1:${remote_report_port}/runs/_jobs/${job_id}/index.html
+Spark-local live report: http://127.0.0.1:${remote_report_port}/runs/${job_id}/index.html
+Spark-local blast radius: http://127.0.0.1:${remote_report_port}/runs/${job_id}/blast-radius.md
+Spark-local reroute options: http://127.0.0.1:${remote_report_port}/runs/${job_id}/reroute-options.md
+Spark-local customer notifications: http://127.0.0.1:${remote_report_port}/runs/${job_id}/customer-notifications.md
+Mac/tunnel status: http://127.0.0.1:${local_report_port}/runs/_jobs/${job_id}/index.html
+Mac/tunnel live report: http://127.0.0.1:${local_report_port}/runs/${job_id}/index.html
+Mac/tunnel blast radius: http://127.0.0.1:${local_report_port}/runs/${job_id}/blast-radius.md
+Mac/tunnel reroute options: http://127.0.0.1:${local_report_port}/runs/${job_id}/reroute-options.md
+Mac/tunnel customer notifications: http://127.0.0.1:${local_report_port}/runs/${job_id}/customer-notifications.md
 Output directory: ${out_dir}
 EOF
   exit 0
@@ -116,9 +120,13 @@ relative="${out_dir#$ROOT/}"
 cat <<EOF
 
 Cascade complete.
-Live report: http://127.0.0.1:${local_report_port}/${relative}/index.html
-Blast radius: http://127.0.0.1:${local_report_port}/${relative}/blast-radius.md
-Reroute options: http://127.0.0.1:${local_report_port}/${relative}/reroute-options.md
-Customer notifications: http://127.0.0.1:${local_report_port}/${relative}/customer-notifications.md
+Spark-local live report: http://127.0.0.1:${remote_report_port}/${relative}/index.html
+Spark-local blast radius: http://127.0.0.1:${remote_report_port}/${relative}/blast-radius.md
+Spark-local reroute options: http://127.0.0.1:${remote_report_port}/${relative}/reroute-options.md
+Spark-local customer notifications: http://127.0.0.1:${remote_report_port}/${relative}/customer-notifications.md
+Mac/tunnel live report: http://127.0.0.1:${local_report_port}/${relative}/index.html
+Mac/tunnel blast radius: http://127.0.0.1:${local_report_port}/${relative}/blast-radius.md
+Mac/tunnel reroute options: http://127.0.0.1:${local_report_port}/${relative}/reroute-options.md
+Mac/tunnel customer notifications: http://127.0.0.1:${local_report_port}/${relative}/customer-notifications.md
 Output directory: ${out_dir}
 EOF
