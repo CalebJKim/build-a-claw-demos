@@ -13,4 +13,5 @@ location="$(node "$CONFIG_VALUE" sample.location)"
 exec "$ROOT/bin/resume-claw" run \
   --resume "$resume" \
   --target-role "$target_role" \
-  --location "$location"
+  --location "$location" \
+  "$@"
