@@ -1,0 +1,22 @@
+{
+  "name": "side-project-launcher-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenClaw side project launcher demo with market research, branding, product copy, landing page generation, and week-one launch checklist.",
+  "bin": {
+    "side-project-launcher": "./bin/side-project-launcher"
+  },
+  "scripts": {
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
+    "reset": "./scripts/reset",
+    "uninstall": "./scripts/uninstall",
+    "run": "node ./src/run.js run"
+  },
+  "engines": {
+    "node": ">=22.16.0"
+  }
+}

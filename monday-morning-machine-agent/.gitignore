@@ -1,0 +1,9 @@
+.env
+.generated/
+.archive/
+runs/
+input/
+workspaces/
+openclaw/agents/
+node_modules/
+*.log

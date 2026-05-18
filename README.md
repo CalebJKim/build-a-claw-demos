@@ -12,6 +12,9 @@ The goal is repeatable demo shipping: a builder should be able to add a new demo
 - `spending-autopsy-agent/` - spending autopsy demo with messy CSV cleanup, behavioral categorization, anomaly flags, visual report, and blunt cut list.
 - `meeting-aftermath-agent/` - meeting aftermath demo with mock transcript retrieval, parallel extraction, personalized follow-up emails, and PM-tool timeline output.
 - `surprise-trip-planner-agent/` - surprise trip planner demo with constrained destination search, trail/logistics research, booking links, and personalized reveal messages.
+- `side-project-launcher-agent/` - side project launcher demo with mock market research, brand/copy generation, live landing page, email capture, and week-one checklist.
+- `self-fixing-game-agent/` - self-fixing multiplayer trivia game demo with spec/build/test/fix/deploy loop, live phone-playable game server, and bug report.
+- `monday-morning-machine-agent/` - Monday morning prep demo with mock calendar/inbox/world-search integrations, parallel claws, weekly brief, and mock-safe action receipts.
 
 ## Packaging Model
 

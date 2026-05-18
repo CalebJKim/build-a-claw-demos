@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+case "${1:-last72}" in
+  last72)
+    cat "$ROOT/data/mock-inbox-last72h.json"
+    ;;
+  -h|--help|help)
+    echo "Usage: mock-inbox last72"
+    ;;
+  *)
+    echo "Unknown command: $1" >&2
+    exit 2
+    ;;
+esac

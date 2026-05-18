@@ -1,0 +1,22 @@
+{
+  "name": "self-fixing-game-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenClaw self-fixing multiplayer trivia game demo with autonomous test, bug report, fix loop, and live game server.",
+  "bin": {
+    "self-fixing-game": "./bin/self-fixing-game"
+  },
+  "scripts": {
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
+    "reset": "./scripts/reset",
+    "uninstall": "./scripts/uninstall",
+    "run": "node ./src/run.js run"
+  },
+  "engines": {
+    "node": ">=22.16.0"
+  }
+}

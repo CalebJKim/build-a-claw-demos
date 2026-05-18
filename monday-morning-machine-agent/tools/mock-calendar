@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+case "${1:-week}" in
+  week)
+    cat "$ROOT/data/mock-calendar-week.json"
+    ;;
+  -h|--help|help)
+    echo "Usage: mock-calendar week"
+    ;;
+  *)
+    echo "Unknown command: $1" >&2
+    exit 2
+    ;;
+esac

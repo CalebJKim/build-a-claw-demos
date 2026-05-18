@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG_VALUE="$ROOT/src/config-value.js"
+
+cd "$ROOT"
+export PATH="$HOME/.npm-global/bin:$PATH"
+
+demo_name="$(node "$CONFIG_VALUE" name)"
+profile="$(node "$CONFIG_VALUE" profile)"
+node_min="$(node "$CONFIG_VALUE" nodeMinVersion)"
+model="$(node "$CONFIG_VALUE" model)"
+
+echo "Demo: $demo_name"
+echo "Profile: $profile"
+echo "Model: $model"
+echo
+
+node -e '
+const min = process.argv[1];
+const parse = (v) => v.replace(/^v/, "").split(".").map((n) => Number(n));
+const [ma, mi, pa] = parse(process.versions.node);
+const [ra, ri, rp] = parse(min);
+const ok = ma > ra || (ma === ra && (mi > ri || (mi === ri && pa >= rp)));
+if (!ok) {
+  console.error(`node: v${process.versions.node} is below required v${min}`);
+  process.exit(1);
+}
+console.log(`node: v${process.versions.node}`);
+' "$node_min"
+
+missing=0
+while IFS= read -r cmd; do
+  if command -v "$cmd" >/dev/null 2>&1; then
+    echo "$cmd: $(command -v "$cmd")"
+  else
+    echo "$cmd: missing" >&2
+    missing=1
+  fi
+done < <(node -e 'const fs=require("fs"); const c=JSON.parse(fs.readFileSync("demo.config.json","utf8")); for (const cmd of c.requiredCommands || []) console.log(cmd);')
+
+echo
+"$ROOT/bin/monday-morning-machine" doctor || missing=1
+
+exit "$missing"

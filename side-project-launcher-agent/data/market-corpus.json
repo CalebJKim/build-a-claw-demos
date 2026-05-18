@@ -1,0 +1,96 @@
+{
+  "category": "handmade soaps",
+  "source": "seeded demo market corpus",
+  "marketSignals": [
+    {
+      "channel": "Etsy",
+      "signal": "Giftable soap bundles and seasonal scent sets are easier to understand than one-off bars.",
+      "priceRange": "$8-$14 per bar, $24-$42 for three-bar bundles",
+      "buyerLanguage": ["gentle", "smells clean but not fake", "pretty enough to gift", "does not dry my hands"]
+    },
+    {
+      "channel": "Instagram",
+      "signal": "Process videos, cutting videos, ingredient closeups, and sink-side styling photos perform better than plain product shots.",
+      "priceRange": "$12-$18 per premium bar when packaged as small-batch or botanical",
+      "buyerLanguage": ["small batch", "cold process", "botanical", "sensitive skin", "gift-ready"]
+    },
+    {
+      "channel": "Shopify",
+      "signal": "Simple starter collections convert better than huge scent menus. Three products are enough for launch.",
+      "priceRange": "$28-$36 starter trio",
+      "buyerLanguage": ["starter set", "routine", "restock", "subscribe and save"]
+    }
+  ],
+  "competitors": [
+    {
+      "name": "Wild Fern Soap Studio",
+      "positioning": "Botanical cold-process soaps with rustic gift packaging.",
+      "observedPrices": ["$10 single bar", "$30 three-bar gift set"],
+      "whatWorks": "Clear ingredient story and earthy visual identity.",
+      "gap": "Feels outdoorsy but not especially modern or sink-styled."
+    },
+    {
+      "name": "Sunday Lather Co.",
+      "positioning": "Soft pastel soaps for gifts and self-care routines.",
+      "observedPrices": ["$12 single bar", "$38 curated box"],
+      "whatWorks": "Strong gift angle and polished product names.",
+      "gap": "Could feel too precious for everyday use."
+    },
+    {
+      "name": "Plain Good Goods",
+      "positioning": "Minimal fragrance-free and low-scent bars for sensitive skin.",
+      "observedPrices": ["$9 single bar", "$26 three-pack"],
+      "whatWorks": "Trustworthy simplicity and low-irritation promise.",
+      "gap": "Low emotional pull; not very giftable."
+    }
+  ],
+  "gaps": [
+    "Quietly giftable soap: attractive enough to give, practical enough to use every day.",
+    "Low-crowd shelf: fewer scents, clearer choice, no overwhelming menu.",
+    "Sink-side design: products merchandised as part of a calm bathroom or kitchen ritual.",
+    "Founder-made proof: process clips and batch notes can build trust without expensive ads."
+  ],
+  "launchProducts": [
+    {
+      "name": "Lavender Oat Bar",
+      "angle": "gentle everyday bar",
+      "notes": "Oat milk, lavender, and a creamy lather for sensitive-feeling skin.",
+      "price": 12
+    },
+    {
+      "name": "Citrus Clay Bar",
+      "angle": "fresh morning sink bar",
+      "notes": "Orange peel, kaolin clay, and a clean scent that does not smell like cleaner.",
+      "price": 12
+    },
+    {
+      "name": "Cedar Mint Bar",
+      "angle": "shower reset bar",
+      "notes": "Cedar, mint, and charcoal for a sharper, cooler shower bar.",
+      "price": 13
+    }
+  ],
+  "channels": [
+    {
+      "name": "Landing page",
+      "purpose": "Collect emails and test which product angle gets clicks before opening a shop."
+    },
+    {
+      "name": "Instagram Reels",
+      "purpose": "Show making, cutting, wrapping, and sink styling. Use one post per product."
+    },
+    {
+      "name": "Etsy",
+      "purpose": "Use after the email list and product names are ready; start with one starter trio listing."
+    }
+  ],
+  "weekOneActions": [
+    "Pick the brand name and reserve matching handles.",
+    "Make or photograph three prototype bars in consistent light.",
+    "Publish the landing page and ask 20 friends to pick a favorite product.",
+    "Post three process clips: mixing, cutting, wrapping.",
+    "Set up a simple email list export from the landing page responses.",
+    "Price the starter trio and decide whether shipping is included.",
+    "Write the first Etsy listing draft, but do not open the shop until product photos are ready."
+  ]
+}

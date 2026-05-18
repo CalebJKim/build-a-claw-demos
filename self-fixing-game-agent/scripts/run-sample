@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG_VALUE="$ROOT/src/config-value.js"
+
+cd "$ROOT"
+
+brief="$(node "$CONFIG_VALUE" sample.brief)"
+theme="$(node "$CONFIG_VALUE" sample.theme)"
+vibe="$(node "$CONFIG_VALUE" sample.vibe)"
+rounds="$(node "$CONFIG_VALUE" sample.rounds)"
+
+exec "$ROOT/bin/self-fixing-game" run \
+  --brief "$brief" \
+  --theme "$theme" \
+  --vibe "$vibe" \
+  --rounds "$rounds" \
+  "$@"

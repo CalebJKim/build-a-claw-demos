@@ -1,0 +1,46 @@
+{
+  "asOf": "2026-05-18T07:30:00-07:00",
+  "sourceMode": "seeded mock web-search corpus",
+  "items": [
+    {
+      "id": "world-301",
+      "queryTags": ["energy", "EnergyCo", "grid", "security"],
+      "headline": "Regional grid operators publish new vendor reliability checklist",
+      "publishedAt": "2026-05-18T05:40:00-07:00",
+      "source": "Mock GridWire",
+      "url": "mock://world-check/grid-vendor-reliability-checklist",
+      "summary": "A new checklist emphasizes audit trails, incident response windows, and vendor continuity plans for software touching grid operations.",
+      "whyItMatters": "EnergyCo's commercial review includes procurement and security. Lead with auditability and response process, not speed alone."
+    },
+    {
+      "id": "world-302",
+      "queryTags": ["AI developer tools", "LaunchLens", "competitors", "workflow cards"],
+      "headline": "AsterFlow ships workflow cards for developer task automation",
+      "publishedAt": "2026-05-17T09:10:00-07:00",
+      "source": "Mock DevTools Daily",
+      "url": "mock://world-check/asterflow-workflow-cards",
+      "summary": "AsterFlow announced reusable workflow cards that bundle prompts, tools, and validation steps for software teams.",
+      "whyItMatters": "This directly affects Tuesday's LaunchLens roadmap review. Workflow cards are no longer theoretical; a competitor has planted the category."
+    },
+    {
+      "id": "world-303",
+      "queryTags": ["fundraising", "investor", "retention", "SaaS"],
+      "headline": "Growth investors push harder on expansion revenue in 2026 SaaS updates",
+      "publishedAt": "2026-05-16T12:30:00-07:00",
+      "source": "Mock SaaS Ledger",
+      "url": "mock://world-check/expansion-revenue-investor-focus",
+      "summary": "Recent investor notes are weighting expansion revenue, renewal quality, and usage-based retention more heavily than new-logo growth.",
+      "whyItMatters": "Ari specifically wants to pressure-test expansion narrative and net retention in Wednesday's dry run."
+    },
+    {
+      "id": "world-304",
+      "queryTags": ["product review", "templates", "developer onboarding", "DevRel"],
+      "headline": "Developers ask for prebuilt workflow templates in automation tools",
+      "publishedAt": "2026-05-18T06:05:00-07:00",
+      "source": "Mock Community Pulse",
+      "url": "mock://world-check/workflow-template-demand",
+      "summary": "Community posts over the weekend favored template libraries and validation checklists over blank-canvas automation builders.",
+      "whyItMatters": "The DevRel digest says users are asking for templates. Pair that with competitor workflow cards in the product review."
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG_VALUE="$ROOT/src/config-value.js"
+
+cd "$ROOT"
+
+idea="$(node "$CONFIG_VALUE" sample.idea)"
+founder_name="$(node "$CONFIG_VALUE" sample.founderName)"
+audience="$(node "$CONFIG_VALUE" sample.audience)"
+location="$(node "$CONFIG_VALUE" sample.location)"
+
+exec "$ROOT/bin/side-project-launcher" run \
+  --idea "$idea" \
+  --founder-name "$founder_name" \
+  --audience "$audience" \
+  --location "$location" \
+  "$@"

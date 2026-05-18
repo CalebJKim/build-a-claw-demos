@@ -1,0 +1,46 @@
+{
+  "gateway": {
+    "mode": "local",
+    "port": "${GATEWAY_PORT}"
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "${OPENCLAW_MODEL}",
+        "fallbacks": []
+      },
+      "workspace": "${DEMO_ROOT}/workspaces/main",
+      "maxConcurrent": 4,
+      "subagents": {
+        "maxConcurrent": 4
+      }
+    }
+  },
+  "models": {
+    "mode": "merge",
+    "providers": {
+      "ollama": {
+        "baseUrl": "${OLLAMA_HOST}",
+        "apiKey": "ollama",
+        "api": "ollama",
+        "models": [
+          {
+            "id": "${OLLAMA_MODEL}",
+            "name": "${OLLAMA_MODEL}",
+            "reasoning": false,
+            "input": ["text"],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 262144,
+            "maxTokens": 8192,
+            "api": "ollama"
+          }
+        ]
+      }
+    }
+  }
+}

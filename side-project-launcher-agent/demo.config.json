@@ -1,0 +1,97 @@
+{
+  "name": "side-project-launcher-agent",
+  "profile": "launcher-demo",
+  "openclawMinVersion": "2026.5.12",
+  "nodeMinVersion": "22.16.0",
+  "model": {
+    "provider": "ollama",
+    "id": "qwen3.6:35b-a3b",
+    "openclawId": "ollama/qwen3.6:35b-a3b",
+    "baseUrl": "http://127.0.0.1:11434",
+    "contextTokens": 32768,
+    "maxOutputTokens": 2048,
+    "temperature": 0.5
+  },
+  "ports": {
+    "gateway": 18893,
+    "report": 18998,
+    "localTunnel": 18999
+  },
+  "agents": [
+    {
+      "id": "main",
+      "workspace": "workspaces/main",
+      "agentDir": "openclaw/agents/main/agent",
+      "template": "agents/main/AGENTS.md",
+      "soul": "agents/main/SOUL.md",
+      "chatFacing": true
+    },
+    {
+      "id": "market",
+      "workspace": "workspaces/market",
+      "agentDir": "openclaw/agents/market/agent",
+      "template": "agents/market/AGENTS.md",
+      "soul": "agents/market/SOUL.md"
+    },
+    {
+      "id": "brand",
+      "workspace": "workspaces/brand",
+      "agentDir": "openclaw/agents/brand/agent",
+      "template": "agents/brand/AGENTS.md",
+      "soul": "agents/brand/SOUL.md"
+    },
+    {
+      "id": "copy",
+      "workspace": "workspaces/copy",
+      "agentDir": "openclaw/agents/copy/agent",
+      "template": "agents/copy/AGENTS.md",
+      "soul": "agents/copy/SOUL.md"
+    },
+    {
+      "id": "builder",
+      "workspace": "workspaces/builder",
+      "agentDir": "openclaw/agents/builder/agent",
+      "template": "agents/builder/AGENTS.md",
+      "soul": "agents/builder/SOUL.md"
+    }
+  ],
+  "claws": {
+    "market": "agents/market/SOUL.md",
+    "brand": "agents/brand/SOUL.md",
+    "copy": "agents/copy/SOUL.md",
+    "builder": "agents/builder/SOUL.md"
+  },
+  "requiredCommands": [
+    "openclaw",
+    "node",
+    "ollama",
+    "curl",
+    "python3"
+  ],
+  "optionalCommands": [
+    "chromium",
+    "google-chrome"
+  ],
+  "generatedPaths": [
+    "runs",
+    "input",
+    "workspaces",
+    ".generated",
+    ".archive",
+    "openclaw/agents"
+  ],
+  "sample": {
+    "idea": "I want to sell handmade soaps online. I have no idea where to start.",
+    "founderName": "Avery",
+    "audience": "people who want gentle, good-looking soap that feels giftable but not precious",
+    "location": "United States"
+  },
+  "commands": {
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
+    "reset": "./scripts/reset",
+    "uninstall": "./scripts/uninstall"
+  }
+}

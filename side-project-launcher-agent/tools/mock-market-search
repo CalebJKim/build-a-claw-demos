@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+usage() {
+  cat <<'USAGE'
+Usage:
+  mock-market-search search
+
+Prints the seeded market corpus as JSON. This intentionally acts like a local
+market-research API for the live demo.
+USAGE
+}
+
+case "${1:-}" in
+  search)
+    cat "$ROOT/data/market-corpus.json"
+    ;;
+  -h|--help|help|'')
+    usage
+    ;;
+  *)
+    echo "Unknown command: $1" >&2
+    usage >&2
+    exit 2
+    ;;
+esac

@@ -1,0 +1,22 @@
+{
+  "name": "monday-morning-machine-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenClaw Monday morning machine demo with mocked calendar, inbox, world search, parallel prep, and action receipts.",
+  "bin": {
+    "monday-morning-machine": "./bin/monday-morning-machine"
+  },
+  "scripts": {
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
+    "reset": "./scripts/reset",
+    "uninstall": "./scripts/uninstall",
+    "run": "node ./src/run.js run"
+  },
+  "engines": {
+    "node": ">=22.16.0"
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "name": "monday-morning-machine-agent",
+  "profile": "monday-demo",
+  "openclawMinVersion": "2026.5.12",
+  "nodeMinVersion": "22.16.0",
+  "model": {
+    "provider": "ollama",
+    "id": "qwen3.6:35b-a3b",
+    "openclawId": "ollama/qwen3.6:35b-a3b",
+    "baseUrl": "http://127.0.0.1:11434",
+    "contextTokens": 32768,
+    "maxOutputTokens": 2048,
+    "temperature": 0.35
+  },
+  "ports": {
+    "gateway": 18895,
+    "report": 19004,
+    "localTunnel": 19005
+  },
+  "agents": [
+    {
+      "id": "main",
+      "workspace": "workspaces/main",
+      "agentDir": "openclaw/agents/main/agent",
+      "template": "agents/main/AGENTS.md",
+      "soul": "agents/main/SOUL.md",
+      "chatFacing": true
+    },
+    {
+      "id": "calendar",
+      "workspace": "workspaces/calendar",
+      "agentDir": "openclaw/agents/calendar/agent",
+      "template": "agents/calendar/AGENTS.md",
+      "soul": "agents/calendar/SOUL.md"
+    },
+    {
+      "id": "inbox",
+      "workspace": "workspaces/inbox",
+      "agentDir": "openclaw/agents/inbox/agent",
+      "template": "agents/inbox/AGENTS.md",
+      "soul": "agents/inbox/SOUL.md"
+    },
+    {
+      "id": "world",
+      "workspace": "workspaces/world",
+      "agentDir": "openclaw/agents/world/agent",
+      "template": "agents/world/AGENTS.md",
+      "soul": "agents/world/SOUL.md"
+    },
+    {
+      "id": "prep",
+      "workspace": "workspaces/prep",
+      "agentDir": "openclaw/agents/prep/agent",
+      "template": "agents/prep/AGENTS.md",
+      "soul": "agents/prep/SOUL.md"
+    },
+    {
+      "id": "executor",
+      "workspace": "workspaces/executor",
+      "agentDir": "openclaw/agents/executor/agent",
+      "template": "agents/executor/AGENTS.md",
+      "soul": "agents/executor/SOUL.md"
+    }
+  ],
+  "claws": {
+    "calendar": "agents/calendar/SOUL.md",
+    "inbox": "agents/inbox/SOUL.md",
+    "world": "agents/world/SOUL.md",
+    "prep": "agents/prep/SOUL.md",
+    "executor": "agents/executor/SOUL.md"
+  },
+  "requiredCommands": [
+    "openclaw",
+    "node",
+    "ollama",
+    "curl",
+    "python3"
+  ],
+  "generatedPaths": [
+    "runs",
+    "input",
+    "workspaces",
+    ".generated",
+    ".archive",
+    "openclaw/agents"
+  ],
+  "sample": {
+    "ask": "Get me ready for my week.",
+    "weekOf": "2026-05-18",
+    "persona": "founder/operator with energy-sector clients and a product review this week"
+  },
+  "commands": {
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
+    "reset": "./scripts/reset",
+    "uninstall": "./scripts/uninstall"
+  }
+}

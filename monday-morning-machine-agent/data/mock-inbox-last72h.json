@@ -1,0 +1,75 @@
+{
+  "window": "last 72 hours before 2026-05-18T08:00:00-07:00",
+  "threads": [
+    {
+      "id": "mail-201",
+      "from": "Sarah Kim <sarah.kim@energyco.example>",
+      "to": "Caleb",
+      "subject": "Need updated rollout pricing before Monday EOD",
+      "receivedAt": "2026-05-17T16:22:00-07:00",
+      "snippet": "Can you send the updated rollout pricing and confirm whether the security questionnaire answers changed? Procurement wants it before our Wednesday review.",
+      "deadline": "2026-05-18T15:00:00-07:00",
+      "relationship": "client",
+      "stakes": "critical",
+      "needsReply": true,
+      "commitmentByUser": "Send updated rollout pricing and security questionnaire delta.",
+      "status": "unanswered"
+    },
+    {
+      "id": "mail-202",
+      "from": "Priya Rao <priya.rao@example.com>",
+      "to": "Caleb",
+      "subject": "Decision needed before our 1:1",
+      "receivedAt": "2026-05-16T10:05:00-07:00",
+      "snippet": "Can we decide whether LaunchLens should keep the workflow cards in scope for Q3? I can use the 1:1 for tradeoffs, but I need a direction.",
+      "deadline": "2026-05-19T14:00:00-07:00",
+      "relationship": "direct report",
+      "stakes": "high",
+      "needsReply": true,
+      "commitmentByUser": "Give Priya a direction on Q3 workflow cards.",
+      "status": "unanswered"
+    },
+    {
+      "id": "mail-203",
+      "from": "Ari Gold <ari@northstar.example>",
+      "to": "Caleb",
+      "subject": "Deck before dry run?",
+      "receivedAt": "2026-05-17T20:40:00-07:00",
+      "snippet": "Can you send the investor update deck before Wednesday's dry run? I mainly want to pressure-test expansion narrative and net retention.",
+      "deadline": "2026-05-20T10:00:00-07:00",
+      "relationship": "investor",
+      "stakes": "high",
+      "needsReply": true,
+      "commitmentByUser": "Send investor update deck before the dry run.",
+      "status": "unanswered"
+    },
+    {
+      "id": "mail-204",
+      "from": "DevRel Weekly <digest@example.com>",
+      "to": "Caleb",
+      "subject": "Weekly mentions digest",
+      "receivedAt": "2026-05-18T06:30:00-07:00",
+      "snippet": "Three community posts mentioned LaunchLens onboarding. One asks for more templates.",
+      "deadline": "",
+      "relationship": "digest",
+      "stakes": "low",
+      "needsReply": false,
+      "commitmentByUser": "",
+      "status": "FYI"
+    },
+    {
+      "id": "mail-205",
+      "from": "Maya Chen <maya@example.com>",
+      "to": "Caleb",
+      "subject": "Roadmap review prep",
+      "receivedAt": "2026-05-15T15:48:00-07:00",
+      "snippet": "I can defend the LaunchLens workflow cards if you want to keep them, but we should be honest about competitor pressure.",
+      "deadline": "2026-05-19T09:00:00-07:00",
+      "relationship": "product lead",
+      "stakes": "medium",
+      "needsReply": true,
+      "commitmentByUser": "Confirm whether Maya should defend workflow cards in the product review.",
+      "status": "unanswered"
+    }
+  ]
+}

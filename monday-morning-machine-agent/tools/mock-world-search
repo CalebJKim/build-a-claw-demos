@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const ROOT = path.resolve(path.dirname(__filename), '..');
+const command = process.argv[2] ?? 'search';
+const query = process.argv.slice(3).join(' ').trim().toLowerCase();
+
+if (['-h', '--help', 'help'].includes(command)) {
+  console.log('Usage: mock-world-search search <query>');
+  process.exit(0);
+}
+
+if (command !== 'search') {
+  console.error(`Unknown command: ${command}`);
+  process.exit(2);
+}
+
+const corpus = JSON.parse(readFileSync(path.join(ROOT, 'data/mock-world-corpus.json'), 'utf8'));
+const terms = query.split(/[^a-z0-9]+/).filter((term) => term.length > 2);
+const results = corpus.items
+  .map((item) => {
+    const haystack = [
+      item.headline,
+      item.summary,
+      item.whyItMatters,
+      ...(item.queryTags ?? []),
+    ].join(' ').toLowerCase();
+    const score = terms.reduce((sum, term) => sum + (haystack.includes(term) ? 1 : 0), 0);
+    return { ...item, score };
+  })
+  .filter((item) => item.score > 0 || !query)
+  .sort((a, b) => b.score - a.score || a.publishedAt.localeCompare(b.publishedAt))
+  .slice(0, 4);
+
+console.log(JSON.stringify({
+  query: query || 'all',
+  asOf: corpus.asOf,
+  sourceMode: corpus.sourceMode,
+  results,
+}, null, 2));

@@ -1,0 +1,99 @@
+{
+  "name": "self-fixing-game-agent",
+  "profile": "game-demo",
+  "openclawMinVersion": "2026.5.12",
+  "nodeMinVersion": "22.16.0",
+  "model": {
+    "provider": "ollama",
+    "id": "qwen3.6:35b-a3b",
+    "openclawId": "ollama/qwen3.6:35b-a3b",
+    "baseUrl": "http://127.0.0.1:11434",
+    "contextTokens": 32768,
+    "maxOutputTokens": 2048,
+    "temperature": 0.45
+  },
+  "ports": {
+    "gateway": 18894,
+    "report": 19000,
+    "localTunnel": 19001,
+    "game": 19002,
+    "gameTunnel": 19003
+  },
+  "agents": [
+    {
+      "id": "main",
+      "workspace": "workspaces/main",
+      "agentDir": "openclaw/agents/main/agent",
+      "template": "agents/main/AGENTS.md",
+      "soul": "agents/main/SOUL.md",
+      "chatFacing": true
+    },
+    {
+      "id": "spec",
+      "workspace": "workspaces/spec",
+      "agentDir": "openclaw/agents/spec/agent",
+      "template": "agents/spec/AGENTS.md",
+      "soul": "agents/spec/SOUL.md"
+    },
+    {
+      "id": "builder",
+      "workspace": "workspaces/builder",
+      "agentDir": "openclaw/agents/builder/agent",
+      "template": "agents/builder/AGENTS.md",
+      "soul": "agents/builder/SOUL.md"
+    },
+    {
+      "id": "tester",
+      "workspace": "workspaces/tester",
+      "agentDir": "openclaw/agents/tester/agent",
+      "template": "agents/tester/AGENTS.md",
+      "soul": "agents/tester/SOUL.md"
+    },
+    {
+      "id": "deployer",
+      "workspace": "workspaces/deployer",
+      "agentDir": "openclaw/agents/deployer/agent",
+      "template": "agents/deployer/AGENTS.md",
+      "soul": "agents/deployer/SOUL.md"
+    }
+  ],
+  "claws": {
+    "spec": "agents/spec/SOUL.md",
+    "builder": "agents/builder/SOUL.md",
+    "tester": "agents/tester/SOUL.md",
+    "deployer": "agents/deployer/SOUL.md"
+  },
+  "requiredCommands": [
+    "openclaw",
+    "node",
+    "ollama",
+    "curl",
+    "python3"
+  ],
+  "optionalCommands": [
+    "chromium",
+    "google-chrome"
+  ],
+  "generatedPaths": [
+    "runs",
+    "input",
+    "workspaces",
+    ".generated",
+    ".archive",
+    "openclaw/agents"
+  ],
+  "sample": {
+    "brief": "Build me a multiplayer trivia game my friends can play from their phones right now. Theme: internet history. Vibe: neon arcade. Rules: quick rounds, phones as controllers, host advances questions.",
+    "theme": "internet history",
+    "vibe": "neon arcade",
+    "rounds": 6
+  },
+  "commands": {
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
+    "reset": "./scripts/reset",
+    "uninstall": "./scripts/uninstall"
+  }
+}
