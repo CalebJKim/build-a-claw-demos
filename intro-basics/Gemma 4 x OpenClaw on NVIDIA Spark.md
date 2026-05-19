@@ -135,7 +135,7 @@ You can use this openclaw.json file as reference setup:
           {
             "id": "unsloth/gemma-4-26B-A4B-it-GGUF",
             "name": "unsloth/gemma-4-26B-A4B-it-GGUF",
-            "reasoning": false,
+            "reasoning": true,
             "input": [
               "text", "image"
             ],
