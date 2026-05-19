@@ -1,0 +1,77 @@
+[
+  {
+    "id": "santa-fe",
+    "name": "Santa Fe, New Mexico",
+    "airport": "SAF/ABQ",
+    "tags": ["art", "food", "light hiking", "architecture"],
+    "weather": {
+      "summary": "Sunny, dry, and comfortable",
+      "highF": 76,
+      "lowF": 48,
+      "rainChancePct": 8
+    },
+    "why": "Adobe architecture, galleries around Canyon Road, chile-heavy food, and easy half-day hikes.",
+    "logistics": "Fly into ABQ for better fares, rent a car or shuttle 65 minutes to Santa Fe.",
+    "bookingNotes": ["Reserve dinner early for Friday/Saturday.", "Hydrate; elevation is above 7,000 ft."]
+  },
+  {
+    "id": "mexico-city",
+    "name": "Mexico City, Mexico",
+    "airport": "MEX",
+    "tags": ["food", "art", "walkable neighborhoods", "museums"],
+    "weather": {
+      "summary": "Warm afternoons with a small storm risk",
+      "highF": 78,
+      "lowF": 57,
+      "rainChancePct": 22
+    },
+    "why": "World-class food, Roma/Condesa walks, Chapultepec museums, and a strong long-weekend rhythm.",
+    "logistics": "Nonstop or one-stop flights are common from ORD; rideshares work well in core neighborhoods.",
+    "bookingNotes": ["Passport required.", "Pick Roma Norte or Condesa to keep transit simple."]
+  },
+  {
+    "id": "san-diego",
+    "name": "San Diego, California",
+    "airport": "SAN",
+    "tags": ["food", "walkable neighborhoods", "beach", "parks"],
+    "weather": {
+      "summary": "Mild, bright, and coastal",
+      "highF": 70,
+      "lowF": 61,
+      "rainChancePct": 5
+    },
+    "why": "Easy weather, Balboa Park, tacos, beaches, and a low-friction airport close to town.",
+    "logistics": "Stay in Little Italy, North Park, or Mission Beach depending on food versus beach priority.",
+    "bookingNotes": ["Hotel prices rise near waterfront events.", "Transit is fine downtown; car helps for beach hops."]
+  },
+  {
+    "id": "portland-me",
+    "name": "Portland, Maine",
+    "airport": "PWM",
+    "tags": ["food", "walkable neighborhoods", "coast", "museums"],
+    "weather": {
+      "summary": "Cool coastal spring weather",
+      "highF": 63,
+      "lowF": 49,
+      "rainChancePct": 18
+    },
+    "why": "Compact harbor walks, seafood, breweries, and an easy pace for a short reset.",
+    "logistics": "One-stop flights from ORD are common; Old Port hotels keep the weekend car-light.",
+    "bookingNotes": ["Pack a rain layer.", "Restaurant reservations matter for peak dinner times."]
+  },
+  {
+    "id": "denver",
+    "name": "Denver, Colorado",
+    "airport": "DEN",
+    "tags": ["light hiking", "food", "museums", "mountains"],
+    "weather": {
+      "summary": "Warm days, cool nights, mountain weather variable",
+      "highF": 74,
+      "lowF": 50,
+      "rainChancePct": 16
+    },
+    "why": "Direct flights, mountain access, RiNo food halls, and a clean split between city and outdoors.",
+    "logistics": "Airport train reaches downtown; rent a car only for foothills or mountain day trips.",
+    "bookingNotes": ["Afternoon storms can affect hikes.", "Altitude is noticeable on day one."]
+  }
+]

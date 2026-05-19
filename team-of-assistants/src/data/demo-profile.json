@@ -1,0 +1,12 @@
+{
+  "travelerName": "Demo User",
+  "homeCity": "Chicago",
+  "homeAirport": "ORD",
+  "timezone": "America/Chicago",
+  "budgetUsd": 2200,
+  "partySize": 1,
+  "interests": ["food", "walkable neighborhoods", "art", "light hiking"],
+  "hotelStyle": "clean boutique or reliable 4-star",
+  "riskTolerance": "medium",
+  "passportReady": true
+}

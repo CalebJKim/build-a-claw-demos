@@ -1,0 +1,16 @@
+{
+  "name": "team-of-assistants",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A NemoClaw/OpenShell-ready demo where Discord-hosted claws plan PTO together.",
+  "scripts": {
+    "demo": "node src/index.js",
+    "discord": "node src/discord.js",
+    "test": "node --test",
+    "check": "node --check src/index.js && node --check src/discord.js && node --check src/orchestrator.js && node --check src/agents/research-claw.js && node --check src/agents/finance-claw.js && node --check src/agents/scheduling-claw.js"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

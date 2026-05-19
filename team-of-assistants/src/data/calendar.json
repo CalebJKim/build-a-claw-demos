@@ -1,0 +1,35 @@
+{
+  "timezone": "America/Chicago",
+  "events": [
+    {
+      "date": "2026-05-28",
+      "title": "Product strategy review",
+      "movable": false,
+      "importance": "high"
+    },
+    {
+      "date": "2026-06-01",
+      "title": "Manager 1:1",
+      "movable": true,
+      "importance": "medium"
+    },
+    {
+      "date": "2026-06-02",
+      "title": "Quarterly planning block",
+      "movable": false,
+      "importance": "high"
+    },
+    {
+      "date": "2026-06-08",
+      "title": "Launch readiness checkpoint",
+      "movable": false,
+      "importance": "high"
+    },
+    {
+      "date": "2026-06-15",
+      "title": "Team retrospective",
+      "movable": true,
+      "importance": "low"
+    }
+  ]
+}
