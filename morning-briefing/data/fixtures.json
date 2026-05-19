@@ -1,0 +1,56 @@
+{
+  "weather": {
+    "source": "fixture",
+    "summary": "Cool start, sunny commute window, light rain possible after lunch.",
+    "temperature": 58,
+    "apparentTemperature": 56,
+    "high": 72,
+    "low": 51,
+    "rainChance": 35,
+    "windMph": 9
+  },
+  "news": {
+    "AI infrastructure": [
+      {
+        "title": "Cloud teams expand GPU capacity ahead of summer model launches",
+        "source": "Demo Newswire",
+        "url": "https://example.com/ai-infrastructure-gpu-capacity",
+        "publishedAt": "2026-05-14T10:10:00Z"
+      },
+      {
+        "title": "Enterprises shift more agent workloads into policy-isolated sandboxes",
+        "source": "Automation Daily",
+        "url": "https://example.com/agent-sandbox-policy",
+        "publishedAt": "2026-05-14T08:40:00Z"
+      }
+    ],
+    "Markets and macro": [
+      {
+        "title": "Futures edge higher as traders wait for morning economic data",
+        "source": "Market Desk",
+        "url": "https://example.com/futures-economic-data",
+        "publishedAt": "2026-05-14T09:15:00Z"
+      },
+      {
+        "title": "Treasury yields hold steady before consumer demand update",
+        "source": "Macro Brief",
+        "url": "https://example.com/yields-consumer-demand",
+        "publishedAt": "2026-05-14T07:50:00Z"
+      }
+    ],
+    "Productivity tools": [
+      {
+        "title": "Calendar assistants add stronger controls for proactive reminders",
+        "source": "Worktech Review",
+        "url": "https://example.com/calendar-assistants-controls",
+        "publishedAt": "2026-05-14T06:30:00Z"
+      },
+      {
+        "title": "Messaging platforms focus on summaries over scroll-heavy feeds",
+        "source": "Collab Weekly",
+        "url": "https://example.com/messaging-summary-feeds",
+        "publishedAt": "2026-05-13T22:15:00Z"
+      }
+    ]
+  }
+}

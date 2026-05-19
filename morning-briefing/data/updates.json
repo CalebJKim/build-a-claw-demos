@@ -1,0 +1,54 @@
+{
+  "calendar": [
+    {
+      "title": "Q2 planning readout",
+      "time": "09:30",
+      "dayOffset": 0,
+      "owner": "Maya",
+      "priority": "high"
+    },
+    {
+      "title": "Design partner sync",
+      "time": "13:00",
+      "dayOffset": 0,
+      "owner": "Ravi",
+      "priority": "medium"
+    },
+    {
+      "title": "Draft launch retro",
+      "time": "10:00",
+      "dayOffset": 1,
+      "owner": "You",
+      "priority": "medium"
+    }
+  ],
+  "tasks": [
+    {
+      "title": "Reply to vendor security questions",
+      "dueOffsetDays": 0,
+      "priority": "high"
+    },
+    {
+      "title": "Send revised demo narrative",
+      "dueOffsetDays": 0,
+      "priority": "high"
+    },
+    {
+      "title": "Review weekly analytics notes",
+      "dueOffsetDays": 2,
+      "priority": "low"
+    }
+  ],
+  "messages": [
+    {
+      "source": "Slack #launch",
+      "summary": "Design freeze moved up; confirm blockers by 11:00.",
+      "sensitivity": "time-sensitive"
+    },
+    {
+      "source": "Email from Finance",
+      "summary": "Budget inputs are due before the afternoon staff meeting.",
+      "sensitivity": "time-sensitive"
+    }
+  ]
+}
