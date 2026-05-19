@@ -1,0 +1,22 @@
+[
+  "Capture the request",
+  "Identify audience and outcome",
+  "Extract core topics",
+  "Expand search queries",
+  "Search trusted corpus",
+  "Search broad candidate pool",
+  "Deduplicate results",
+  "Classify each result by topic",
+  "Score source authority",
+  "Score beginner fit",
+  "Screen commercial or speculative results",
+  "Filter low-quality candidates",
+  "Balance topics for coverage",
+  "Select the reading list",
+  "Write short descriptions",
+  "Add a suggested reading order",
+  "Format the shareable document",
+  "Render the HTML version",
+  "Verify artifact completeness",
+  "Publish the handoff"
+]
