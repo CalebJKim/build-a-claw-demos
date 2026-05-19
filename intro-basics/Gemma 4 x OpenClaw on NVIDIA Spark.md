@@ -19,8 +19,8 @@ sudo apt-get install pciutils build-essential cmake curl libcurl4-openssl-dev -y
 
 git clone https://github.com/ggml-org/llama.cpp
 
-#locked the version to 4/13 commits - Korea BAC
-git -C llama.cpp checkout e21cdc11a0461d8b0cbd28cc356d993bf6be7282
+#latest from 5/4
+git -C llama.cpp checkout b97ebdc98f6053604a19d861c08d8087601b96e0
 
 #or try version on 4/26 tested by Ray -- works ok
 #git -C llama.cpp checkout 5594d132244aeb1bae54dd431e7efbc908f5e3b8
@@ -94,7 +94,7 @@ curl -fsSL https://openclaw.ai/install.sh | bash -s -- --no-onboard
 
 #if you have version too new you can install with this
 #to avoid demo failure that's been tested
-npm install -g openclaw@2026.4.8
+npm install -g openclaw@2026.5.7
 
 ```
 
@@ -137,7 +137,7 @@ You can use this openclaw.json file as reference setup:
             "name": "unsloth/gemma-4-26B-A4B-it-GGUF",
             "reasoning": false,
             "input": [
-              "text"
+              "text", "image"
             ],
             "cost": {
               "input": 0,
@@ -146,7 +146,7 @@ You can use this openclaw.json file as reference setup:
               "cacheWrite": 0
             },
             "contextWindow": 128000,
-            "maxTokens": 8192
+            "maxTokens": 16000
           }
         ]
       }
