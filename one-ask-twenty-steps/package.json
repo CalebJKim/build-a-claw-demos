@@ -7,9 +7,13 @@
     "demo": "node scripts/demo-runner.mjs",
     "demo:json": "node scripts/demo-runner.mjs --json",
     "demo:personal-finance": "node scripts/demo-runner.mjs \"Put together a reading list on personal finance for a beginner.\"",
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
     "check": "node scripts/demo-runner.mjs --no-write --json"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22.14"
   }
 }

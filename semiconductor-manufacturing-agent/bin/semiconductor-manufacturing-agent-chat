@@ -1,0 +1,116 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG_VALUE="$ROOT/src/config-value.js"
+cd "$ROOT"
+
+usage() {
+  cat <<'USAGE'
+Usage:
+  demo-chat [workflow flags] [--async]
+
+Runs this packaged demo, keeps the report server running, and prints browser
+links for dashboard chat. With no workflow flags, the manifest sample is used.
+USAGE
+}
+
+async=false
+run_args=()
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --async)
+      async=true
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      run_args+=("$1")
+      shift
+      ;;
+  esac
+done
+
+write_status_page() {
+  local file="$1"
+  local title="$2"
+  local body="$3"
+  cat > "$file" <<EOF
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="refresh" content="5">
+<title>${title}</title>
+<style>
+body{font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;background:#f6f7f9;color:#1f2328}
+main{max-width:860px;margin:0 auto;padding:42px 24px;background:#fff;min-height:100vh}
+a{color:#2457d6} code,pre{background:#eef2f6;border-radius:6px} code{padding:2px 5px} pre{padding:14px;overflow:auto}
+</style>
+</head>
+<body><main>
+${body}
+</main></body>
+</html>
+EOF
+}
+
+remote_report_port="$(node "$CONFIG_VALUE" remoteReportPort)"
+demo_name="$(node "$CONFIG_VALUE" name)"
+
+mkdir -p "$ROOT/.generated" "$ROOT/runs"
+if [[ -f "$ROOT/.generated/report-server.pid" ]] && kill -0 "$(cat "$ROOT/.generated/report-server.pid")" 2>/dev/null; then
+  :
+else
+  nohup python3 -m http.server "$remote_report_port" --bind 127.0.0.1 > "$ROOT/.generated/report-server.log" 2>&1 &
+  echo $! > "$ROOT/.generated/report-server.pid"
+  sleep 1
+fi
+
+if [[ "$async" == true ]]; then
+  job_id="chat-$(date -u +%Y%m%dT%H%M%SZ)"
+  job_dir="$ROOT/runs/_jobs/$job_id"
+  out_dir="$ROOT/runs/$job_id"
+  mkdir -p "$job_dir"
+  write_status_page "$job_dir/index.html" "$demo_name running" "<h1>$demo_name running</h1><p>The demo workflow is running in the background.</p><p>This page refreshes every 5 seconds.</p><p>Output directory: <code>$out_dir</code></p>"
+  if [[ "${#run_args[@]}" -eq 0 ]]; then
+    nohup "$ROOT/bin/$demo_name-job" --job-id "$job_id" > "$job_dir/launcher.log" 2>&1 < /dev/null &
+  else
+    nohup "$ROOT/bin/$demo_name-job" --job-id "$job_id" "${run_args[@]}" > "$job_dir/launcher.log" 2>&1 < /dev/null &
+  fi
+  echo $! > "$job_dir/pid"
+  cat <<EOF
+$demo_name started.
+Status: http://127.0.0.1:${remote_report_port}/runs/_jobs/${job_id}/index.html
+Server-local status: http://127.0.0.1:${remote_report_port}/runs/_jobs/${job_id}/index.html
+Output directory: ${out_dir}
+EOF
+  exit 0
+fi
+
+run_log="$ROOT/.generated/chat-run-$(date +%Y%m%d%H%M%S).log"
+if [[ "${#run_args[@]}" -eq 0 ]]; then
+  "$ROOT/bin/$demo_name" sample | tee "$run_log"
+else
+  "$ROOT/bin/$demo_name" run "${run_args[@]}" | tee "$run_log"
+fi
+
+out_dir="$(awk -F'Report: ' '/^Report: / {print $2}' "$run_log" | sed 's#/index.html$##' | tail -1)"
+if [[ -z "$out_dir" ]]; then
+  out_dir="$(ls -td "$ROOT"/runs/* | head -1)"
+fi
+
+relative="${out_dir#$ROOT/}"
+
+cat <<EOF
+
+$demo_name complete.
+Report: http://127.0.0.1:${remote_report_port}/${relative}/index.html
+Server-local report: http://127.0.0.1:${remote_report_port}/${relative}/index.html
+Output directory: ${out_dir}
+EOF

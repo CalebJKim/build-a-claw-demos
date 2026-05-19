@@ -1,0 +1,78 @@
+{
+  "name": "semiconductor-manufacturing-agent",
+  "profile": "semiconductor-demo",
+  "openclawMinVersion": "2026.5.12",
+  "nodeMinVersion": "22.14.0",
+  "model": {
+    "provider": "ollama",
+    "id": "qwen3.6:35b-a3b",
+    "openclawId": "ollama/qwen3.6:35b-a3b",
+    "baseUrl": "http://127.0.0.1:11434",
+    "contextTokens": 32768,
+    "maxOutputTokens": 4096,
+    "temperature": 0.25
+  },
+  "ports": {
+    "gateway": 18904,
+    "report": 19022,
+    "localTunnel": 19023
+  },
+  "agents": [
+    {
+      "id": "main",
+      "workspace": "workspaces/main",
+      "agentDir": "openclaw/agents/main/agent",
+      "template": "agents/main/AGENTS.md",
+      "soul": "agents/main/SOUL.md",
+      "chatFacing": true
+    },
+    {
+      "id": "maintenance-claw",
+      "workspace": "workspaces/maintenance-claw",
+      "agentDir": "openclaw/agents/maintenance-claw/agent",
+      "template": "agents/maintenance-claw/AGENTS.md",
+      "soul": "agents/maintenance-claw/SOUL.md"
+    },
+    {
+      "id": "quality-claw",
+      "workspace": "workspaces/quality-claw",
+      "agentDir": "openclaw/agents/quality-claw/agent",
+      "template": "agents/quality-claw/AGENTS.md",
+      "soul": "agents/quality-claw/SOUL.md"
+    },
+    {
+      "id": "supplier-claw",
+      "workspace": "workspaces/supplier-claw",
+      "agentDir": "openclaw/agents/supplier-claw/agent",
+      "template": "agents/supplier-claw/AGENTS.md",
+      "soul": "agents/supplier-claw/SOUL.md"
+    }
+  ],
+  "requiredCommands": [
+    "openclaw",
+    "node",
+    "ollama",
+    "curl",
+    "python3"
+  ],
+  "generatedPaths": [
+    "runs",
+    "input",
+    "workspaces",
+    ".generated",
+    ".archive",
+    "openclaw/agents"
+  ],
+  "sample": {
+    "mode": "all",
+    "language": "bilingual"
+  },
+  "commands": {
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
+    "reset": "./scripts/reset",
+    "uninstall": "./scripts/uninstall"
+  }
+}

@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+node_modules/
+runs/
+input/
+workspaces/
+.generated/
+.archive/
+openclaw/agents/
+out/
+.DS_Store

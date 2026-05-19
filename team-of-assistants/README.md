@@ -71,3 +71,39 @@ Use `--today YYYY-MM-DD` to keep the phrase "in two weeks" stable during rehears
 - The booking step is dry-run by default.
 - The fixture data is not live pricing; it is designed to prove the orchestration and handoff.
 - NemoClaw is alpha software, so keep real credentials and booking actions behind explicit guardrails.
+
+## OpenClaw Demo Pack
+
+This directory now follows the repo demo-pack format. It has its own manifest, OpenClaw profile, gateway port, report port, generated workspaces, reset flow, and chat wrapper.
+
+- Profile: `pto-demo`
+- Gateway: `18901`
+- Report server: `19016`
+- Local model: `ollama/qwen3.6:35b-a3b`
+- Chat-facing command: `bin/team-of-assistants-chat --prompt "<ask>" --async`
+
+Standard run flow:
+
+```bash
+./scripts/doctor
+./scripts/bootstrap
+./scripts/start
+./scripts/run-sample
+```
+
+To use the OpenClaw UI, start the demo and open the profile dashboard:
+
+```bash
+./scripts/start
+openclaw --profile pto-demo dashboard
+```
+
+Then ask for PTO planning in chat. The main agent routes to the packaged workflow and returns a status/report URL.
+
+Reset between demos:
+
+```bash
+./scripts/reset
+```
+
+Generated state lives under `runs/`, `input/`, `workspaces/`, `.generated/`, `.archive/`, and `openclaw/agents/`. Do not commit real travel profiles, Discord tokens, generated reports, or live booking data.

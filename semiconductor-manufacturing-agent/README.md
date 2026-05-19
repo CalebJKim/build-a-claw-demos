@@ -203,3 +203,41 @@ It must not modify WIP dispatch, route qualification, or production schedules wi
 
 That separation is the point of the demo: NemoClaw and OpenShell constrain the environment, while the agent demonstrates useful fab-floor reasoning inside those boundaries.
 此分離正是示範的重點：NemoClaw 與 OpenShell 約束執行環境，而代理在這些邊界內展示有價值的晶圓廠現場推理能力。
+
+## OpenClaw Demo Pack
+## OpenClaw 示範套件
+
+This directory now follows the repo demo-pack format. It has an isolated OpenClaw profile, standard scripts, report hosting, and a chat wrapper around the synthetic fab operations runner.
+此目錄現在符合 repo 示範套件格式，包含獨立 OpenClaw profile、標準腳本、報告服務，以及包裝合成晶圓廠營運 runner 的聊天入口。
+
+- Profile: `semiconductor-demo`
+- Gateway: `18904`
+- Report server: `19022`
+- Local model: `ollama/qwen3.6:35b-a3b`
+- Chat-facing command: `bin/semiconductor-manufacturing-agent-chat --mode all --lang bilingual --async`
+
+Standard run flow:
+
+```bash
+./scripts/doctor
+./scripts/bootstrap
+./scripts/start
+./scripts/run-sample
+```
+
+To use the OpenClaw UI:
+
+```bash
+./scripts/start
+openclaw --profile semiconductor-demo dashboard
+```
+
+Ask for the full fab report or one use case such as quality, maintenance, schedule, supplier, diagnostics, or triage. The main agent invokes the packaged workflow and returns the status/report link.
+
+Reset between demos:
+
+```bash
+./scripts/reset
+```
+
+Generated state lives under `runs/`, `input/`, `workspaces/`, `.generated/`, `.archive/`, and `openclaw/agents/`. Do not commit real fab data, production credentials, LINE secrets, generated reports from real systems, or customer-specific incident details.

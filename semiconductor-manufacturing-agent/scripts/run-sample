@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG_VALUE="$ROOT/src/config-value.js"
+
+cd "$ROOT"
+
+demo_name="$(node "$CONFIG_VALUE" name)"
+
+exec "$ROOT/bin/$demo_name" sample "$@"

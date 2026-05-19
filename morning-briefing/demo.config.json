@@ -1,0 +1,79 @@
+{
+  "name": "morning-briefing",
+  "profile": "briefing-demo",
+  "openclawMinVersion": "2026.5.12",
+  "nodeMinVersion": "22.14.0",
+  "model": {
+    "provider": "ollama",
+    "id": "qwen3.6:35b-a3b",
+    "openclawId": "ollama/qwen3.6:35b-a3b",
+    "baseUrl": "http://127.0.0.1:11434",
+    "contextTokens": 32768,
+    "maxOutputTokens": 4096,
+    "temperature": 0.25
+  },
+  "ports": {
+    "gateway": 18902,
+    "report": 19018,
+    "localTunnel": 19019
+  },
+  "agents": [
+    {
+      "id": "main",
+      "workspace": "workspaces/main",
+      "agentDir": "openclaw/agents/main/agent",
+      "template": "agents/main/AGENTS.md",
+      "soul": "agents/main/SOUL.md",
+      "chatFacing": true
+    },
+    {
+      "id": "weather-claw",
+      "workspace": "workspaces/weather-claw",
+      "agentDir": "openclaw/agents/weather-claw/agent",
+      "template": "agents/weather-claw/AGENTS.md",
+      "soul": "agents/weather-claw/SOUL.md"
+    },
+    {
+      "id": "news-claw",
+      "workspace": "workspaces/news-claw",
+      "agentDir": "openclaw/agents/news-claw/agent",
+      "template": "agents/news-claw/AGENTS.md",
+      "soul": "agents/news-claw/SOUL.md"
+    },
+    {
+      "id": "updates-claw",
+      "workspace": "workspaces/updates-claw",
+      "agentDir": "openclaw/agents/updates-claw/agent",
+      "template": "agents/updates-claw/AGENTS.md",
+      "soul": "agents/updates-claw/SOUL.md"
+    }
+  ],
+  "requiredCommands": [
+    "openclaw",
+    "node",
+    "ollama",
+    "curl",
+    "python3"
+  ],
+  "generatedPaths": [
+    "runs",
+    "input",
+    "workspaces",
+    ".generated",
+    ".archive",
+    "openclaw/agents",
+    "out"
+  ],
+  "sample": {
+    "ask": "Give me my morning briefing.",
+    "now": "2026-05-14T07:00:00-05:00"
+  },
+  "commands": {
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
+    "reset": "./scripts/reset",
+    "uninstall": "./scripts/uninstall"
+  }
+}

@@ -7,7 +7,10 @@ The goal is repeatable demo shipping: a builder should be able to add a new demo
 ## Current Demos
 
 - `intro-basics/` - introductory OpenClaw/Spark notes.
-- `semiconductor-manufacturing-agent/` - semiconductor manufacturing operations demo with synthetic fab data and OpenClaw workspace files.
+- `team-of-assistants/` - PTO planning team demo with coordinator, research, finance, and scheduling claws plus optional Discord/NemoClaw notes.
+- `morning-briefing/` - scheduled morning briefing demo with weather, news, personal updates, fixture fallback, and optional Telegram delivery.
+- `one-ask-twenty-steps/` - one-request research/publishing demo that filters sources, writes a reading list, renders HTML, and verifies artifacts.
+- `semiconductor-manufacturing-agent/` - semiconductor manufacturing operations demo with synthetic fab data, bilingual shift reports, OpenClaw profile packaging, and approval-gated recommendations.
 - `resume-callback-agent/` - resume callback demo with PDF upload, parallel specialist claws, local Ollama execution, report generation, and upgraded resume output.
 - `spending-autopsy-agent/` - spending autopsy demo with messy CSV cleanup, behavioral categorization, anomaly flags, visual report, and blunt cut list.
 - `meeting-aftermath-agent/` - meeting aftermath demo with mock transcript retrieval, parallel extraction, personalized follow-up emails, and PM-tool timeline output.

@@ -13,6 +13,13 @@
     "demo:supplier": "node scripts/demo-runner.mjs supplier",
     "demo:diagnostics": "node scripts/demo-runner.mjs diagnostics",
     "demo:triage": "node scripts/demo-runner.mjs triage",
-    "line:webhook": "node scripts/line-webhook.mjs"
+    "line:webhook": "node scripts/line-webhook.mjs",
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample"
+  },
+  "engines": {
+    "node": ">=22.14"
   }
 }

@@ -9,9 +9,13 @@
     "brief": "node src/morning-briefing.mjs --dry-run",
     "send": "node src/morning-briefing.mjs --send",
     "schedule": "node src/scheduler.mjs",
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
     "test": "node --test"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22.14"
   }
 }

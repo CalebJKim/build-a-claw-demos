@@ -7,10 +7,14 @@
   "scripts": {
     "demo": "node src/index.js",
     "discord": "node src/discord.js",
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
     "test": "node --test",
     "check": "node --check src/index.js && node --check src/discord.js && node --check src/orchestrator.js && node --check src/agents/research-claw.js && node --check src/agents/finance-claw.js && node --check src/agents/scheduling-claw.js"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=22.14"
   }
 }

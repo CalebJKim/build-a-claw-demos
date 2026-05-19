@@ -1,0 +1,77 @@
+{
+  "name": "one-ask-twenty-steps",
+  "profile": "one-ask-demo",
+  "openclawMinVersion": "2026.5.12",
+  "nodeMinVersion": "22.14.0",
+  "model": {
+    "provider": "ollama",
+    "id": "qwen3.6:35b-a3b",
+    "openclawId": "ollama/qwen3.6:35b-a3b",
+    "baseUrl": "http://127.0.0.1:11434",
+    "contextTokens": 32768,
+    "maxOutputTokens": 4096,
+    "temperature": 0.25
+  },
+  "ports": {
+    "gateway": 18903,
+    "report": 19020,
+    "localTunnel": 19021
+  },
+  "agents": [
+    {
+      "id": "main",
+      "workspace": "workspaces/main",
+      "agentDir": "openclaw/agents/main/agent",
+      "template": "agents/main/AGENTS.md",
+      "soul": "agents/main/SOUL.md",
+      "chatFacing": true
+    },
+    {
+      "id": "research-claw",
+      "workspace": "workspaces/research-claw",
+      "agentDir": "openclaw/agents/research-claw/agent",
+      "template": "agents/research-claw/AGENTS.md",
+      "soul": "agents/research-claw/SOUL.md"
+    },
+    {
+      "id": "writer-claw",
+      "workspace": "workspaces/writer-claw",
+      "agentDir": "openclaw/agents/writer-claw/agent",
+      "template": "agents/writer-claw/AGENTS.md",
+      "soul": "agents/writer-claw/SOUL.md"
+    },
+    {
+      "id": "publisher-claw",
+      "workspace": "workspaces/publisher-claw",
+      "agentDir": "openclaw/agents/publisher-claw/agent",
+      "template": "agents/publisher-claw/AGENTS.md",
+      "soul": "agents/publisher-claw/SOUL.md"
+    }
+  ],
+  "requiredCommands": [
+    "openclaw",
+    "node",
+    "ollama",
+    "curl",
+    "python3"
+  ],
+  "generatedPaths": [
+    "runs",
+    "input",
+    "workspaces",
+    ".generated",
+    ".archive",
+    "openclaw/agents"
+  ],
+  "sample": {
+    "ask": "Put together a reading list on personal finance for a beginner."
+  },
+  "commands": {
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
+    "reset": "./scripts/reset",
+    "uninstall": "./scripts/uninstall"
+  }
+}

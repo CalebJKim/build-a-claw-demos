@@ -1,0 +1,79 @@
+{
+  "name": "team-of-assistants",
+  "profile": "pto-demo",
+  "openclawMinVersion": "2026.5.12",
+  "nodeMinVersion": "22.14.0",
+  "model": {
+    "provider": "ollama",
+    "id": "qwen3.6:35b-a3b",
+    "openclawId": "ollama/qwen3.6:35b-a3b",
+    "baseUrl": "http://127.0.0.1:11434",
+    "contextTokens": 32768,
+    "maxOutputTokens": 4096,
+    "temperature": 0.25
+  },
+  "ports": {
+    "gateway": 18901,
+    "report": 19016,
+    "localTunnel": 19017
+  },
+  "agents": [
+    {
+      "id": "main",
+      "workspace": "workspaces/main",
+      "agentDir": "openclaw/agents/main/agent",
+      "template": "agents/main/AGENTS.md",
+      "soul": "agents/main/SOUL.md",
+      "chatFacing": true
+    },
+    {
+      "id": "research-claw",
+      "workspace": "workspaces/research-claw",
+      "agentDir": "openclaw/agents/research-claw/agent",
+      "template": "agents/research-claw/AGENTS.md",
+      "soul": "agents/research-claw/SOUL.md"
+    },
+    {
+      "id": "finance-claw",
+      "workspace": "workspaces/finance-claw",
+      "agentDir": "openclaw/agents/finance-claw/agent",
+      "template": "agents/finance-claw/AGENTS.md",
+      "soul": "agents/finance-claw/SOUL.md"
+    },
+    {
+      "id": "scheduling-claw",
+      "workspace": "workspaces/scheduling-claw",
+      "agentDir": "openclaw/agents/scheduling-claw/agent",
+      "template": "agents/scheduling-claw/AGENTS.md",
+      "soul": "agents/scheduling-claw/SOUL.md"
+    }
+  ],
+  "requiredCommands": [
+    "openclaw",
+    "node",
+    "ollama",
+    "curl",
+    "python3"
+  ],
+  "generatedPaths": [
+    "runs",
+    "input",
+    "workspaces",
+    ".generated",
+    ".archive",
+    "openclaw/agents"
+  ],
+  "sample": {
+    "prompt": "Plan my PTO in two weeks.",
+    "today": "2026-05-14",
+    "bookChoice": 1
+  },
+  "commands": {
+    "doctor": "./scripts/doctor",
+    "bootstrap": "./scripts/bootstrap",
+    "start": "./scripts/start",
+    "sample": "./scripts/run-sample",
+    "reset": "./scripts/reset",
+    "uninstall": "./scripts/uninstall"
+  }
+}

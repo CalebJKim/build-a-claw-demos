@@ -90,3 +90,39 @@ Edit `config/briefing.json`:
 - `updatesFile`: local calendar/task/message signals
 
 Edit `data/updates.json` to simulate "pulls your updates" in the demo. The `dayOffset` and `dueOffsetDays` fields keep demo dates relative to the run date.
+
+## OpenClaw Demo Pack
+
+This directory now follows the repo demo-pack format. It has an isolated OpenClaw profile and a chat wrapper that generates a report URL from either fixture-backed or live-with-fallback data.
+
+- Profile: `briefing-demo`
+- Gateway: `18902`
+- Report server: `19018`
+- Local model: `ollama/qwen3.6:35b-a3b`
+- Chat-facing command: `bin/morning-briefing-chat --demo --async`
+
+Standard run flow:
+
+```bash
+./scripts/doctor
+./scripts/bootstrap
+./scripts/start
+./scripts/run-sample
+```
+
+To use the OpenClaw UI:
+
+```bash
+./scripts/start
+openclaw --profile briefing-demo dashboard
+```
+
+Ask for a morning briefing. The main agent invokes the packaged workflow and returns the status/report link. Use `--live` only when network access is expected; fixture fallback keeps the demo stage-safe.
+
+Reset between runs:
+
+```bash
+./scripts/reset
+```
+
+Generated state lives under `runs/`, `out/`, `input/`, `workspaces/`, `.generated/`, `.archive/`, and `openclaw/agents/`. Do not commit real Telegram credentials, personal updates, generated reports, or live message payloads.

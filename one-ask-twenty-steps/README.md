@@ -111,3 +111,39 @@ nemoclaw my-assistant policy-add
 ## Guardrails
 
 This demo produces educational content only. It does not recommend specific securities, accounts, lenders, insurers, tax strategies, or personalized financial plans.
+
+## OpenClaw Demo Pack
+
+This directory now follows the repo demo-pack format. It has a manifest, isolated OpenClaw profile, standard scripts, and a chat wrapper that publishes the generated HTML under `runs/`.
+
+- Profile: `one-ask-demo`
+- Gateway: `18903`
+- Report server: `19020`
+- Local model: `ollama/qwen3.6:35b-a3b`
+- Chat-facing command: `bin/one-ask-twenty-steps-chat --ask "<ask>" --async`
+
+Standard run flow:
+
+```bash
+./scripts/doctor
+./scripts/bootstrap
+./scripts/start
+./scripts/run-sample
+```
+
+To use the OpenClaw UI:
+
+```bash
+./scripts/start
+openclaw --profile one-ask-demo dashboard
+```
+
+Ask for a research/publishing deliverable. The main agent invokes the deterministic twenty-step runner and returns the report URL.
+
+Reset between demos:
+
+```bash
+./scripts/reset
+```
+
+Generated state lives under `runs/`, `input/`, `workspaces/`, `.generated/`, `.archive/`, and `openclaw/agents/`. The existing `output/` folder remains the legacy local-demo target; the OpenClaw wrapper writes fresh stage runs to `runs/`.

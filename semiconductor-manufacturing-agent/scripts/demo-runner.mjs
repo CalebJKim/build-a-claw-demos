@@ -28,11 +28,21 @@ function parseArgs(argv) {
   let requested = "all";
   let lang = "bilingual";
   let writeReport = true;
+  let selectedOutputDir = outputDir;
 
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
     if (arg === "--no-write") {
       writeReport = false;
+      continue;
+    }
+    if (arg === "--out-dir") {
+      i += 1;
+      selectedOutputDir = argv[i] || selectedOutputDir;
+      continue;
+    }
+    if (arg.startsWith("--out-dir=")) {
+      selectedOutputDir = arg.slice("--out-dir=".length);
       continue;
     }
     if (arg === "--lang" || arg === "-l") {
@@ -68,10 +78,10 @@ function parseArgs(argv) {
     process.exit(1);
   }
 
-  return { requested, lang: normalizedLang, writeReport };
+  return { requested, lang: normalizedLang, writeReport, selectedOutputDir };
 }
 
-const { requested, lang, writeReport } = parseArgs(process.argv.slice(2));
+const { requested, lang, writeReport, selectedOutputDir } = parseArgs(process.argv.slice(2));
 
 const readJson = (name) => JSON.parse(fs.readFileSync(path.join(dataDir, name), "utf8"));
 
@@ -759,12 +769,13 @@ const selected = requested === "all"
   ? [analyses.maintenance, analyses.quality, analyses.schedule, analyses.supplier, analyses.diagnostics, analyses.triage]
   : [analyses[requested]];
 
-fs.mkdirSync(outputDir, { recursive: true });
+const reportOutputDir = path.isAbsolute(selectedOutputDir) ? selectedOutputDir : path.join(root, selectedOutputDir);
+fs.mkdirSync(reportOutputDir, { recursive: true });
 const report = buildReport(selected, lang);
 const reportFile = lang === "bilingual"
   ? "manufacturing-agent-report.md"
   : `manufacturing-agent-report.${lang}.md`;
-const reportPath = path.join(outputDir, reportFile);
+const reportPath = path.join(reportOutputDir, reportFile);
 if (writeReport) fs.writeFileSync(reportPath, report);
 
 console.log(report);

@@ -2,4 +2,10 @@ node_modules/
 .env
 .env.*
 !.env.example
+runs/
+input/
+workspaces/
+.generated/
+.archive/
+openclaw/agents/
 .DS_Store

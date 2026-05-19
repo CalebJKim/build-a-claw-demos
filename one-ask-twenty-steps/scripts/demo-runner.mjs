@@ -17,7 +17,8 @@ function parseArgs(argv) {
     ask: defaultAsk,
     write: true,
     json: false,
-    publish: "both"
+    publish: "both",
+    outDir: outputDir
   };
 
   const freeform = [];
@@ -34,6 +35,15 @@ function parseArgs(argv) {
     if (arg === "--publish") {
       i += 1;
       args.publish = argv[i] || args.publish;
+      continue;
+    }
+    if (arg === "--out-dir") {
+      i += 1;
+      args.outDir = argv[i] || args.outDir;
+      continue;
+    }
+    if (arg.startsWith("--out-dir=")) {
+      args.outDir = arg.slice("--out-dir=".length);
       continue;
     }
     if (arg.startsWith("--publish=")) {
@@ -550,6 +560,7 @@ function verifyArtifacts({ markdown, html, search }) {
 }
 
 function main() {
+  const artifactDir = path.isAbsolute(args.outDir) ? args.outDir : path.join(root, args.outDir);
   const intent = extractIntent(args.ask);
   const search = runSearch(intent);
   const artifacts = [];
@@ -559,14 +570,14 @@ function main() {
   const checks = verifyArtifacts({ markdown, html, search });
 
   if (args.write) {
-    fs.mkdirSync(outputDir, { recursive: true });
+    fs.mkdirSync(artifactDir, { recursive: true });
     if (args.publish === "md" || args.publish === "both") {
-      const markdownPath = path.join(outputDir, `${outputBase}.md`);
+      const markdownPath = path.join(artifactDir, `${outputBase}.md`);
       fs.writeFileSync(markdownPath, markdown);
       artifacts.push(markdownPath);
     }
     if (args.publish === "html" || args.publish === "both") {
-      const htmlPath = path.join(outputDir, `${outputBase}.html`);
+      const htmlPath = path.join(artifactDir, `${outputBase}.html`);
       fs.writeFileSync(htmlPath, html);
       artifacts.push(htmlPath);
     }
