@@ -145,14 +145,25 @@ async function runDemo(config, args) {
   console.log(`Budget: $${profile.budget}`);
   console.log(`Output: ${outDir}`);
 
-  const corpus = JSON.parse(corpusResponse);
+  let corpus = JSON.parse(corpusResponse);
+  if (!args['skip-model']) {
+    try {
+      const generated = await searchDestinationsForBrief(effectiveConfig, profile);
+      if (generated.length) {
+        corpus = { ...corpus, origin: profile.origin, generatedFor: profile.brief, destinations: generated };
+        console.log(`Destinations from model: ${generated.map((d) => d.name).join(', ')}`);
+      }
+    } catch (error) {
+      console.log(`Falling back to static corpus (${error.message.slice(0, 120)})`);
+    }
+  }
   const [destinationResearch, trailResearch, logisticsResearch] = await Promise.all([
     Promise.resolve(researchDestinations(profile, corpus.destinations)),
     Promise.resolve(researchTrails(profile, corpus.destinations)),
     Promise.resolve(researchLogistics(profile, corpus.destinations)),
   ]);
 
-  let packages = mergePackages(profile, destinationResearch, trailResearch, logisticsResearch).slice(0, 3);
+  let packages = mergePackages(profile, destinationResearch, trailResearch, logisticsResearch, corpus.destinations).slice(0, 3);
   packages = attachRevealMessages(profile, packages);
   if (!args['skip-model']) {
     packages = await polishRevealMessagesWithFallback(effectiveConfig, profile, packages);
@@ -312,8 +323,8 @@ function researchLogistics(profile, destinations) {
   return byDestination;
 }
 
-function mergePackages(profile, destinationResearch, trailResearch, logisticsResearch) {
-  const allDestinations = readCorpusDestinations();
+function mergePackages(profile, destinationResearch, trailResearch, logisticsResearch, destinations) {
+  const allDestinations = destinations ?? readCorpusDestinations();
   return destinationResearch.selected.map((item, index) => {
     const destination = allDestinations.find((candidate) => candidate.id === item.id);
     const logistics = logisticsResearch[item.id];
@@ -441,11 +452,82 @@ async function callOllama(config, messages) {
       model: config.model,
       messages,
       stream: false,
+      chat_template_kwargs: { enable_thinking: false },
       temperature: config.temperature ?? 0.45,
       max_tokens: config.maxOutputTokens ?? 2048,
     }),
   }, 180000);
   return response.choices?.[0]?.message?.content ?? '';
+}
+
+async function callOllamaJson(config, messages, options = {}) {
+  const response = await fetchJson(`${config.ollamaHost}/chat/completions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: config.model,
+      messages,
+      stream: false,
+      chat_template_kwargs: { enable_thinking: false },
+      temperature: options.temperature ?? 0.4,
+      max_tokens: options.maxTokens ?? 6000,
+      response_format: { type: 'json_object' },
+    }),
+  }, options.timeout ?? 240000);
+  const raw = response.choices?.[0]?.message?.content ?? '';
+  try {
+    return JSON.parse(raw);
+  } catch {
+    const extracted = extractJson(raw);
+    if (extracted) {
+      try { return JSON.parse(extracted); } catch {}
+    }
+    throw new Error(`Model returned non-JSON: ${raw.slice(0, 400)}`);
+  }
+}
+
+async function searchDestinationsForBrief(config, profile) {
+  const system = `You generate plausible vacation destination candidates for a surprise trip planner. Return a JSON object with a "destinations" array containing 3 entries. Each destination must follow this exact schema:
+
+{
+  "id": "slug-like-string",
+  "name": "Destination headline e.g. 'Taipei + Yangmingshan'",
+  "region": "Region or country e.g. 'Taipei, Taiwan'",
+  "travelMode": "drive" or "fly",
+  "driveHours": number or null,
+  "flightHours": number or null,
+  "crowdLevel": integer 1-10 (lower is quieter),
+  "hikingFit": integer 1-10 (higher means better for hiking),
+  "romanceFit": integer 1-10,
+  "seasonFit": ["spring","summer","fall","winter", or season phrases],
+  "quietWindow": "Short string describing the best low-crowd window",
+  "whyFits": "One or two sentence pitch tied to the user's brief",
+  "risks": ["short string", ...],
+  "costs": { "transport": int, "lodging": int, "food": int, "activities": int, "contingency": int },
+  "lodging": { "name": "string", "neighborhood": "string", "notes": "string", "bookingUrl": "https URL" },
+  "transportLinks": [{ "label": "string", "url": "https URL" }],
+  "bookingLinks": [{ "label": "string", "url": "https URL" }],
+  "trails": [{ "name": "string", "difficulty": "easy|moderate|hard", "distanceMiles": number, "elevationFeet": number, "bestTime": "string", "crowdTip": "string", "reviewSignal": "string", "url": "https URL" }]
+}
+
+Rules:
+- If the brief names a specific destination (city, country, park), the FIRST entry MUST be that destination. Add 2 alternatives that fit the same vibe.
+- If the brief is open-ended, propose 3 destinations that suit the partner profile.
+- Total costs (sum of all five cost fields) should fit within the budget.
+- Use real, googlable place names and plausible URLs.
+- Output strict JSON only — no markdown, no commentary.`;
+  const userMessage = `Brief: ${profile.brief}
+Origin: ${profile.origin}
+Budget: $${profile.budget}
+Partner profile: hatesCrowds=${profile.hatesCrowds}, lovesHiking=${profile.lovesHiking}, dates=${profile.dates}
+
+Generate 3 destinations now.`;
+  const out = await callOllamaJson(config, [
+    { role: 'system', content: system },
+    { role: 'user', content: userMessage },
+  ], { maxTokens: 6500 });
+  const destinations = Array.isArray(out?.destinations) ? out.destinations : Array.isArray(out) ? out : [];
+  return destinations.filter((d) => d && typeof d.name === 'string').slice(0, 5);
 }
 
 async function fetchJson(url, options = {}, timeout = 30000) {
