@@ -12,8 +12,8 @@ const ROOT = path.resolve(path.dirname(__filename), '..');
 process.env.PATH = `${path.join(os.homedir(), '.npm-global', 'bin')}:${process.env.PATH ?? ''}`;
 
 const DEFAULT_CONFIG = {
-  model: 'qwen3.6:35b-a3b',
-  ollamaHost: 'http://127.0.0.1:11434',
+  model: 'unsloth/Qwen3.6-35B-A3B-GGUF',
+  ollamaHost: 'http://127.0.0.1:8000/v1',
   temperature: 0.35,
   maxOutputTokens: 2048,
 };
@@ -51,7 +51,7 @@ Options:
   --no-actions        Prepare action plan but do not write mock action receipts.
   --ask <text>        Natural-language trigger.
   --out <path>        Output directory.
-  --model <name>      Ollama model override.
+  --model <name>      Model id override.
 `;
 }
 
@@ -92,24 +92,24 @@ async function doctor(config) {
   let ok = true;
   checks.push(['node', process.version]);
   const openclawVersion = commandExists('openclaw') ? safeRunLabel('openclaw', ['--version']) : 'missing';
-  const ollamaVersion = commandExists('ollama') ? safeRunLabel('ollama', ['--version']) : 'missing';
+  const llamaServerOk = await fetchJson(`${config.ollamaHost}/models`, {}, 5000).then(() => 'ok').catch((e) => `error: ${e.message}`);
   const pythonPath = commandExists('python3') ?? 'missing';
   checks.push(['openclaw', openclawVersion]);
-  checks.push(['ollama', ollamaVersion]);
+  checks.push(['llama-server', llamaServerOk]);
   checks.push(['python3', pythonPath]);
   checks.push(['mock-calendar', existsSync(path.join(ROOT, 'tools/mock-calendar')) ? 'present' : 'missing']);
   checks.push(['mock-inbox', existsSync(path.join(ROOT, 'tools/mock-inbox')) ? 'present' : 'missing']);
   checks.push(['mock-world-search', existsSync(path.join(ROOT, 'tools/mock-world-search')) ? 'present' : 'missing']);
   checks.push(['mock-action-api', existsSync(path.join(ROOT, 'tools/mock-action-api')) ? 'present' : 'missing']);
-  if (openclawVersion === 'missing' || ollamaVersion === 'missing' || pythonPath === 'missing') ok = false;
-  if (openclawVersion.startsWith('error:') || ollamaVersion.startsWith('error:')) ok = false;
+  if (openclawVersion === 'missing' || llamaServerOk.startsWith('error:') || pythonPath === 'missing') ok = false;
+  if (openclawVersion.startsWith('error:') || llamaServerOk.startsWith('error:')) ok = false;
 
   let ollamaModels = [];
   try {
-    const tags = await fetchJson(`${config.ollamaHost}/api/tags`, {}, 8000);
-    ollamaModels = (tags.models ?? []).map((model) => model.name);
+    const tags = await fetchJson(`${config.ollamaHost}/models`, {}, 8000);
+    ollamaModels = (tags.data ?? []).map((m) => m.id);
   } catch (error) {
-    checks.push(['ollama-api', `error: ${error.message}`]);
+    checks.push(['llama-server-api', `error: ${error.message}`]);
     ok = false;
   }
 
@@ -599,20 +599,18 @@ async function toolJson(command, args) {
 }
 
 async function callOllama(config, messages) {
-  const response = await fetchJson(`${config.ollamaHost}/api/chat`, {
+  const response = await fetchJson(`${config.ollamaHost}/chat/completions`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       model: config.model,
       messages,
       stream: false,
-      options: {
-        temperature: config.temperature ?? 0.35,
-        num_predict: config.maxOutputTokens ?? 2048,
-      },
+      temperature: config.temperature ?? 0.35,
+      max_tokens: config.maxOutputTokens ?? 2048,
     }),
   }, 180000);
-  return response.message?.content ?? '';
+  return response.choices?.[0]?.message?.content ?? '';
 }
 
 async function fetchJson(url, options = {}, timeout = 30000) {
