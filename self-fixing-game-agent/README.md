@@ -1,5 +1,7 @@
 # Self-Fixing Game
 
+> **Try it:** "Build me a multiplayer trivia game my friends can play from their phones right now. Theme: internet history. Vibe: neon arcade. Rules: quick rounds, phones as controllers, host advances questions."
+
 OpenClaw demo pack for turning a loose "build a multiplayer trivia game" request into a real phone-playable game, a self-test/fix loop, a bug report, and a live URL.
 
 Audience: developers, tech-curious people, and anyone who has tried to vibe-code and given up.

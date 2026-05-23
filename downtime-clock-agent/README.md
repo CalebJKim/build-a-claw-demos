@@ -1,5 +1,7 @@
 # The Downtime Clock
 
+> **Try it:** "Machine 4 just went down. What is this actually costing me."
+
 OpenClaw demo pack for turning a machine-down event into a live executive cost clock with cascade, repair break-even, and historical context.
 
 Audience: CFOs, plant controllers, and executives who hear "we had some downtime this week" without enough financial detail.

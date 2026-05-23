@@ -1,5 +1,8 @@
 # Meeting Aftermath Machine
 
+
+> **Try it:** "Paste a messy meeting transcript. Get everything that should have happened after it."
+
 OpenClaw demo pack for turning a messy meeting transcript into the work that should happen after the meeting.
 
 Audience: managers, team leads, and people who sit in too many meetings.

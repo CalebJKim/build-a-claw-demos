@@ -1,5 +1,8 @@
 # OpenClaw Spending Autopsy Demo
 
+
+> **Try it:** "Drop three months of bank exports. Get the truth."
+
 This demo is for anyone with a bank account and vague financial anxiety.
 
 The user ask is:

@@ -1,5 +1,8 @@
 # OpenClaw Resume Callback Demo
 
+
+> **Try it:** "My resume is not getting callbacks. Fix it."
+
 This demo is for job seekers, career changers, and anyone who has sent a resume into the void.
 
 The user ask is:

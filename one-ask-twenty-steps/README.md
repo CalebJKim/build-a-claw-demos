@@ -1,5 +1,7 @@
 # One Ask, Twenty Steps Done
 
+> **Try it:** "Put together a reading list on personal finance for a beginner."
+
 One request triggers a full workflow: search, filter, write, format, verify, and publish. The user can move on while the agent handles the intermediate work.
 
 Demo request:

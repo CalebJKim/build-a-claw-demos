@@ -1,5 +1,7 @@
 # The Scrap Genome
 
+> **Try it:** "We're scrapping too many parts on this geometry. Why."
+
 OpenClaw demo pack for turning noisy scrap history into a live process-risk warning and specific manufacturing recommendations.
 
 Audience: quality engineers, process engineers, and plant managers who have stared at scrap reports without getting an actionable answer.

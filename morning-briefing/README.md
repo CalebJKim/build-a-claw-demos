@@ -1,5 +1,7 @@
 # Morning Briefing Claw
 
+> **Try it:** "Give me my morning briefing."
+
 Demo line: set it once. Every morning at 7am, a NemoClaw/OpenShell sandbox checks the news, weather, and your updates, then drops a short Telegram digest on your phone.
 
 This repo is intentionally small: no npm dependencies, no app to open, and a dry-run fixture mode so the demo works even without network access or phone credentials.
