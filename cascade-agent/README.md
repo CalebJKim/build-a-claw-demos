@@ -1,5 +1,7 @@
 # The Cascade
 
+> **Try it:** "Press 17 just went down. Figure out what just happened to the rest of my week."
+
 OpenClaw demo pack for showing how one machine downtime event turns into a full-week production, cost, reroute, and customer-communication problem.
 
 Audience: plant managers, operations directors, and anyone who has watched one problem become five problems by end of shift.

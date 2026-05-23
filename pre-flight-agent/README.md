@@ -1,5 +1,7 @@
 # The Pre-Flight
 
+> **Try it:** "Before this job runs, tell me if it's going to go well."
+
 OpenClaw demo pack for deciding whether a manufacturing job should run now, wait for better conditions, or run with added controls before the first part is cut.
 
 Audience: quality managers, production planners, and ops leaders who are tired of finding out a job went wrong after it already ran.

@@ -1,6 +1,9 @@
 # GTC Taipei NemoClaw Semiconductor Manufacturing Agent
 # GTC Taipei NemoClaw 半導體製造代理
 
+
+> **Try it:** "Give me shift-ready manufacturing recommendations from today's fab data."
+
 This workspace contains a semiconductor manufacturing OpenClaw agent demo designed to run inside a NemoClaw-managed OpenShell sandbox.
 此工作區包含一個半導體製造 OpenClaw 代理示範，設計用於 NemoClaw 管理的 OpenShell 沙盒中執行。
 

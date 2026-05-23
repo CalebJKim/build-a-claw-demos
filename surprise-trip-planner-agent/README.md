@@ -1,5 +1,7 @@
 # Surprise Trip Planner
 
+> **Try it:** "Plan a surprise weekend trip for my partner. She loves hiking, hates crowds, and we have $1,200."
+
 OpenClaw demo pack for turning a one-sentence relationship brief into three decision-ready weekend trip packages.
 
 Audience: people who have relationships, people who feel guilty about not planning things, and gift-givers.

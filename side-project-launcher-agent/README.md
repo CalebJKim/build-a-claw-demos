@@ -1,5 +1,8 @@
 # Side Project Launcher
 
+
+> **Try it:** "I want to sell handmade soaps online. I have no idea where to start."
+
 OpenClaw demo pack for turning a one-line business idea into a market-backed brand, product copy, live landing page, and week-one launch checklist.
 
 Audience: makers, entrepreneurs, and people with ideas stuck in their heads.

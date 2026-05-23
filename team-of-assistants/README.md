@@ -1,5 +1,7 @@
 # Team Of Assistants
 
+> **Try it:** "Plan my PTO in two weeks."
+
 Demo scaffold for: "Your Own Team of Assistants." A coordinator claw lives in Discord and delegates to three specialist claws:
 
 - `research-claw`: destination ideas from weather and interests

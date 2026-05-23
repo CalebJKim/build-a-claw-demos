@@ -1,5 +1,7 @@
 # Monday Morning Machine
 
+> **Try it:** "Get me ready for my week."
+
 OpenClaw demo pack for turning one sentence into a complete weekly operating brief with calendar prep, inbox triage, world-check research, and mock-safe actions taken.
 
 Audience: anyone who works: professionals, freelancers, managers, founders.
