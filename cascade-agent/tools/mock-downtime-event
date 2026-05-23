@@ -19,14 +19,21 @@ if (command !== 'trigger') {
   process.exit(2);
 }
 
-const plantState = JSON.parse(readFileSync(path.join(ROOT, 'data/plant-state.json'), 'utf8'));
-const machine = plantState.machines.find((item) => item.id === machineId);
+const rawPlantState = JSON.parse(readFileSync(path.join(ROOT, 'data/plant-state.json'), 'utf8'));
+const machine = rawPlantState.machines.find((item) => item.id === machineId);
 if (!machine) {
   console.error(`Unknown machine: ${machineId}`);
   process.exit(1);
 }
 
 const eventTime = process.env.CASCADE_DETECTED_AT || new Date().toISOString();
+
+// Anchor every date in the seed to the live event time so the mock data
+// doesn't decay relative to "now".
+const referenceMs = new Date(rawPlantState.plant.asOf).getTime();
+const deltaMs = new Date(eventTime).getTime() - referenceMs;
+const plantState = shiftDates(rawPlantState, deltaMs);
+
 console.log(JSON.stringify({
   eventId: `DOWNTIME-${machineId}-${eventTime.replace(/[^0-9]/g, '').slice(0, 12)}`,
   eventType: 'unplanned downtime',
@@ -38,3 +45,19 @@ console.log(JSON.stringify({
   source: 'mock PLC downtime event',
   plantState,
 }, null, 2));
+
+function shiftDates(value, deltaMs) {
+  if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:?\d{2})?)?$/.test(value)) {
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) return value;
+    const shifted = new Date(parsed.getTime() + deltaMs);
+    return value.length === 10 ? shifted.toISOString().slice(0, 10) : shifted.toISOString();
+  }
+  if (Array.isArray(value)) return value.map((item) => shiftDates(item, deltaMs));
+  if (value && typeof value === 'object') {
+    const out = {};
+    for (const [k, v] of Object.entries(value)) out[k] = shiftDates(v, deltaMs);
+    return out;
+  }
+  return value;
+}
