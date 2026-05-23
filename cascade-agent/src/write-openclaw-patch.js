@@ -34,7 +34,7 @@ const patch = {
     providers: {
       vllm: {
         baseUrl: vllmBaseUrl,
-        apiKey: 'VLLM_API_KEY',
+        apiKey: 'local',
         api: 'openai-completions',
         models: [
           {

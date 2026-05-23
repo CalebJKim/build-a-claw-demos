@@ -21,7 +21,7 @@
     "providers": {
       "vllm": {
         "baseUrl": "${VLLM_BASE_URL}",
-        "apiKey": "VLLM_API_KEY",
+        "apiKey": "local",
         "api": "openai-completions",
         "models": [
           {
