@@ -1,7 +1,7 @@
 {
   "name": "cascade-agent",
   "profile": "cascade-demo",
-  "openclawMinVersion": "2026.5.12",
+  "openclawMinVersion": "2026.5.7",
   "nodeMinVersion": "22.16.0",
   "model": {
     "provider": "vllm",
