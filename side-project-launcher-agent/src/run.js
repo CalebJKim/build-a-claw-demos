@@ -348,6 +348,7 @@ async function callOllama(config, messages) {
       model: config.model,
       messages,
       stream: false,
+    chat_template_kwargs: { enable_thinking: false },
       temperature: config.temperature ?? 0.5,
       max_tokens: config.maxOutputTokens ?? 2048,
     }),
