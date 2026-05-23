@@ -13,8 +13,8 @@ const ROOT = path.resolve(path.dirname(__filename), '..');
 process.env.PATH = `${path.join(os.homedir(), '.npm-global', 'bin')}:${process.env.PATH ?? ''}`;
 
 const DEFAULT_CONFIG = {
-  model: 'qwen3.6:35b-a3b',
-  ollamaHost: 'http://127.0.0.1:11434',
+  model: 'unsloth/Qwen3.6-35B-A3B-GGUF',
+  ollamaHost: 'http://127.0.0.1:8000/v1',
   contextTokens: 32768,
   maxOutputTokens: 4096,
   temperature: 0.2,
@@ -64,7 +64,7 @@ function usage() {
   resume-claw run --resume /path/to/resume.pdf [--target-role "Product Manager"] [--location "San Francisco, CA"] [--out runs/demo]
 
 Options:
-  --model <name>        Ollama model override. Default from demo.config.json.
+  --model <name>        Model id override. Default from demo.config.json.
   --skip-web            Use model analysis with no live web corpus.
   --serial              Run claws sequentially instead of parallel.
 `;
@@ -98,16 +98,16 @@ async function doctor(config) {
   const checks = [];
   checks.push(['node', process.version]);
   checks.push(['openclaw', commandExists('openclaw') ? run('openclaw', ['--version']).trim() : 'missing']);
-  checks.push(['ollama', commandExists('ollama') ? run('ollama', ['--version']).trim() : 'missing']);
+  checks.push(['llama-server', await fetchJson(`${config.ollamaHost}/models`, {}, 5000).then(() => 'ok').catch((e) => `error: ${e.message}`)]);
   checks.push(['pdftotext', commandExists('pdftotext') ?? 'missing']);
   checks.push(['chromium', commandExists('chromium') ?? commandExists('google-chrome') ?? 'missing']);
 
   let ollamaModels = [];
   try {
-    const tags = await fetchJson(`${config.ollamaHost}/api/tags`, {}, 8000);
-    ollamaModels = (tags.models ?? []).map((model) => model.name);
+    const tags = await fetchJson(`${config.ollamaHost}/models`, {}, 8000);
+    ollamaModels = (tags.data ?? []).map((m) => m.id);
   } catch (error) {
-    checks.push(['ollama-api', `error: ${error.message}`]);
+    checks.push(['llama-server-api', `error: ${error.message}`]);
   }
 
   for (const [name, value] of checks) {
@@ -278,20 +278,16 @@ async function callOllamaJson(config, messages, options = {}) {
     model: config.model,
     messages,
     stream: false,
-    think: false,
-    format: 'json',
-    options: {
-      temperature: config.temperature,
-      num_ctx: config.contextTokens,
-      num_predict: options.maxTokens ?? config.maxOutputTokens,
-    },
+    temperature: config.temperature,
+    max_tokens: options.maxTokens ?? config.maxOutputTokens,
+    response_format: { type: 'json_object' },
   };
-  const response = await fetchJson(`${config.ollamaHost}/api/chat`, {
+  const response = await fetchJson(`${config.ollamaHost}/chat/completions`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   }, options.timeout ?? 900000);
-  const content = response?.message?.content ?? response?.response ?? '';
+  const content = response?.choices?.[0]?.message?.content ?? '';
   const parsed = tryParseJson(content);
   if (parsed.ok) return parsed.value;
 
@@ -330,20 +326,16 @@ async function repairJson(config, malformed, label) {
       },
     ],
     stream: false,
-    think: false,
-    format: 'json',
-    options: {
-      temperature: 0,
-      num_ctx: Math.min(config.contextTokens, 16384),
-      num_predict: config.maxOutputTokens,
-    },
+    temperature: 0,
+    max_tokens: config.maxOutputTokens,
+    response_format: { type: 'json_object' },
   };
-  const response = await fetchJson(`${config.ollamaHost}/api/chat`, {
+  const response = await fetchJson(`${config.ollamaHost}/chat/completions`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   }, 300000);
-  return response?.message?.content ?? response?.response ?? '';
+  return response?.choices?.[0]?.message?.content ?? '';
 }
 
 function extractJsonObject(text) {

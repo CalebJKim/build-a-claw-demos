@@ -4,10 +4,10 @@
   "openclawMinVersion": "2026.5.12",
   "nodeMinVersion": "22.14.0",
   "model": {
-    "provider": "ollama",
-    "id": "qwen3.6:35b-a3b",
-    "openclawId": "ollama/qwen3.6:35b-a3b",
-    "baseUrl": "http://127.0.0.1:11434",
+    "provider": "vllm",
+    "id": "unsloth/Qwen3.6-35B-A3B-GGUF",
+    "openclawId": "vllm/unsloth/Qwen3.6-35B-A3B-GGUF",
+    "baseUrl": "http://127.0.0.1:8000/v1",
     "contextTokens": 32768,
     "maxOutputTokens": 2048,
     "temperature": 0.28
@@ -64,7 +64,6 @@
   "requiredCommands": [
     "openclaw",
     "node",
-    "ollama",
     "curl",
     "python3"
   ],

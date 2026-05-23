@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-const [root, portRaw, openclawModel, ollamaModel, ollamaHost] = process.argv.slice(2);
+const [root, portRaw, openclawModel, vllmModel, vllmBaseUrl] = process.argv.slice(2);
 
-if (!root || !portRaw || !openclawModel || !ollamaModel || !ollamaHost) {
-  console.error('Usage: write-openclaw-patch.js <root> <port> <openclaw-model> <ollama-model> <ollama-host>');
+if (!root || !portRaw || !openclawModel || !vllmModel || !vllmBaseUrl) {
+  console.error('Usage: write-openclaw-patch.js <root> <port> <openclaw-model> <vllm-model> <vllm-base-url>');
   process.exit(1);
 }
 
@@ -20,9 +20,7 @@ const patch = {
         fallbacks: [],
       },
       models: {
-        [openclawModel]: {
-          alias: 'Pre-Flight Local',
-        },
+        [openclawModel]: {},
       },
       workspace: `${root}/workspaces/main`,
       maxConcurrent: 3,
@@ -34,25 +32,19 @@ const patch = {
   models: {
     mode: 'merge',
     providers: {
-      ollama: {
-        baseUrl: ollamaHost,
-        apiKey: 'ollama',
-        api: 'ollama',
+      vllm: {
+        baseUrl: vllmBaseUrl,
+        apiKey: 'VLLM_API_KEY',
+        api: 'openai-completions',
         models: [
           {
-            id: ollamaModel,
-            name: ollamaModel,
-            reasoning: false,
-            input: ['text'],
-            cost: {
-              input: 0,
-              output: 0,
-              cacheRead: 0,
-              cacheWrite: 0,
-            },
+            id: vllmModel,
+            name: vllmModel,
+            reasoning: true,
+            input: ['text', 'image'],
+            cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
             contextWindow: 262144,
             maxTokens: 8192,
-            api: 'ollama',
           },
         ],
       },

@@ -12,21 +12,20 @@ fi
 PROFILE="${OPENCLAW_PROFILE:-$(node "$CONFIG_VALUE" profile)}"
 PORT="${OPENCLAW_GATEWAY_PORT:-$(node "$CONFIG_VALUE" gatewayPort)}"
 OPENCLAW_MODEL="${OPENCLAW_MODEL:-$(node "$CONFIG_VALUE" openclawModel)}"
-OLLAMA_MODEL="${OLLAMA_MODEL:-$(node "$CONFIG_VALUE" model)}"
-OLLAMA_HOST="${OLLAMA_HOST:-$(node "$CONFIG_VALUE" ollamaHost)}"
+VLLM_MODEL="${VLLM_MODEL:-$(node "$CONFIG_VALUE" model)}"
+VLLM_BASE_URL="${VLLM_BASE_URL:-$(node "$CONFIG_VALUE" ollamaHost)}"
 
 export PATH="$HOME/.npm-global/bin:$PATH"
-export OLLAMA_API_KEY="${OLLAMA_API_KEY:-ollama}"
 
-for cmd in openclaw ollama curl; do
+for cmd in openclaw curl; do
   if ! command -v "$cmd" >/dev/null 2>&1; then
     echo "$cmd is required but was not found on PATH." >&2
     exit 1
   fi
 done
 
-if ! ollama list | awk 'NR > 1 {print $1}' | grep -Fx "$OLLAMA_MODEL" >/dev/null; then
-  echo "Ollama model '$OLLAMA_MODEL' is not installed. Run: ollama pull $OLLAMA_MODEL" >&2
+if ! curl -sf "${VLLM_BASE_URL:-http://127.0.0.1:8000/v1}/models" >/dev/null; then
+  echo "llama.cpp server not reachable at ${VLLM_BASE_URL:-http://127.0.0.1:8000/v1} " >&2
   exit 1
 fi
 
@@ -38,7 +37,7 @@ for row in "${AGENT_ROWS[@]}"; do
 done
 
 PATCH="$ROOT/.generated/openclaw.patch.json"
-node "$ROOT/src/write-openclaw-patch.js" "$ROOT" "$PORT" "$OPENCLAW_MODEL" "$OLLAMA_MODEL" "$OLLAMA_HOST" > "$PATCH"
+node "$ROOT/src/write-openclaw-patch.js" "$ROOT" "$PORT" "$OPENCLAW_MODEL" "$VLLM_MODEL" "$VLLM_BASE_URL" > "$PATCH"
 
 openclaw --profile "$PROFILE" config patch --file "$PATCH" >/dev/null
 

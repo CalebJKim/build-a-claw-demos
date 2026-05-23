@@ -10,8 +10,8 @@ const ROOT = path.resolve(path.dirname(__filename), '..');
 
 const DEFAULTS = {
   name: 'downtime-clock-agent',
-  model: 'qwen3.6:35b-a3b',
-  ollamaHost: 'http://127.0.0.1:11434',
+  model: 'unsloth/Qwen3.6-35B-A3B-GGUF',
+  ollamaHost: 'http://127.0.0.1:8000/v1',
   nodeMinVersion: '22.14.0',
   openclawMinVersion: '2026.5.12',
   sample: {
@@ -66,8 +66,8 @@ function usage(exitCode = 0) {
 Options:
   --machine <id>           Machine to trigger. Default: MACHINE-4.
   --out <dir>              Output directory. Default: runs/<timestamp>-downtime-clock.
-  --skip-model             Use deterministic wording instead of calling Ollama.
-  --model <name>           Ollama model override.`);
+  --skip-model             Use deterministic wording instead of calling the model.
+  --model <name>           Model id override.`);
   process.exit(exitCode);
 }
 
@@ -106,25 +106,25 @@ async function doctor(configValue) {
   const nodeVersion = process.versions.node;
   checks.push(['node', `v${nodeVersion}`]);
   const openclawVersion = commandExists('openclaw') ? safeRunLabel('openclaw', ['--version']) : 'missing';
-  const ollamaVersion = commandExists('ollama') ? safeRunLabel('ollama', ['--version']) : 'missing';
+  const llamaServerOk = await fetchJson(`${configValue.ollamaHost}/models`, {}, 5000).then(() => 'ok').catch((e) => `error: ${e.message}`);
   const pythonPath = commandExists('python3') ? safeRunLabel('bash', ['-lc', 'command -v python3']) : 'missing';
   checks.push(['openclaw', openclawVersion]);
-  checks.push(['ollama', ollamaVersion]);
+  checks.push(['llama-server', llamaServerOk]);
   checks.push(['python3', pythonPath]);
   checks.push(['downtime-clock-seed', await exists(path.join(ROOT, 'data/downtime-clock-seed.json')) ? 'present' : 'missing']);
   checks.push(['mock-downtime-clock-data', await exists(path.join(ROOT, 'tools/mock-downtime-clock-data')) ? 'present' : 'missing']);
 
   let ok = true;
   if (!versionAtLeast(nodeVersion, configValue.nodeMinVersion)) ok = false;
-  if (openclawVersion === 'missing' || ollamaVersion === 'missing' || pythonPath === 'missing') ok = false;
-  if (openclawVersion.startsWith('error:') || ollamaVersion.startsWith('error:')) ok = false;
+  if (openclawVersion === 'missing' || llamaServerOk.startsWith('error:') || pythonPath === 'missing') ok = false;
+  if (openclawVersion.startsWith('error:') || llamaServerOk.startsWith('error:')) ok = false;
 
   let ollamaModels = [];
   try {
-    const tags = await fetchJson(`${configValue.ollamaHost}/api/tags`, {}, 8000);
-    ollamaModels = (tags.models ?? []).map((model) => model.name);
+    const tags = await fetchJson(`${configValue.ollamaHost}/models`, {}, 8000);
+    ollamaModels = (tags.data ?? []).map((m) => m.id);
   } catch (error) {
-    checks.push(['ollama-api', `error: ${error.message}`]);
+    checks.push(['llama-server-api', `error: ${error.message}`]);
     ok = false;
   }
 
@@ -357,20 +357,18 @@ async function polishSummaryWithFallback(configValue, fallback, context) {
 }
 
 async function callOllama(configValue, messages) {
-  const response = await fetchJson(`${configValue.ollamaHost}/api/chat`, {
+  const response = await fetchJson(`${configValue.ollamaHost}/chat/completions`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       model: configValue.model,
       messages,
       stream: false,
-      options: {
-        temperature: configValue.temperature ?? 0.22,
-        num_predict: configValue.maxOutputTokens ?? 2048,
-      },
+      temperature: configValue.temperature ?? 0.22,
+      max_tokens: configValue.maxOutputTokens ?? 2048,
     }),
   }, 180000);
-  return response.message?.content ?? '';
+  return response.choices?.[0]?.message?.content ?? '';
 }
 
 function renderExecutiveSummary(summary, comparator, history) {
