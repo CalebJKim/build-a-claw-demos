@@ -1,7 +1,7 @@
 {
   "name": "meeting-aftermath-agent",
   "profile": "meeting-demo",
-  "openclawMinVersion": "2026.5.12",
+  "openclawMinVersion": "2026.5.7",
   "nodeMinVersion": "22.16.0",
   "model": {
     "provider": "vllm",

@@ -1,7 +1,7 @@
 {
   "name": "downtime-clock-agent",
   "profile": "downtime-clock-demo",
-  "openclawMinVersion": "2026.5.12",
+  "openclawMinVersion": "2026.5.7",
   "nodeMinVersion": "22.14.0",
   "model": {
     "provider": "vllm",

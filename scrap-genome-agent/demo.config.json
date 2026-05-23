@@ -1,7 +1,7 @@
 {
   "name": "scrap-genome-agent",
   "profile": "scrap-demo",
-  "openclawMinVersion": "2026.5.12",
+  "openclawMinVersion": "2026.5.7",
   "nodeMinVersion": "22.14.0",
   "model": {
     "provider": "vllm",
